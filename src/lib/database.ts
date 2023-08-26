@@ -13,6 +13,10 @@ class Database {
 
         return databaseConnection
     }
+
+    async generateConnection() {
+		return Promise.resolve(this.configureConnection());
+	}
 }
 
 export default Database

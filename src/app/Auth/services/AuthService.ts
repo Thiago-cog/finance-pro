@@ -2,16 +2,21 @@ import jwt from 'jsonwebtoken'
 import AuthError from "@app/Auth/exceptions/AuthError"
 import config from '@/config'
 import { get, set } from '@/lib/redis';
+import Database from '@/lib/database';
 
 export default class AuthService {
+    private databaseConnector: Database;
+    
+    constructor(){
+        this.databaseConnector = new Database()
+    }
+
     async singIn(email: string, password: string): Promise<{user: object; token: string}> {
-        const user = {
-            id: '123',
-            email: 'adm@gmail.com',
-            password: '123456',
-            fullName: 'Admin'
-        }
         
+        const conn = await this.databaseConnector.generateConnection()
+        const result = await conn.query('SELECT * FROM users WHERE email = $1 AND password = $2', [email, password])
+        const user = result.rows[0]
+
         if (email !== user.email && password !== user.password) {
             throw new AuthError('Email e Senha não confere!')
         }
