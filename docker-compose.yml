@@ -7,6 +7,18 @@ services:
       - redis-data:/data
     ports:
       - 6379:6379
+  
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: login_node
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/data/postgres
 
 volumes:
   redis-data:

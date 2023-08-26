@@ -19,8 +19,8 @@ class AuthController {
     }
 
     async destroy(req: Request, res: Response): Promise<Response> {
-        req.user.id && new AuthService().singOut(req.user.token)
-
+        const authService = new AuthService()
+        await authService.singOut(req.user.token)
         return res.status(204).send()
     }
 }

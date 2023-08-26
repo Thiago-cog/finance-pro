@@ -1,8 +1,9 @@
 import { Router } from "express"
 import auth from "@app/Auth/controllers/AuthController"
+import authenticateToken from '@app/Auth/middlewares/AuthMiddleware'
 
 const routes = Router()
 routes.post('/auth/sing-in', auth.create)
-routes.delete('/auth/sing-out', auth.destroy)
+routes.delete('/auth/sing-out', authenticateToken, auth.destroy)
 
 export default routes
