@@ -4,7 +4,7 @@ import AuthError from "@app/Auth/exceptions/AuthError"
 
 class AuthController {
     
-    async create(req: Request, res: Response): Promise<Response> {
+    async login(req: Request, res: Response): Promise<Response> {
         
         const {email, password} = req.body
 
@@ -18,7 +18,7 @@ class AuthController {
         }
     }
 
-    async destroy(req: Request, res: Response): Promise<Response> {
+    async logout(req: Request, res: Response): Promise<Response> {
         const authService = new AuthService()
         await authService.singOut(req.user.token)
         return res.status(204).send()
