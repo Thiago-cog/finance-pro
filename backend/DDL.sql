@@ -1,7 +1,7 @@
 create table users (
 	id serial,
 	email varchar(255),
-	password char(8),
+	password varchar(8),
 	fullName varchar(255)
 );
 

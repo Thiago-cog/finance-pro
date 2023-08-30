@@ -11,7 +11,7 @@
     "servers": [
         {
             "url": "http://localhost:3000",
-            "description": "Api Test"
+            "description": "Api Local"
         }
     ],
     "paths": {
@@ -57,6 +57,66 @@
                     }
                 }
             }
+        },
+        "/auth/logout": {
+            "delete": {
+                "summary": "Logout",
+                "description": "Desloga o usuário e remove o token do Redis",
+                "tags": ["Auth"],
+                "security": [{"bearerAuth": []}],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "summary": "Busca usuários",
+                "description": "Essa rota retorna todos os usuários do banco",
+                "tags": ["Users"],
+                "security": [{"bearerAuth": []}],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Users"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/create": {
+            "post": {
+                "summary": "Cria Usuário",
+                "description": "Rota para criar usuário",
+                "tags": ["Users"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateUserRequest"
+                            },
+                            "examples": {
+                                "creatrUser":{
+                                    "value": {
+                                        "email": "test@gmail.com",
+                                        "password": "54876216",
+                                        "fullname": "Usuario Teste"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -93,6 +153,52 @@
                         "type": "string"
                     }
                 }
+            },
+            "Users": {
+                "type": "object",
+                "properties": {
+                    "users": {
+                        "$ref": "#/components/schemas/UsersResponse"
+                    }
+                }
+            },
+            "UsersResponse": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/UsersResponseArray"          
+                }
+            },
+            "UsersResponseArray": {
+                "type": "object",
+                "properties": {
+                    "fullname": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CreateUserRequest": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "fullname": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
             }
         }
     }
