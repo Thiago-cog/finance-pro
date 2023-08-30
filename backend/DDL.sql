@@ -5,4 +5,4 @@ create table users (
 	fullName varchar(255)
 );
 
-insert into users(email, password, fullname) values('adm@gmail.com', '123456', 'Admin');
+insert into users(email, password, fullname) values('adm@gmail.com', '12345678', 'Admin');
