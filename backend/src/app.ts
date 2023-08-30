@@ -1,16 +1,16 @@
 import express, {Application} from 'express'
 import cors from 'cors'
 import routes from '@/routes'
+import swaggerUi from "swagger-ui-express";
+import swaggerDocs from "@/swagger.json"
 
 export default class App{
     app: Application
 
     constructor(){
         this.app = express();
-
         this.middelwares();
         this.routes();
-        this.exceptionHandler();
     }
     listen(port: number):void {
         this.app.listen(port,()=>{
@@ -26,6 +26,6 @@ export default class App{
 
     private routes(){
         this.app.use(routes)
+        this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
     }
-    private exceptionHandler(){}
 }
