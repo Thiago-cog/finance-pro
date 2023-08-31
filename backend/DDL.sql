@@ -13,8 +13,8 @@ create table accounts(
 	id bigint,
 	user_id bigint,
 	name varchar(255),
-	typeaccounts int,
-	balance float,
+	typeaccounts int NOT NULL,
+	balance float NOT NULL,
 	PRIMARY KEY (id),
 	CONSTRAINT fk_users_id FOREIGN KEY (user_id) REFERENCES users (id)
 );

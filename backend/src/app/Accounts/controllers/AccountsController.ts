@@ -6,7 +6,11 @@ class AccountsController {
         const {name, typeaccount, balance} = req.body;
         const userId = req.user.id
         const result = await new AccountsService().createAccountByUserId(userId, name, typeaccount, balance)
-        return res.status(200).send()
+
+        if(!result.status){
+            return res.status(500).json({"message": result.message})
+        }
+        return res.status(200).json({"message": result.message})
     }
 }
 
