@@ -1,5 +1,5 @@
-import { Pool } from 'pg'
-import config from "@/config"
+const { Pool } = require('pg');
+const config = require("../config");
 
 class Database {
     async configureConnection() {
@@ -9,14 +9,14 @@ class Database {
             database: config.postgres.database,
             password: config.postgres.password,
             port: config.postgres.port,
-        })
+        });
 
-        return databaseConnection
+        return databaseConnection;
     }
 
     async generateConnection() {
-		return Promise.resolve(this.configureConnection());
-	}
+        return Promise.resolve(this.configureConnection());
+    }
 }
 
-export default Database
+module.exports = Database;

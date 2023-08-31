@@ -1,7 +1,7 @@
-import dotenv from 'dotenv'
+const dotenv = require('dotenv');
 dotenv.config();
 
-export default {
+module.exports = {
     port: Number(process.env.PORT) || 3000,
     redis: {
         url: process.env.REDIS_URL || 'redis://localhost:6379'
@@ -17,4 +17,4 @@ export default {
         database: process.env.POSTGRES_DATABASE || 'login_node',
         password: process.env.POSTGRES_PASS || '123456',
     }
-}
+};
