@@ -41,4 +41,4 @@ Link do app
 [http://localhost:3000](http://localhost:3000)
 
 Link da Documentação da API
-[http://localhost:3000](http://localhost:3000/api-docs)
+[http://localhost:3000/api-docs](http://localhost:3000/api-docs)
