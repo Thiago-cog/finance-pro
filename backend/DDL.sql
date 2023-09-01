@@ -33,3 +33,5 @@ ALTER TABLE
     cards ADD CONSTRAINT cards_accounts_id_foreign FOREIGN KEY(accounts_id) REFERENCES accounts(id);
 ALTER TABLE
     accounts ADD CONSTRAINT accounts_user_id_foreign FOREIGN KEY(user_id) REFERENCES users(id);
+
+insert into users(email, password, fullname) values('adm@gmail.com', '12345678', 'Admin');
