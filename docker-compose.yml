@@ -19,6 +19,33 @@ services:
       - "5432:5432"
     volumes:
       - ./data:/data/postgres
+  
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - frontend
+    networks:
+      - my-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./frontend:/app
+    networks:
+      - my-network
 
 volumes:
   redis-data:
+
+networks:
+  my-network:
