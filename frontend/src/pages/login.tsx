@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import "../styles/login.css";
+import authServices  from "../services/authServices.js";
+
 
 export const Login = () => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(email);
-        console.log(pass);
+        const response = await authServices.login(email, pass);
+        if(response.token){
+            alert("Usuário Logado com sucesso");
+        }
     }
 
     return (

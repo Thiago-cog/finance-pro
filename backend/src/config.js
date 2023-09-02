@@ -8,7 +8,7 @@ module.exports = {
         port: process.env.REDIS_PORT || '6379',
     },
     auth: {
-        secret: process.env.AUHT_SECRET || 'secrt',
+        secret: process.env.AUTH_SECRET || 'secrt',
         expiresIn: process.env.AUTH_EXPIRES_IN || '7d',
     },
     postgres: {
