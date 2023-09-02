@@ -2,9 +2,10 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = {
-    port: Number(process.env.PORT) || 3000,
+    port: Number(process.env.PORT) || 3001,
     redis: {
-        url: process.env.REDIS_URL || 'redis://localhost:6379'
+        host: process.env.REDIS_HOST || 'redis',
+        port: process.env.REDIS_PORT || '6379',
     },
     auth: {
         secret: process.env.AUHT_SECRET || 'secrt',

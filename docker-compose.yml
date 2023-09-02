@@ -1,51 +1,49 @@
-version: '3.1'
+version: '3'
 services:
   redis:
-    image: redis:6
+    image: redis:latest
     restart: always
-    volumes:
-      - redis-data:/data
     ports:
       - 6379:6379
-  
+    networks:
+      - my-network
+
   postgres:
     container_name: postgres
-    image: postgres
+    image: postgres:latest
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: login_node
     ports:
       - "5432:5432"
-    volumes:
-      - ./data:/data/postgres
-  
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./backend:/app
-    depends_on:
-      - frontend
     networks:
       - my-network
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "3001:3001"
+      - "3000:3000"
     volumes:
-      - ./frontend:/app
+      - ./frontend:/app/frontend
     networks:
       - my-network
-
-volumes:
-  redis-data:
+  
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app/backend
+    depends_on:
+      - postgres
+    networks:
+      - my-network
 
 networks:
   my-network:
