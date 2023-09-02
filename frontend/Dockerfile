@@ -2,7 +2,7 @@
 FROM node:14
 
 # Defina o diretório de trabalho dentro do container
-WORKDIR /app
+WORKDIR /app/frontend
 
 # Copie os arquivos de configuração e as dependências
 COPY package*.json ./
