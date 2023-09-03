@@ -10,12 +10,12 @@ class UsersControllers {
 
     async create(req, res) {
         const { email, password, fullname } = req.body;
-        const insert = await new UsersService().createUser(email, password, fullname);
+        const { status, message } = await new UsersService().createUser(email, password, fullname);
 
-        if (insert) {
-            return res.status(201).json({ message: 'Usuário criado com sucesso' });
+        if (status == 201) {
+            return res.status(status).json({ message: message });
         } else {
-            return res.status(200).json({ message: 'Erro ao criar usuário' });
+            return res.status(status).json({ message: message });
         }
     }
 }
