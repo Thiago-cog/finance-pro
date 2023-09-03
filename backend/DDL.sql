@@ -34,4 +34,4 @@ ALTER TABLE
 ALTER TABLE
     accounts ADD CONSTRAINT accounts_user_id_foreign FOREIGN KEY(user_id) REFERENCES users(id);
 
-insert into users(email, password, fullname) values('adm@gmail.com', '12345678', 'Admin');
+insert into users(email, password, fullname) values('adm@gmail.com', '$2b$10$oOZiInZ9Z2qHHac6TNQlH.0G7dGhZ3SoW.vIDK/yymrSPfEM0FpZ6', 'Admin');

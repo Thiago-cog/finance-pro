@@ -5,14 +5,13 @@ const AuthError = require("../exceptions/AuthError");
 class AuthController {
     async login(req, res) {
         const { email, password } = req.body;
-
-        try {
-            const authService = new AuthService();
-            const { user, token } = await authService.singIn(email, password);
-            return res.status(200).json({ user, token });
-        } catch (error) {
-            if (error instanceof AuthError) return res.status(401).send();
-            return res.status(500).send({ error });
+        const authService = new AuthService();
+        const {user, token, status, message} = await authService.singIn(email, password);
+       
+        if(status == 200){
+            return res.status(status).json({ user, token , message});
+        }else{
+            return res.status(status).json({ message }); 
         }
     }
 

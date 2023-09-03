@@ -3,6 +3,7 @@ const AuthError = require("../exceptions/AuthError");
 const config = require('../../../config');
 const { get, set } = require('../../../lib/redis');
 const Database = require('../../../lib/database');
+const bcrypt = require('bcrypt');
 
 class AuthService {
     constructor() {
@@ -11,35 +12,52 @@ class AuthService {
 
     async singIn(email, password) {
         const conn = await this.databaseConnector.generateConnection();
-        const result = await conn.query('SELECT * FROM users WHERE email = $1 AND password = $2', [email, password]);
-        const user = result.rows[0];
 
-        if (email !== user.email && password !== user.password) {
-            throw new AuthError('Email e Senha não confere!');
-        }
-
-        if (email !== user.email) {
-            throw new AuthError('Email não confere!');
-        }
-
-        if (password !== user.password) {
-            throw new AuthError('Senha não confere!');
-        }
-
-        const { id, fullName } = user;
-
-        const token = jwt.sign({ id }, config.auth.secret, {
-            expiresIn: config.auth.expiresIn
-        });
-
-        return {
-            user: {
+        try{
+            const result = await conn.query('SELECT * FROM users WHERE email = $1', [email]);
+            const user = result.rows[0];
+            const passwordMatch = await bcrypt.compare(password, user.password);
+            const { id, fullname } = user;
+            const userToken = {
                 id,
-                fullName,
-                email,
-            },
-            token,
-        };
+                fullname,
+                email
+            }
+
+            // verifica se o usuário já está logado pelo redis.
+            const userSession = await get(`user_session_token:${id}`);
+
+            if (!passwordMatch) {
+                throw new AuthError('Senha não confere!');
+            }
+
+            if (email !== user.email) {
+                throw new AuthError('Email não confere!');
+            }
+
+            const token = jwt.sign({ userToken }, config.auth.secret, {
+                expiresIn: config.auth.expiresIn
+            });
+            
+            await set(`user_session_token:${id}`, token);
+
+            return {
+                user: {
+                    id,
+                    fullname,
+                    email,
+                },
+                token,
+                status: 200,
+                message: "Usuário logado com sucesso!"
+            };
+        }catch(error){
+            return {
+                status: 400,
+                message: error.message
+            }
+        }
+        
     }
 
     async singOut(token) {
@@ -52,7 +70,7 @@ class AuthService {
                 throw new AuthError('Token está na BlackList');
             }
             const decoded = jwt.verify(token, config.auth.secret);
-            return decoded.id;
+            return decoded;
         } catch (error) {
             throw new AuthError('Token inválido');
         }
