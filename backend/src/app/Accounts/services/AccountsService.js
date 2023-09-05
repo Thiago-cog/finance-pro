@@ -49,10 +49,39 @@ class AccountsService {
             retornoJson.message = "Cartão cadastrado com sucesso.";
         }catch(error){
             retornoJson.status = false;
-            retornoJson.message = "Erro ao cadastrar a seu cartão.";    
+            retornoJson.message = "Erro ao cadastrar a seu cartão. " + error.message;    
         }
 
         return retornoJson;
+    }
+
+    async createRevenueExtract(accountsId, value, type_movement, date_movement, month, year) {
+        const conn = await this.databaseConnector.generateConnection();
+        let retornoJson = {
+            status: null,
+            message: null,
+        };
+
+        try{
+            if(!Math.sign(value)){
+                throw new Error("O valor da receita não pode ser negativo");
+            }
+
+            conn.query(`
+            INSERT INTO extract(account_id, value, type_movement, date_movement, month, year) VALUES($1, $2, $3, $4, $5, $6)`,
+            [accountsId, value, type_movement, date_movement, month, year]);
+
+            const accountResult = conn.query(`SELECT value FROM accounts WHERE id = $1`, [accountsId]);
+            const valueFinal = accountResult.rows[0].value + value;
+
+            conn.query(`UPDATE accounts SET value = $1`, [valueFinal]);
+
+            retornoJson.status = true;
+            retornoJson.message = "Receita lançada com sucesso"
+        }catch(error){
+            retornoJson.status = false;
+            retornoJson.message = "Erro ao lançar a receita. " + error.message;
+        }
     }
 }
 
