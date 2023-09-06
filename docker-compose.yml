@@ -9,12 +9,11 @@ services:
       - my-network
 
   postgres:
-    container_name: postgres
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: login_node
+      POSTGRES_DB: finance
     ports:
       - "5432:5432"
     networks:

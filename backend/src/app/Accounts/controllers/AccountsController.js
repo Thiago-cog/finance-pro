@@ -29,10 +29,10 @@ class AccountsController {
         return res.status(200).json({ "message": result.message });
     }
 
-    async createRevenueExtract(req, res){
+    async createMovementExtract(req, res){
         const { accountsId, value, type_movement, date_movement, month, year } = req.body;
 
-        const result = await new AccountsService().createRevenueExtract(accountsId, value, type_movement, date_movement, month, year);
+        const result = await new AccountsService().createMovementExtract(accountsId, value, type_movement, date_movement, month, year);
 
         if (!result.status) {
             return res.status(500).json({ "message": result.message });

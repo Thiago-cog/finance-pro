@@ -55,8 +55,9 @@ class AccountsService {
         return retornoJson;
     }
 
-    async createRevenueExtract(accountsId, value, type_movement, date_movement, month, year) {
+    async createMovementExtract(accountsId, value, type_movement, date_movement, month, year) {
         const conn = await this.databaseConnector.generateConnection();
+        
         let retornoJson = {
             status: null,
             message: null,
@@ -72,16 +73,34 @@ class AccountsService {
             [accountsId, value, type_movement, date_movement, month, year]);
 
             const accountResult = conn.query(`SELECT value FROM accounts WHERE id = $1`, [accountsId]);
-            const valueFinal = accountResult.rows[0].value + value;
+            
+            const calculateValueResult = this.#calculateValue(accountResult.rows[0].value, value, type_movement);
 
-            conn.query(`UPDATE accounts SET value = $1`, [valueFinal]);
+            conn.query(`UPDATE accounts SET value = $1`, [calculateValueResult.valueFinal]);
 
             retornoJson.status = true;
-            retornoJson.message = "Receita lançada com sucesso"
+            retornoJson.message = calculateValueResult.type + " lançada com sucesso";
         }catch(error){
             retornoJson.status = false;
-            retornoJson.message = "Erro ao lançar a receita. " + error.message;
+            retornoJson.message = "Erro ao lançar a " + calculateValueResult.type + ". "  + error.message;
         }
+    }
+
+    #calculateValue(value_account, value_movement, type_movement){
+        let returnJson = {
+            valueFinal: 0,
+            type: ""
+        }
+        
+        if(type_movement == 1){
+            returnJson.valueFinal = value_account + value_movement;
+            returnJson.type = "Receita";
+        }else{
+            returnJson.valueFinal = value_account - value_movement;
+            returnJson.type = "Despesa";
+        }
+
+        return returnJson;
     }
 }
 
