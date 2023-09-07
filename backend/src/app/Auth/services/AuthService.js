@@ -70,7 +70,7 @@ class AuthService {
                 throw new AuthError('Token está na BlackList');
             }
             const decoded = jwt.verify(token, config.auth.secret);
-            return decoded;
+            return decoded.userToken;
         } catch (error) {
             throw new AuthError('Token inválido');
         }

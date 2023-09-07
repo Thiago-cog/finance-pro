@@ -39,6 +39,17 @@ class AccountsController {
         }
         return res.status(200).json({ "message": result.message });
     }
+
+    async createMovementInvoice(req, res){
+        const { cardId, value, type_movement, date_movement, month, year } = req.body;
+
+        const result = await new AccountsService().createMovementInvoice(cardId, value, type_movement, date_movement, month, year);
+
+        if (!result.status) {
+            return res.status(500).json({ "message": result.message });
+        }
+        return res.status(200).json({ "message": result.message });
+    }
 }
 
 module.exports = new AccountsController();

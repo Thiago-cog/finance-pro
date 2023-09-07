@@ -15,7 +15,7 @@ class AccountsService {
 
         try {
             conn.query(`
-                INSERT INTO accounts(id, user_id, name, typeaccounts, balance) VALUES(nextval('seq_accounts_id'), $1, $2, $3, $4)
+                INSERT INTO accounts(user_id, name, type_accounts, balance) VALUES($1, $2, $3, $4)
             `, [userId, name, typeaccount, balance]);
             retornoJson.status = true;
             retornoJson.message = "Conta cadastrada com sucesso.";
@@ -62,31 +62,66 @@ class AccountsService {
             status: null,
             message: null,
         };
-
+        
         try{
+            const accountResult = await conn.query(`SELECT balance FROM accounts WHERE id = $1`, [accountsId]);
+            const calculateValueResult = this.#calculateValueExtract(accountResult.rows[0].balance, value, type_movement);
+
             if(!Math.sign(value)){
-                throw new Error("O valor da receita não pode ser negativo");
+                throw new Error("O valor da " + calculateValueResult.type + " não pode ser negativo");
             }
 
-            conn.query(`
-            INSERT INTO extract(account_id, value, type_movement, date_movement, month, year) VALUES($1, $2, $3, $4, $5, $6)`,
+            await conn.query(`
+            INSERT INTO extracts(account_id, value, type_movement, date_movement, month, year) VALUES($1, $2, $3, $4, $5, $6)`,
             [accountsId, value, type_movement, date_movement, month, year]);
 
-            const accountResult = conn.query(`SELECT value FROM accounts WHERE id = $1`, [accountsId]);
-            
-            const calculateValueResult = this.#calculateValue(accountResult.rows[0].value, value, type_movement);
-
-            conn.query(`UPDATE accounts SET value = $1`, [calculateValueResult.valueFinal]);
+            await conn.query(`UPDATE accounts SET balance = $1`, [calculateValueResult.valueFinal]);
 
             retornoJson.status = true;
             retornoJson.message = calculateValueResult.type + " lançada com sucesso";
         }catch(error){
             retornoJson.status = false;
-            retornoJson.message = "Erro ao lançar a " + calculateValueResult.type + ". "  + error.message;
+            retornoJson.message = "Ocorreu um erro inesperado. "  + error.message;
         }
+
+        return retornoJson;
     }
 
-    #calculateValue(value_account, value_movement, type_movement){
+    async createMovementInvoice(cardId, value, type_movement, date_movement, month, year) {
+        const conn = await this.databaseConnector.generateConnection();
+        let type = '';
+        let retornoJson = {
+            status: null,
+            message: null,
+        };
+
+        if(type_movement == 1){
+            type = "Estorno";
+        }else{
+            type = "Despesa";
+        }
+
+        try{
+            if(!Math.sign(value)){
+                throw new Error("O valor da " + type + " não pode ser negativo");
+            }
+
+            await conn.query(`
+            INSERT INTO invoices(card_id, value, type_movement, date_movement, month, year) VALUES($1, $2, $3, $4, $5, $6)`,
+            [cardId, value, type_movement, date_movement, month, year]);
+
+            retornoJson.status = true;
+            retornoJson.message = type + " lançado com sucesso";
+        }catch(error){
+            retornoJson.status = false;
+            retornoJson.message = "Ocorreu um erro inesperado. " + error.message;
+        }
+
+        return retornoJson;
+    }
+
+
+    #calculateValueExtract(value_account = 0, value_movement, type_movement){
         let returnJson = {
             valueFinal: 0,
             type: ""
