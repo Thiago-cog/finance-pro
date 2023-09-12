@@ -53,7 +53,7 @@ class AuthService {
             };
         }catch(error){
             return {
-                status: 400,
+                status: 401,
                 message: error.message
             }
         }

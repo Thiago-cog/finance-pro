@@ -15,13 +15,13 @@
 .img-box {
     width: 50%;
     height: 100%;
-    background-color: #5bb4ff;
+    background-color: #252e35;
     padding: 20px;
 }
 
 .img-box img {
     width: 100%;
-    height: 100%;
+    height: 80%;
 }
 
 .content-box {
@@ -88,20 +88,12 @@
     border-radius: 5px;
 }
 
-.content-box .form-box .input-box span {
-    font-size: 16px;
-    margin-bottom: 5px;
-    display: inline-block;
-    color: #32324f;
-    font-weight: 400;
-}
-
 .content-box .form-box .input-box input::placeholder {
     color: #a9adb6;
 }
 
 .content-box .form-box .input-box input[type=submit] {
-    background: #4aa4ee;
+    background: #252e35;
     color: #fff;
     outline: none;
     border: none;
@@ -112,7 +104,7 @@
 }
 
 .content-box .form-box .input-box input[type=submit]:hover {
-    background: #3286ca;
+    background: #252e35;
 }
 
 .content-box .form-box .remember {

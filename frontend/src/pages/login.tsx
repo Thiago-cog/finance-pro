@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/login.css";
 import authServices  from "../services/authServices.js";
-
+import FinanceImage from "../assets/Finance Pro.jpg";
 
 export const Login = () => {
     const [email, setEmail] = useState("");
@@ -10,27 +10,26 @@ export const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const response = await authServices.login(email, pass);
+        console.log(response);
         if(response.token){
-            alert("Usuário Logado com sucesso");
+            window.location.href = "/test.tsx"
         }
     }
 
     return (
         <div className="container-login">
             <div className="img-box">
-                <img src="static/Finance.png"/>
+                <img src={FinanceImage}/>
             </div>
             <div className="content-box">
                 <div className="form-box">
                     <form onSubmit={handleSubmit}>
                         <div className="input-box">
-                            <span>Email</span>
-                            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="@mail.com"/>
+                            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email"/>
                         </div>
 
                         <div className="input-box">
-                            <span>Senha</span>
-                            <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="password"/>
+                            <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="Senha"/>
                         </div>
 
                         <div className="remember">
@@ -45,7 +44,7 @@ export const Login = () => {
                         </div>
 
                         <div className="input-box">
-                        <p>Não Tem Uma Conta? <a href="#">Inscrever-se</a></p>
+                        <p>Não possui uma conta? <a href="#">Cadastre-se</a></p>
                         </div>
                     </form>
                 </div>
