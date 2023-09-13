@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../styles/login.css";
 import authServices  from "../services/authServices.js";
 import FinanceImage from "../assets/Finance Pro.jpg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -45,7 +45,7 @@ const Login = () => {
                         </div>
 
                         <div className="input-box">
-                        <p>Não possui uma conta? <a href="#">Cadastre-se</a></p>
+                        <p>Não possui uma conta? <Link to="/register">Cadastre-se</Link></p>
                         </div>
                     </form>
                 </div>
