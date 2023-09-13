@@ -2,17 +2,18 @@ import React, { useState } from "react";
 import "../styles/login.css";
 import authServices  from "../services/authServices.js";
 import FinanceImage from "../assets/Finance Pro.jpg";
+import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
+const Login = () => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const response = await authServices.login(email, pass);
-        console.log(response);
         if(response.token){
-            window.location.href = "/test.tsx"
+            return navigate("/test");
         }
     }
 
@@ -49,15 +50,7 @@ export const Login = () => {
                     </form>
                 </div>
             </div>
-            {/* <div className="auth-form">
-            <form onSubmit={handleSubmit} className="login-form">
-                <label>Email</label>
-                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" name="email" id="email" placeholder="exemplo@email.com" />
-                <label>Senha</label>
-                <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" name="password" id="password" />
-                <button type="submit" className="btn-link">Entrar</button>
-            </form>
-        </div> */}
         </div>
     )
 }
+export default Login;
