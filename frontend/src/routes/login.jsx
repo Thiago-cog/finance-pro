@@ -12,6 +12,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const response = await authServices.login(email, pass);
+        alert(response.message);
         if(response.token){
             return navigate("/test");
         }

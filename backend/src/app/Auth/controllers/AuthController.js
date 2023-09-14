@@ -6,7 +6,7 @@ class AuthController {
     async login(req, res) {
         const { email, password } = req.body;
         const authService = new AuthService();
-        const {user, token, status, message} = await authService.singIn(email, password);
+        const {user, token, status, message} = await authService.singIn(email, password, req);
 
         req.user = { id: user.id, fullName: user.fullname, email: user.email, token };
         
