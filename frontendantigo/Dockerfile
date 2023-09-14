@@ -1,5 +1,5 @@
 # Use uma imagem base do Node.js
-FROM node:latest
+FROM node:14
 
 # Defina o diretório de trabalho dentro do container
 WORKDIR /app/frontend
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Inicie o servidor de desenvolvimento
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
