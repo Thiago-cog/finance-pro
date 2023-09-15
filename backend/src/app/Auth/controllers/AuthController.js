@@ -7,10 +7,9 @@ class AuthController {
         const { email, password } = req.body;
         const authService = new AuthService();
         const {user, token, status, message} = await authService.singIn(email, password, req);
-
-        req.user = { id: user.id, fullName: user.fullname, email: user.email, token };
         
         if(status == 200){
+            req.user = { id: user.id, fullName: user.fullname, email: user.email, token };
             return res.status(status).json({ user, token , message});
         }else{
             return res.status(status).json({ message }); 

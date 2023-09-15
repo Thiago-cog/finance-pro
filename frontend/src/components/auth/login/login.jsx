@@ -14,8 +14,7 @@ const Login = () => {
         const response = await authServices.login(email, pass);
         alert(response.message);
         if(response.token){
-            alert("deu certo");
-            // return navigate("/test");
+            return navigate("/home");
         }
     }
 
