@@ -4,6 +4,6 @@ const authenticateToken = require('../Auth/middlewares/AuthMiddleware');
 
 const routes = Router();
 routes.get('/users', authenticateToken, users.index);
-routes.post('/users/create', authenticateToken, users.create);
+routes.post('/users/create', users.create);
 
 module.exports = routes;

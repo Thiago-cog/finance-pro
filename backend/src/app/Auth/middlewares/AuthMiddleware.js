@@ -9,9 +9,7 @@ module.exports = async (req, res, next) => {
 
     try {
         const authService = new AuthService();
-        const { id, fullName, email } = await authService.validateToken(token);
-        
-        req.user = { id, fullName, email, token };
+        await authService.validateToken(token);
     } catch (error) {
         if (error instanceof AuthError) {
             return res.status(401).send();

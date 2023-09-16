@@ -13,9 +13,9 @@ class UsersControllers {
         const { status, message } = await new UsersService().createUser(email, password, fullname);
 
         if (status == 201) {
-            return res.status(status).json({ message: message });
+            return res.status(status).json({ message: message, status: status });
         } else {
-            return res.status(status).json({ message: message });
+            return res.status(status).json({ message: message, status: status});
         }
     }
 }

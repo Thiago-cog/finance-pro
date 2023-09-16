@@ -1,5 +1,5 @@
 # Use a imagem base do Node.js
-FROM node:14
+FROM node:latest
 
 # Defina o diretório de trabalho dentro do container
 WORKDIR /app/backend
