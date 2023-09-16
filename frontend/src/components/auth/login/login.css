@@ -12,18 +12,6 @@
     display: flex;
 }
 
-.img-box {
-    width: 50%;
-    height: 100%;
-    background-color: #252e35;
-    padding: 20px;
-}
-
-.img-box img {
-    width: 100%;
-    height: 80%;
-}
-
 .content-box {
     display: flex;
     justify-content: center;

@@ -1,8 +1,11 @@
-import React, { useState } from "react";
-import "./login.css";
-import authServices  from "../../../services/authServices.js";
-import FinanceImage from "../../../assets/Finance Pro.jpg";
+import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
+
+import authServices  from "../../../services/authServices.js";
+import FinanceImage from "../../../assets/1.png";
+import cookies from "../../../services/cookies.js"
+
+import "./login.css";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -11,17 +14,19 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         const response = await authServices.login(email, pass);
-        alert(response.message);
+
         if(response.token){
-            return navigate("/home");
+            cookies.setCookie('user_session', response.token);
+            return navigate("/");
         }
     }
 
     return (
-        <div className="container-login">
+        <div className="container-login bg-gray-700">
             <div className="img-box">
-                <img src={FinanceImage}/>
+                <img src={FinanceImage} className="h-full"/>
             </div>
             <div className="content-box">
                 <div className="form-box">
@@ -36,7 +41,7 @@ const Login = () => {
 
                         <div className="remember">
                             <label>
-                                <input type="checkbox"/> Remember me
+                                <input className="text-white" type="checkbox"/> Remember me
                             </label>
                             <a href="#">Esqueceu a Senha?</a>
                         </div>
