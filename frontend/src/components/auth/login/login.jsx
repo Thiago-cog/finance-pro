@@ -1,25 +1,32 @@
-import { useState, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 import authServices  from "../../../services/authServices.js";
 import FinanceImage from "../../../assets/1.png";
-import cookies from "../../../services/cookies.js"
-
+import SetCookie from "../../../hooks/setCookie.jsx";
+import GetCookie from "../../../hooks/getCookie.jsx";
 import "./login.css";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const navigate = useNavigate();
+    const isUserAuthorized = GetCookie("user_session");
 
+    useEffect(() => {
+        if(isUserAuthorized){
+            return navigate("/home");
+        }
+    });
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const response = await authServices.login(email, pass);
 
         if(response.token){
-            cookies.setCookie('user_session', response.token);
-            return navigate("/");
+            SetCookie('user_session', response.token);
+            return navigate("/home");
         }
     }
 
