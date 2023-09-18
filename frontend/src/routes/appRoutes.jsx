@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Login from "../components/auth/login/login";
-import Register from "../components/auth/users/register";
-import Home from "../components/app/home";
+import Login from "../pages/users/login";
+import Register from "../pages/users/register";
+import Home from "../pages/app/home";
 import { PrivateRoute } from "./privateRoute";
 
 const AppRoutes = () => {

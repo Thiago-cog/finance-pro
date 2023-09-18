@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import authServices from "../../../services/userServices";
-import Logo from "../../../assets/2-removebg-preview.png";
+import authServices from "../../services/userServices";
+import Logo from "../../assets/2-removebg-preview.png"
 
 const Register = () => {
     const [email, setEmail] = useState("");
