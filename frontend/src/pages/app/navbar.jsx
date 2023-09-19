@@ -1,7 +1,36 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Logo from "../../assets/2-removebg-preview.png";
 import AllStatus from "../../components/dashbord/allStatus";
+import GetCookie from "../../hooks/getCookie.jsx";
+import RemoveCookie from "../../hooks/removeCookie.jsx";
+import authServices from "../../services/authServices.js";
 
 const Navbar = () => {
+    const [name, setName] = useState("");
+    const navigate = useNavigate();
+    
+    useEffect( () => {
+        async function getUser() {
+            const token = GetCookie("user_session");
+            try{
+                const response = await authServices.decodeToken(token);
+                setName(response.userToken.fullname);
+            }catch(error){
+                console.log(error);
+            }
+        }
+        getUser();
+    }, []);
+
+    function logout() {
+        RemoveCookie("user_session");
+        // chamar a rota de logout do backend.
+        navigate("/");
+
+    }
+
     return (
         <div>
             <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -20,7 +49,8 @@ const Navbar = () => {
                         </div>
                         <div className="flex items-center">
                             <div className="flex items-center ml-3">
-                                <div>
+                                <div className="flex">
+                                    <span className="text-white pr-2 pt-1 font-sans text-base">{name}</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-8 h-8 text-white">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
@@ -70,12 +100,12 @@ const Navbar = () => {
                             </a>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                            <button onClick={logout} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                                 </svg>
                                 <span className="flex-1 ml-3 whitespace-nowrap">Sair</span>
-                            </a>
+                            </button>
                         </li>
                     </ul>
                 </div>
@@ -160,9 +190,6 @@ const Navbar = () => {
                 </div>
             </div>
         </div>
-        // <div className="">
-        //   <Outlet />
-        // </div>
     );
 }
 

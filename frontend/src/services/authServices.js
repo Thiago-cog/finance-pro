@@ -9,6 +9,20 @@ class AuthService {
             throw error;
         }
     }
+
+    async decodeToken(token) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        try{
+            const response = await axios.get(`${BASE_URL}/auth/decode-token`, config);
+            return response.data;
+        }catch (error){
+            throw error;
+        }
+    }
 }
 
 export default new AuthService();

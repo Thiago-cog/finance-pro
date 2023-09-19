@@ -21,6 +21,13 @@ class AuthController {
         await authService.singOut(req.user.token);
         return res.status(204).send();
     }
+
+    async decode(req, res) {
+        const authService = new AuthService();
+        const [, token] = req.headers.authorization.split(' ');
+        const decode = await authService.decodeToken(token);
+        return res.status(200).json(decode);
+    }
 }
 
 module.exports = new AuthController();
