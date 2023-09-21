@@ -14,7 +14,7 @@ const Login = () => {
 
     useEffect(() => {
         if (isUserAuthorized) {
-            return navigate("/home");
+            return navigate("/dashboard");
         }
     });
 
@@ -25,7 +25,7 @@ const Login = () => {
 
         if (response.token) {
             SetCookie('user_session', response.token);
-            return navigate("/home");
+            return navigate("/dashboard");
         }
     }
 
