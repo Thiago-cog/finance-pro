@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Wallet, CreditCard } from 'lucide-react';
 
 function FormAccount() {
     const [nameAccount, setNameAccount] = useState("");
@@ -14,12 +15,8 @@ function FormAccount() {
         
         setValueBalance(inputValue);
     }
-    
-    function showDropTypeAccount(e) {
-        e.target.parentElement.children[1].classList.toggle("hidden");
-    }
 
-    function setValueDropDown(e) {
+    function setValueTypeAccount(e) {
         let valueTypeAccount = e.target.value;
         setTypeAccount(valueTypeAccount);
     }
@@ -41,9 +38,7 @@ function FormAccount() {
                             <a className="cursor-pointer">
                                 <div className="flex items-center instance group">
                                     <div className="svg-container group-hover:text-sky-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
-                                        </svg>
+                                        <Wallet/>
                                     </div>
                                     <div className="pl-3 heading-container">
                                         <p className="text-base font-medium leading-none text-slate-800 group-hover:text-sky-600 ">
@@ -55,9 +50,7 @@ function FormAccount() {
                             <a className="cursor-pointer">
                                 <div className="flex items-center instance group">
                                     <div className="svg-container group-hover:text-sky-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
-                                        </svg>
+                                        <CreditCard/>
                                     </div>
                                     <div className="pl-3 heading-container">
                                         <p className="text-base font-medium leading-none text-slate-800 group-hover:text-sky-600">
@@ -86,7 +79,7 @@ function FormAccount() {
                                     Tipo de Conta
                                 </p>
                                 <div className="relative top-1">
-                                    <select className=" border-gray-300 relative flex items-center justify-between w-full h-14 px-5 py-4 rounded" onChange={setValueDropDown}>
+                                    <select className=" border-gray-300 relative flex items-center justify-between w-full h-14 px-5 py-4 rounded outline-none focus:bg-gray-50" onChange={setValueTypeAccount}>
                                         <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={1}>Conta Corrente</option>
                                         <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={2}>Conta Poupança</option>
                                     </select>
