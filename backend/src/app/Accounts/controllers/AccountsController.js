@@ -3,8 +3,7 @@ const AccountsService = require("../services/AccountsService");
 
 class AccountsController {
     async createAccounts(req, res) {
-        const { name, typeaccount, balance } = req.body;
-        const userId = req.user.id;
+        const { name, typeaccount, balance, userId } = req.body;
         const result = await new AccountsService().createAccountByUserId(userId, name, typeaccount, balance);
 
         if (!result.status) {

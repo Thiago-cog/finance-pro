@@ -1,20 +1,19 @@
 import { useState, useEffect } from "react";
 import { Wallet, CreditCard } from 'lucide-react';
 
+import { InputMoney } from "../input/inputMoney";
+import accountsServices from "../../services/accountsServices";
+import authServices from "../../services/authServices";
+import GetCookie from "../../hooks/getCookie";
+
 function FormAccount() {
     const [nameAccount, setNameAccount] = useState("");
-    const [valueBalance, setValueBalance] = useState("");
     const [typeAccount, setTypeAccount] = useState(1);
+    const [valueBalance, setValueBalance] = useState(0);
+    const token = GetCookie("user_session");
 
+    // carregar contas já cadastradas no useEffect.
     // useEffect(() => { });
-
-    function handleValueBalanceChange(e) {
-        let inputValue =  e.target.value;
-        // let valueFormat = inputValue.replace(/[^0-9.]/g, '');
-        // let value = parseFloat(valueFormat).toFixed(2);
-        
-        setValueBalance(inputValue);
-    }
 
     function setValueTypeAccount(e) {
         let valueTypeAccount = e.target.value;
@@ -23,10 +22,10 @@ function FormAccount() {
 
     const handleSave = async (e) => {
         e.preventDefault();
-
-        console.log(nameAccount);
-        console.log(valueBalance);
-        console.log(typeAccount);
+        const decodeToken = await authServices.decodeToken(token);
+        const userId = decodeToken.userToken.id;
+        const response = await accountsServices.createAccount(token, nameAccount, typeAccount, valueBalance, userId);
+        console.log(response);
     }
 
     return (
@@ -90,8 +89,11 @@ function FormAccount() {
                                     Saldo
                                 </p>
                                 <div className="flex pt-4">
-                                    <p className="border flex items-center p-3 bg-color bg-gray-200 rounded-l">R$</p>
-                                    <input className="w-full p-3 border border-gray-300 rounded-r outline-none focus:bg-gray-50" type="text" value={valueBalance} onChange={handleValueBalanceChange} />
+                                    <InputMoney
+                                        onValue={setValueBalance}
+                                        classP="border flex items-center p-3 bg-color bg-gray-200 rounded-l"
+                                        classInput="w-full p-3 border border-gray-300 rounded-r outline-none focus:bg-gray-50" 
+                                    />
                                 </div>
                             </div>
                         </div>
