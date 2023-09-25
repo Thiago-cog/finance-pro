@@ -8,7 +8,7 @@ class AccountsService {
 
     async createAccountByUserId(userId, name, typeaccount, balance) {
         const conn = await this.databaseConnector.generateConnection();
-        let retornoJson = {
+        let returnJson = {
             status: null,
             message: null,
         };
@@ -17,19 +17,19 @@ class AccountsService {
             conn.query(`
                 INSERT INTO accounts(user_id, name, type_accounts, balance) VALUES($1, $2, $3, $4)
             `, [userId, name, typeaccount, balance]);
-            retornoJson.status = true;
-            retornoJson.message = "Conta cadastrada com sucesso.";
+            returnJson.status = true;
+            returnJson.message = "Conta cadastrada com sucesso.";
         } catch (error) {
-            retornoJson.status = false;
-            retornoJson.message = "Erro ao cadastrar a sua conta.";
+            returnJson.status = false;
+            returnJson.message = "Erro ao cadastrar a sua conta.";
         }
 
-        return retornoJson;
+        return returnJson;
     }
 
     async createCardByAccountId(accountsId, numberCard, dueDay, limitCard, value){
         const conn = await this.databaseConnector.generateConnection();
-        let retornoJson = {
+        let returnJson = {
             status: null,
             message: null,
         };
@@ -45,20 +45,20 @@ class AccountsService {
                 `, [accountsId, numberCard, dueDay, limitCard]);
             }
 
-            retornoJson.status = true;
-            retornoJson.message = "Cartão cadastrado com sucesso.";
+            returnJson.status = true;
+            returnJson.message = "Cartão cadastrado com sucesso.";
         }catch(error){
-            retornoJson.status = false;
-            retornoJson.message = "Erro ao cadastrar a seu cartão. " + error.message;    
+            returnJson.status = false;
+            returnJson.message = "Erro ao cadastrar a seu cartão. " + error.message;    
         }
 
-        return retornoJson;
+        return returnJson;
     }
 
     async createMovementExtract(accountsId, value, type_movement, date_movement, month, year) {
         const conn = await this.databaseConnector.generateConnection();
         
-        let retornoJson = {
+        let returnJson = {
             status: null,
             message: null,
         };
@@ -77,20 +77,20 @@ class AccountsService {
 
             await conn.query(`UPDATE accounts SET balance = $1`, [calculateValueResult.valueFinal]);
 
-            retornoJson.status = true;
-            retornoJson.message = calculateValueResult.type + " lançada com sucesso";
+            returnJson.status = true;
+            returnJson.message = calculateValueResult.type + " lançada com sucesso";
         }catch(error){
-            retornoJson.status = false;
-            retornoJson.message = "Ocorreu um erro inesperado. "  + error.message;
+            returnJson.status = false;
+            returnJson.message = "Ocorreu um erro inesperado. "  + error.message;
         }
 
-        return retornoJson;
+        return returnJson;
     }
 
     async createMovementInvoice(cardId, value, type_movement, date_movement, month, year) {
         const conn = await this.databaseConnector.generateConnection();
         let type = '';
-        let retornoJson = {
+        let returnJson = {
             status: null,
             message: null,
         };
@@ -110,14 +110,46 @@ class AccountsService {
             INSERT INTO invoices(card_id, value, type_movement, date_movement, month, year) VALUES($1, $2, $3, $4, $5, $6)`,
             [cardId, value, type_movement, date_movement, month, year]);
 
-            retornoJson.status = true;
-            retornoJson.message = type + " lançado com sucesso";
+            returnJson.status = true;
+            returnJson.message = type + " lançado com sucesso";
         }catch(error){
-            retornoJson.status = false;
-            retornoJson.message = "Ocorreu um erro inesperado. " + error.message;
+            returnJson.status = false;
+            returnJson.message = "Ocorreu um erro inesperado. " + error.message;
         }
 
-        return retornoJson;
+        return returnJson;
+    }
+
+    async getAccountsByUserId (userId) {
+        const conn = await this.databaseConnector.generateConnection();
+        let returnJson = {
+            status: null,
+            message: null,
+            accounts: null
+        };
+
+        try{
+            const result = await conn.query(` 
+            SELECT id,
+                   user_id,
+                   name,
+                   CASE
+                       WHEN type_accounts = 1 THEN 'Conta Corrente'
+                       ELSE 'Conta Poupança'
+                   END AS type_account,
+                   balance
+            FROM accounts
+            WHERE user_id = $1`, [userId]);
+            
+            returnJson.status = true;
+            returnJson.message = "sucesso";
+            returnJson.accounts = result.rows;
+        }catch(error){
+            returnJson.status = false;
+            returnJson.message = "Ocorreu um erro inesperado. " + error.message;
+        }
+        
+        return returnJson;
     }
 
 

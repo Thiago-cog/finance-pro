@@ -49,6 +49,19 @@ class AccountsController {
         }
         return res.status(200).json({ "message": result.message });
     }
+
+    async getAccounts(req, res) {
+        const userId = parseInt(req.params.userId)
+        const result = await new AccountsService().getAccountsByUserId(userId);
+
+        if (!result.status) {
+            return res.status(500).json({ "message": result.message });
+        }
+        return res.status(200).json({ 
+            "message": result.message,
+            "accounts": result.accounts 
+        });
+    }
 }
 
 module.exports = new AccountsController();

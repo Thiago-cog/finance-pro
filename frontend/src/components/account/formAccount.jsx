@@ -10,10 +10,19 @@ function FormAccount() {
     const [nameAccount, setNameAccount] = useState("");
     const [typeAccount, setTypeAccount] = useState(1);
     const [valueBalance, setValueBalance] = useState(0);
+    const [listAccounts, setListAccounts] = useState([]);
     const token = GetCookie("user_session");
 
-    // carregar contas já cadastradas no useEffect.
-    // useEffect(() => { });
+    
+    async function getAccounts() {
+        const decodeToken = await authServices.decodeToken(token);
+        const userId = decodeToken.userToken.id;
+        const response = await accountsServices.getAccounts(token, userId);
+        setListAccounts(response.accounts)
+    }
+    useEffect(() => {
+        getAccounts();
+    }, []);
 
     function setValueTypeAccount(e) {
         let valueTypeAccount = e.target.value;
@@ -25,19 +34,59 @@ function FormAccount() {
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
         const response = await accountsServices.createAccount(token, nameAccount, typeAccount, valueBalance, userId);
-        console.log(response);
+        setNameAccount("");
+        getAccounts();
+        alert(response.message);
     }
 
     return (
         <>
             <div className="py-4 px-2">
-                <div className="bg-white rounded shadow mt-7 py-7">
+                <div class="relative overflow-x-auto rounded-md">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    nome da conta
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    tipo da conta
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    status
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    saldo
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {listAccounts.map((account, index) => (
+                                <tr class="bg-white border-b ">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        {account.name}
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {account.type_account}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        Ativa
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        R${account.balance}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="bg-white rounded-md shadow mt-7 py-7">
                     <div className="hidden lg:block md:hidden">
                         <div className="px-7 header flex bg-white lg:justify-around md:justify-around justify-start pb-8 pt-2 border-b-[2px] border-slate-100 flex-wrap gap-x-4 ">
                             <a className="cursor-pointer">
                                 <div className="flex items-center instance group">
                                     <div className="svg-container group-hover:text-sky-600">
-                                        <Wallet/>
+                                        <Wallet />
                                     </div>
                                     <div className="pl-3 heading-container">
                                         <p className="text-base font-medium leading-none text-slate-800 group-hover:text-sky-600 ">
@@ -49,7 +98,7 @@ function FormAccount() {
                             <a className="cursor-pointer">
                                 <div className="flex items-center instance group">
                                     <div className="svg-container group-hover:text-sky-600">
-                                        <CreditCard/>
+                                        <CreditCard />
                                     </div>
                                     <div className="pl-3 heading-container">
                                         <p className="text-base font-medium leading-none text-slate-800 group-hover:text-sky-600">
@@ -92,7 +141,7 @@ function FormAccount() {
                                     <InputMoney
                                         onValue={setValueBalance}
                                         classP="border flex items-center p-3 bg-color bg-gray-200 rounded-l"
-                                        classInput="w-full p-3 border border-gray-300 rounded-r outline-none focus:bg-gray-50" 
+                                        classInput="w-full p-3 border border-gray-300 rounded-r outline-none focus:bg-gray-50"
                                     />
                                 </div>
                             </div>
@@ -106,7 +155,7 @@ function FormAccount() {
                     </div>
                 </div>
             </div>
-                    
+
         </>
     );
 }
