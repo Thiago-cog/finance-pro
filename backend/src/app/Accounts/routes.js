@@ -9,5 +9,6 @@ routes.post('/accounts/create-revenue', authenticateToken, accountsController.cr
 routes.post('/accounts/create-expense-extract', authenticateToken, accountsController.createMovementExtract);
 routes.post('/accounts/create-chargeback', authenticateToken, accountsController.createMovementInvoice);
 routes.post('/accounts/create-expense-invoice', authenticateToken, accountsController.createMovementInvoice);
+routes.get('/accounts/get-accounts/:userId', authenticateToken, accountsController.getAccounts);
 
 module.exports = routes;

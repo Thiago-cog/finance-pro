@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import authServices from "../../../services/userServices";
-import Logo from "../../../assets/2-removebg-preview.png";
+import authServices from "../../services/userServices";
+import Logo from "../../assets/2-removebg-preview.png"
 
 const Register = () => {
     const [email, setEmail] = useState("");
@@ -44,7 +44,7 @@ const Register = () => {
                                 type="text"
                                 autoComplete="text"
                                 required
-                                className="block w-full rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>

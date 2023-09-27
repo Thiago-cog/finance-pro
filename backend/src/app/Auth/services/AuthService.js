@@ -24,8 +24,6 @@ class AuthService {
                 email
             }
 
-            // verifica se o usuário já está logado pelo redis.
-            const userSession = await get(`user_session_token:${id}`);
 
             if (!passwordMatch) {
                 throw new AuthError('Senha não confere!');
@@ -39,7 +37,7 @@ class AuthService {
                 expiresIn: config.auth.expiresIn
             });
             
-            await set(`user_session_token:${id}`, token);
+            await set(`user_session_data:${id}`, userToken);
 
             return {
                 user: {
@@ -69,11 +67,17 @@ class AuthService {
             if (await this.isTokenBlackListed(token)) {
                 throw new AuthError('Token está na BlackList');
             }
-            const decoded = jwt.verify(token, config.auth.secret);
+            const decoded = this.decodeToken(token);
             return decoded.userToken;
         } catch (error) {
             throw new AuthError('Token inválido');
         }
+    }
+
+    async decodeToken(token) {
+        const decoded = jwt.verify(token, config.auth.secret);
+
+        return decoded;
     }
 
     async isTokenBlackListed(token) {
