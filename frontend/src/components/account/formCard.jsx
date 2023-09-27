@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
-import { Wallet } from 'lucide-react';
+import { CreditCard } from 'lucide-react';
 
 import { InputMoney } from "../input/inputMoney";
 import accountsServices from "../../services/accountsServices";
 import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
 
-function FormAccount() {
+function FormCard() {
     const [nameAccount, setNameAccount] = useState("");
     const [typeAccount, setTypeAccount] = useState(1);
     const [valueBalance, setValueBalance] = useState(0);
     const [listAccounts, setListAccounts] = useState([]);
     const token = GetCookie("user_session");
 
-    
+
     async function getAccounts() {
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
@@ -86,11 +86,11 @@ function FormAccount() {
                             <a className="cursor-pointer">
                                 <div className="flex items-center instance group">
                                     <div className="svg-container group-hover:text-sky-600">
-                                        <Wallet />
+                                        <CreditCard />
                                     </div>
                                     <div className="pl-3 heading-container">
                                         <p className="text-base font-medium leading-none text-slate-800 group-hover:text-sky-600 ">
-                                            Conta
+                                            Cartão
                                         </p>
                                     </div>
                                 </div>
@@ -99,12 +99,12 @@ function FormAccount() {
                     </div>
                     <div className="mt-10 px-7">
                         <p className="text-xl font-semibold leading-tight text-gray-800">
-                            Cadastro de Contas
+                            Cadastro de Cartão
                         </p>
                         <div className="grid w-full grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-7 mt-7 ">
                             <div>
                                 <p className="text-base font-medium leading-none text-gray-800">
-                                    Nome da conta
+                                    Número do Cartão
                                 </p>
                                 <div className="mb-5">
                                     <input className="font-sans font-normal text-base  w-full p-3 mt-4 border border-gray-300 rounded outline-none focus:bg-gray-50" value={nameAccount} onChange={(e) => setNameAccount(e.target.value)} type="text" />
@@ -112,18 +112,19 @@ function FormAccount() {
                             </div>
                             <div>
                                 <p className="text-base font-medium leading-none text-gray-800 pb-2">
-                                    Tipo de Conta
+                                    Conta
                                 </p>
                                 <div className="relative top-1">
                                     <select className=" border-gray-300 relative flex items-center justify-between w-full h-14 px-5 py-4 rounded outline-none focus:bg-gray-50" onChange={setValueTypeAccount}>
-                                        <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={1}>Conta Corrente</option>
-                                        <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={2}>Conta Poupança</option>
+                                        {listAccounts.map((account, index) => (
+                                            <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={account.id}>{account.name}</option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
                             <div>
                                 <p className="text-base font-medium leading-none text-gray-800">
-                                    Saldo
+                                    Limite do Cartão
                                 </p>
                                 <div className="flex pt-4">
                                     <InputMoney
@@ -131,6 +132,26 @@ function FormAccount() {
                                         classP="border flex items-center p-3 bg-color bg-gray-200 rounded-l"
                                         classInput="w-full p-3 border border-gray-300 rounded-r outline-none focus:bg-gray-50"
                                     />
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-base font-medium leading-none text-gray-800">
+                                    Valor da Fatura
+                                </p>
+                                <div className="flex pt-4">
+                                    <InputMoney
+                                        onValue={setValueBalance}
+                                        classP="border flex items-center p-3 bg-color bg-gray-200 rounded-l"
+                                        classInput="w-full p-3 border border-gray-300 rounded-r outline-none focus:bg-gray-50"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-base font-medium leading-none text-gray-800">
+                                    Data de Vencimento
+                                </p>
+                                <div className="mb-5">
+                                    <input className="font-sans font-normal text-base  w-full p-3 mt-4 border border-gray-300 rounded outline-none focus:bg-gray-50" value={nameAccount} onChange={(e) => setNameAccount(e.target.value)} type="text" />
                                 </div>
                             </div>
                         </div>
@@ -148,4 +169,4 @@ function FormAccount() {
     );
 }
 
-export default FormAccount;
+export default FormCard;
