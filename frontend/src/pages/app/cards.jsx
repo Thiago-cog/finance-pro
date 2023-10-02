@@ -1,9 +1,14 @@
-import React from "react";
+import {useEffect} from "react";
 
 import Navbar from "./navbar";
 import FormCard from "../../components/account/formCard";
 
 const Cards = () => {
+
+    useEffect(() => {
+        alert('Funcionalidade da página ainda não implementada!');
+    }, [])
+    
     return (
         <>
             <Navbar/>
