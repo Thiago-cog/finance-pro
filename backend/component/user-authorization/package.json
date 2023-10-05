@@ -1,0 +1,14 @@
+{
+  "name": "user-authorization",
+  "version": "1.0.0",
+  "description": "",
+  "main": "user-authorization.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "author": "Thiago Santos",
+  "license": "ISC"
+}
