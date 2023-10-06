@@ -10,5 +10,6 @@
     "test": "jest --coverage"
   },
   "author": "Thiago Santos",
+  "type": "module",
   "license": "ISC"
 }

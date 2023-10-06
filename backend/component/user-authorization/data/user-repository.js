@@ -1,4 +1,4 @@
-import Database from "./connectors/database";
+import Database from "./connectors/database.js";
 
 class UserRepository {
     constructor() {
@@ -12,4 +12,4 @@ class UserRepository {
     }
 }
 
-module.exports = UserRepository;
+export default UserRepository;

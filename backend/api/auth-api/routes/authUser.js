@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import authenticateToken from './middleware/authenticateToken';
+import authenticateToken from './middleware/authenticateToken.js';
 
-import UserAuthorization from '../../../component/user-authorization/userAuthorization';
-import UserRepository from '../../../component/user-authorization/data/user-repository';
+import UserAuthorization from '../../../component/user-authorization/user-authorization.js';
+import UserRepository from '../../../component/user-authorization/data/user-repository.js';
 
 const router = Router();
 
@@ -12,3 +12,5 @@ router.post('/login', authenticateToken, async (req, res) => {
     const result = await userAuthorization.login(userData);
 
 });
+
+export default router;

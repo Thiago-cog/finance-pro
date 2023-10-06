@@ -19,3 +19,5 @@ const authenticateToken = async (req, res, next) => {
 
     return next();
 }
+
+export default authenticateToken;

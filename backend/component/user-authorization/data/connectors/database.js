@@ -1,7 +1,4 @@
-const { Pool } = require('pg');
-const dotenv = require('dotenv');
-dotenv.config();
-
+import Pool   from 'pg';
 class Database {
     async configureConnection() {
         const databaseConnection = new Pool({
@@ -20,4 +17,4 @@ class Database {
     }
 }
 
-module.exports = Database;
+export default Database;
