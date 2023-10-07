@@ -22,4 +22,18 @@ router.post('/login', async (req, res) => {
     applyResult(result, res);
 });
 
+router.get('/decode-token', authenticateToken, async (req, res) => {
+    const userAuthorization = new UserAuthorization(new UserRepository());
+    const [, token] = req.headers.authorization.split(' ');
+    const result = await userAuthorization.decodeToken(token);
+    applyResult(result, res);
+});
+
+router.put('/register', async (req, res) => {
+    const userAuthorization = new UserAuthorization(new UserRepository());
+    const userData = req.body;
+    const result = await userAuthorization.register(userData);
+    applyResult(result, res);
+});
+
 module.exports = router;

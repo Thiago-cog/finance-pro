@@ -4,6 +4,23 @@ const jwt =  require('jsonwebtoken');
 class UserAuthorization {
     constructor(userRepository) {
         this.userRepository = userRepository;
+        this.saltRounds = 10;
+    }
+
+    async decodeToken(token) {
+        let result = {}
+        try{
+            const decoded = jwt.verify(token, process.env.AUTH_SECRET);
+            result.status = 200;
+            result.data = decoded;
+        }catch(error){
+            result.status = 500
+            result.errors = {
+                errors: error,
+                message: "Erro inesperado aconteceu!" + error.message 
+            }
+        }
+        return result;
     }
 
     async login(userData) {
@@ -31,6 +48,7 @@ class UserAuthorization {
             const token = jwt.sign({ userToken }, process.env.AUTH_SECRET, {
                 expiresIn: process.env.AUTH_EXPIRES_IN
             });
+
             result.status = 200;
             result.data = {
                 user: {
@@ -42,14 +60,32 @@ class UserAuthorization {
                 message: "Usuário logado com sucesso!"
             }
         }catch(error){
+            result.status = 500
             result.errors = {
-                status: 500,
                 errors: error,
-                message: "Erro inesperado aconteceu!"
-            };
-
+                message: "Erro inesperado aconteceu!" + error.message 
+            }
         }
-
+        return result;
+    }
+    
+    async register(userData) {
+        let result = {}
+        const [email, password, fullname] = userData
+        try{
+            const hash = await bcrypt.hash(password, this.saltRounds);
+            this.userRepository.createUser(email, hash, fullname);
+            result.status = 201;
+            result.data = {
+                message: "Usuário cadastrado com sucesso!"
+            }
+        }catch(error){
+            result.status = 500
+            result.errors = {
+                errors: error,
+                message: "Erro inesperado aconteceu!" + error.message 
+            }
+        }
         return result;
     }
 }
