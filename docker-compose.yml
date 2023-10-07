@@ -39,7 +39,7 @@ services:
   auth-api:
     container_name: auth-api
     build:
-      context: ./backend
+      context: ./backend/api/auth-api
     ports:
       - "3001:3001"
     volumes:

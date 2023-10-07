@@ -1,16 +1,25 @@
-import { Router } from 'express';
-import authenticateToken from './middleware/authenticateToken.js';
+const { Router } = require('express');
+const authenticateToken = require('./middleware/authenticateToken.js');
 
-import UserAuthorization from '../../../component/user-authorization/user-authorization.js';
-import UserRepository from '../../../component/user-authorization/data/user-repository.js';
+const UserAuthorization = require('../component/user-authorization.js');
+const UserRepository = require('../component/data/user-repository.js');
 
 const router = Router();
 
-router.post('/login', authenticateToken, async (req, res) => {
+const applyResult = (result, res) => {
+    if (result.errors) {
+        res.status(result.status);
+        return res.send(result.errors);
+    }
+    res.status(result.status);
+    return res.send(result.data);
+};
+
+router.post('/login', async (req, res) => {
     const userAuthorization = new UserAuthorization(new UserRepository());
     const userData = req.body;
     const result = await userAuthorization.login(userData);
-
+    applyResult(result, res);
 });
 
-export default router;
+module.exports = router;

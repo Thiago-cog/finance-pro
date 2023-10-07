@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node app.js"
+    "dev": "node bin/www.js",
+    "start": "nodemon bin/www.js"
   },
   "author": "Thiago Santos",
-  "type": "module",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "bcrypt": "^5.1.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2"
   }
 }

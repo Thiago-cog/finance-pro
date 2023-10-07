@@ -1,13 +1,29 @@
-import express from 'express';
-import authUser from './routes/authUser.js';
+const express = require('express');
+const cors = require('cors');
+const authUser = require('./routes/authUser.js');
 
-import dotenv from 'dotenv';
-dotenv.config();
+class App {
+    constructor() {
+        this.app = express();
+        this.middlewares();
+        this.routes();
+    }
 
-const app = express();
+    listen(port) {
+        this.app.listen(port, () => {
+            console.log(`Server started at ${port}`);
+        });
+    }
 
-app.use('user/', authUser);
+    middlewares() {
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
+        this.app.use(cors());
+    }
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server started at ${process.env.PORT}`);
-});
+    routes() {
+        this.app.use('/user',authUser);
+    }
+}
+
+module.exports = App;

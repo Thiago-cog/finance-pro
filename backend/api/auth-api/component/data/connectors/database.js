@@ -1,4 +1,4 @@
-import Pool   from 'pg';
+const { Pool } = require('pg');
 class Database {
     async configureConnection() {
         const databaseConnection = new Pool({
@@ -17,4 +17,4 @@ class Database {
     }
 }
 
-export default Database;
+module.exports = Database;
