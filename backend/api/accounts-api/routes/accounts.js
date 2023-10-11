@@ -18,6 +18,44 @@ const applyResult = (result, res) => {
 router.get('/get-accounts/:userId', authenticateToken, async(req, res) => {
     const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
     const userId = parseInt(req.params.userId)
-    const result = accountsMaintenance.tes();
+    const result = accountsMaintenance.getAccountsByUserId(userId);
+    applyResult(result, res);
+});
+
+router.post('/create-accounts', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    const accountData = req.body;
+    const result = accountsMaintenance.createAccount(accountData);
+    applyResult(result, res);
+});
+
+router.post('/create-card', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    const cardData = req.body;
+    const result = accountsMaintenance.createCard(cardData);
+    applyResult(result, res);
+});
+
+router.post('/create-revenue', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    
+    applyResult(result, res);
+});
+
+router.post('/create-expense-extract', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    
+    applyResult(result, res);
+});
+
+router.post('/create-chargeback', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    
+    applyResult(result, res);
+});
+
+router.post('/create-expense-invoice', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    
     applyResult(result, res);
 });

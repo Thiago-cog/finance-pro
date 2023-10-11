@@ -18,6 +18,29 @@ class AccountsRepository {
                    balance
             FROM accounts
             WHERE user_id = $1`, [userId]);
+        
+        return result.rows;
+    }
+
+    async createAccountByUserId(accountData) {
+        const conn = await this.databaseConnector.generateConnection();
+        const { userId, name, typeaccount, balance } = accountData;
+        conn.query(`
+            INSERT INTO accounts(user_id, name, type_accounts, balance) VALUES($1, $2, $3, $4)
+        `, [userId, name, typeaccount, balance]);
+    }
+
+    async createCardByAccountId(cardData) {
+        const conn = await this.databaseConnector.generateConnection();
+        const { accountsId, numberCard, dueDay, limitCard } = cardData;
+        let value = 0;
+
+        if(cardData.value){
+            value = cardData.value;
+        }
+        conn.query(`
+            INSERT INTO cards(accounts_id, number_card, due_day, limit_card, value) VALUES($1, $2, $3, $4, $5)
+        `, [accountsId, numberCard, dueDay, limitCard, value]);
     }
 }
 
