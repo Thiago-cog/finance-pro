@@ -1,14 +1,16 @@
 version: '3'
 services:
   redis:
+    container_name: redis
     image: redis:latest
     restart: always
     ports:
       - 6379:6379
     networks:
-      - my-network
+      - finance-pro
 
   postgres:
+    container_name: postgres
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
@@ -18,11 +20,12 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - my-network
+      - finance-pro
     volumes:
       - ./init:/docker-entrypoint-initdb.d
 
   frontend:
+    container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -31,19 +34,29 @@ services:
     volumes:
       - ./frontend:/app/frontend
     networks:
-      - my-network
+      - finance-pro
   
-  backend:
+  auth-api:
+    container_name: auth-api
     build:
-      context: ./backend
+      context: ./backend/api/auth-api
     ports:
       - "3001:3001"
     volumes:
       - ./backend:/app/backend
-    depends_on:
-      - postgres
     networks:
-      - my-network
+      - finance-pro
+
+  accounts-api:
+    container_name: accounts-api
+    build:
+      context: ./backend/api/accounts-api
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./backend:/app/backend
+    networks:
+      - finance-pro
 
 networks:
-  my-network:
+  finance-pro:

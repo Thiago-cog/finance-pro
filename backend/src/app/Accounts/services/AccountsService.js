@@ -41,7 +41,7 @@ class AccountsService {
                 `, [accountsId, numberCard, dueDay, limitCard, value]);
             }else{
                 conn.query(`
-                    INSERT INTO cards(accounts_id, number_card, due_day, limit_card, value) VALUES($1, $2, $3, $4)
+                    INSERT INTO cards(accounts_id, number_card, due_day, limit_card) VALUES($1, $2, $3, $4)
                 `, [accountsId, numberCard, dueDay, limitCard]);
             }
 
