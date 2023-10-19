@@ -18,44 +18,36 @@ const applyResult = (result, res) => {
 router.get('/get-accounts/:userId', authenticateToken, async(req, res) => {
     const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
     const userId = parseInt(req.params.userId)
-    const result = accountsMaintenance.getAccountsByUserId(userId);
+    const result = await accountsMaintenance.getAccountsByUserId(userId);
     applyResult(result, res);
 });
 
 router.post('/create-accounts', authenticateToken, async(req, res) => {
     const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
     const accountData = req.body;
-    const result = accountsMaintenance.createAccount(accountData);
+    const result = await accountsMaintenance.createAccount(accountData);
     applyResult(result, res);
 });
 
 router.post('/create-card', authenticateToken, async(req, res) => {
     const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
     const cardData = req.body;
-    const result = accountsMaintenance.createCard(cardData);
+    const result = await accountsMaintenance.createCard(cardData);
     applyResult(result, res);
 });
 
-router.post('/create-revenue', authenticateToken, async(req, res) => {
+router.post('/create-movement-extract', authenticateToken, async(req, res) => {
     const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
-    
+    const movementData = req.body;
+    const result = await accountsMaintenance.createMovementExtract(movementData);
     applyResult(result, res);
 });
 
-router.post('/create-expense-extract', authenticateToken, async(req, res) => {
-    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+router.post('/create-movement-invoice', authenticateToken, async(req, res) => {
+    console.log('ok');
+    // const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
     
-    applyResult(result, res);
+    // applyResult(result, res);
 });
 
-router.post('/create-chargeback', authenticateToken, async(req, res) => {
-    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
-    
-    applyResult(result, res);
-});
-
-router.post('/create-expense-invoice', authenticateToken, async(req, res) => {
-    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
-    
-    applyResult(result, res);
-});
+module.exports = router;

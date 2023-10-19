@@ -25,7 +25,7 @@ class AccountsRepository {
     async createAccountByUserId(accountData) {
         const conn = await this.databaseConnector.generateConnection();
         const { userId, name, typeaccount, balance } = accountData;
-        conn.query(`
+        await conn.query(`
             INSERT INTO accounts(user_id, name, type_accounts, balance) VALUES($1, $2, $3, $4)
         `, [userId, name, typeaccount, balance]);
     }
@@ -38,9 +38,27 @@ class AccountsRepository {
         if(cardData.value){
             value = cardData.value;
         }
-        conn.query(`
+        await conn.query(`
             INSERT INTO cards(accounts_id, number_card, due_day, limit_card, value) VALUES($1, $2, $3, $4, $5)
         `, [accountsId, numberCard, dueDay, limitCard, value]);
+    }
+
+    async getBalanceByAccountId(accountId) {
+        const conn = await this.databaseConnector.generateConnection();
+        const result = await conn.query(`SELECT balance FROM accounts WHERE id = $1`, [accountId]);
+        return result.rows[0];
+    }
+
+    async createMovementExtract(movementData) {
+        const conn = await this.databaseConnector.generateConnection();
+        await conn.query(`
+            INSERT INTO extracts(account_id, value, type_movement, date_movement, month, year) VALUES($1, $2, $3, $4, $5, $6)`,
+            [movementData.accountsId, movementData.value, movementData.type_movement, movementData.date_movement, movementData.month, movementData.year]);
+    }
+
+    async updateBalanceByAccountId(accountId, valueFinal) {
+        const conn = await this.databaseConnector.generateConnection();
+        await conn.query(`UPDATE accounts SET balance = $1 WHERE id = $2`, [valueFinal, accountId]);
     }
 }
 

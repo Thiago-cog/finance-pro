@@ -12,7 +12,6 @@ const authenticateToken = async (req, res, next) => {
     const [, token] = authHeader.split(' ');
 
     try {
-        const userAuthorization = new UserAuthorization(new UserRepository());
         const userData = await userAuthorization.decodeToken(token);
         req.user = userData.data;
     } catch (error) {
