@@ -1,0 +1,21 @@
+{
+  "name": "accounts-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "bin": {
+    "accounts-api": "bin/www.js"
+  },
+  "scripts": {
+    "test": "jest --coverage",
+    "dev": "node bin/www.js",
+    "start": "nodemon bin/www.js"
+  },
+  "author": "Thiago Santos",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
