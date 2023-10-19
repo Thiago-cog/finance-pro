@@ -77,31 +77,29 @@ class AccountsMaintenance {
         return result;
     }
 
-    async createMovementExtract(movementData) {
+    async createMovementExtract(movementExtractData) {
         let result = {};
         try{
-            const { accountsId, value, type_movement } = movementData;    
+            const { accountsId, value, type_movement } = movementExtractData;    
             if(!Math.sign(value)){
                 result.status = 500;
                 result.errors = {
                     errors: 'VALOR NEGATIVO',
-                    message: 'O valor da ' + calculateValueResult.type + ' não pode ser negativo'
+                    message: 'O valor da movimentação não pode ser negativo'
                 };
                 return result
             }
 
-            const accountResult = await this.accountsRepository.getBalanceByAccountId(accountsId);
+            const accountResult = await this.accountsRepository.getAccountById(accountsId);
             const calculateValueResult = this.#calculateValueExtract(accountResult.balance, value, type_movement);
 
-            await this.accountsRepository.createMovementExtract(movementData);
+            await this.accountsRepository.createMovementExtract(movementExtractData);
             await this.accountsRepository.updateBalanceByAccountId(accountsId, calculateValueResult.valueFinal);
 
             result.status = 200;
             result.data = {
                 message: 'Movimentação salva com sucesso'
             };
-
-            return result;
         }catch(error){
             result.status = 500
             result.errors = {
@@ -109,6 +107,34 @@ class AccountsMaintenance {
                 message: "Erro inesperado aconteceu!" + error.message 
             };
         }
+        return result;
+    }
+
+    async createMovementInvoice(movementInvoiceData) {
+        let result = {};
+        try{
+            const { cardId, value, type_movement } = movementInvoiceData;   
+            if(!Math.sign(value)){
+                result.status = 500;
+                result.errors = {
+                    errors: 'VALOR NEGATIVO',
+                    message: 'O valor da transação não pode ser negativo'
+                };
+                return result
+            }
+            const cardResult = await this.accountsRepository.getCardById(cardId);
+            const calculateValueResult = this.#calculateValueInvoice(cardResult.value, cardResult.limit_card, value, type_movement);
+
+            await this.accountsRepository.createMovementInvoice(movementExtractData);
+            await this.accountsRepository.updatValuesCardById(cardId, calculateValueResult.invoiceAmount, calculateValueResult.limitValue);
+        }catch(error){
+            result.status = 500
+            result.errors = {
+                errors: error,
+                message: "Erro inesperado aconteceu!" + error.message 
+            };
+        }
+        return result;
     }
 
     #calculateValueExtract(value_account = 0, value_movement, type_movement){
@@ -122,6 +148,26 @@ class AccountsMaintenance {
             returnJson.type = "Receita";
         }else{
             returnJson.valueFinal = value_account - value_movement;
+            returnJson.type = "Despesa";
+        }
+
+        return returnJson;
+    }
+
+    #calculateValueInvoice(valueCard = 0, limitValue, valueMovement, typeMovement){
+        let returnJson = {
+            invoiceAmount: 0,
+            limitValue: limitValue,
+            type: ""
+        }
+        
+        if(typeMovement == 1){
+            returnJson.invoiceAmount = valueCard - valueMovement;
+            returnJson.limitValue = limitValue + valueMovement;
+            returnJson.type = "Estorno";
+        }else{
+            returnJson.invoiceAmount = valueCard + valueMovement;
+            returnJson.limitValue = limitValue - valueMovement;
             returnJson.type = "Despesa";
         }
 

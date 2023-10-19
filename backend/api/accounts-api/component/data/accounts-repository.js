@@ -43,22 +43,40 @@ class AccountsRepository {
         `, [accountsId, numberCard, dueDay, limitCard, value]);
     }
 
-    async getBalanceByAccountId(accountId) {
+    async getAccountById(accountId) {
         const conn = await this.databaseConnector.generateConnection();
-        const result = await conn.query(`SELECT balance FROM accounts WHERE id = $1`, [accountId]);
+        const result = await conn.query(`SELECT * FROM accounts WHERE id = $1`, [accountId]);
         return result.rows[0];
     }
 
-    async createMovementExtract(movementData) {
+    async getCardById(cardId) {
+        const conn = await this.databaseConnector.generateConnection();
+        const result = await conn.query(`SELECT * FROM cards WHERE id = $1`, [cardId]);
+        return result.rows[0];
+    }
+
+    async createMovementExtract(movementExtractData) {
         const conn = await this.databaseConnector.generateConnection();
         await conn.query(`
             INSERT INTO extracts(account_id, value, type_movement, date_movement, month, year) VALUES($1, $2, $3, $4, $5, $6)`,
-            [movementData.accountsId, movementData.value, movementData.type_movement, movementData.date_movement, movementData.month, movementData.year]);
+            [movementExtractData.accountsId, movementExtractData.value, movementExtractData.type_movement, movementExtractData.date_movement, movementExtractData.month, movementExtractData.year]);
+    }
+
+    async createMovementInvoice(movementInvoiceData) {
+        const conn = await this.databaseConnector.generateConnection();
+        await conn.query(`
+            INSERT INTO invoices(card_id, value, type_movement, date_movement, month, year) VALUES($1, $2, $3, $4, $5, $6)`,
+            [movementInvoiceData.cardId, movementInvoiceData.value, movementInvoiceData.type_movement, movementInvoiceData.date_movement, movementInvoiceData.month, movementInvoiceData.year]);
     }
 
     async updateBalanceByAccountId(accountId, valueFinal) {
         const conn = await this.databaseConnector.generateConnection();
         await conn.query(`UPDATE accounts SET balance = $1 WHERE id = $2`, [valueFinal, accountId]);
+    }
+
+    async updatValuesCardById(cardId, invoiceAmount, limitValue) {
+        const conn = await this.databaseConnector.generateConnection();
+        await conn.query(`UPDATE cards SET limit_card = $1, value = $2 WHERE id = $3`, [limitValue, invoiceAmount, cardId]);
     }
 }
 
