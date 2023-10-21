@@ -7,6 +7,6 @@ RUN npm install
 
 WORKDIR /app/backend/api/auth-api
 
-EXPOSE 3000
+EXPOSE 3001
 
 CMD ["npm", "start"]
