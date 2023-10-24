@@ -1,6 +1,7 @@
 const bcrypt =  require('bcrypt');
 const jwt =  require('jsonwebtoken');
 
+
 class UserAuthorization {
     constructor(userRepository) {
         this.userRepository = userRepository;
@@ -10,13 +11,22 @@ class UserAuthorization {
     async decodeToken(token) {
         let result = {}
         try{
+            if(!token) {
+                result.status = 403
+                result.errors = {
+                    errors: 'Token não enviado',
+                    message: "Token não identificado." 
+                }
+                return result;
+            }
+
             const decoded = jwt.verify(token, process.env.AUTH_SECRET);
             result.status = 200;
             result.data = decoded;
         }catch(error){
             result.status = 500
             result.errors = {
-                errors: error,
+                errors: error.message,
                 message: "Erro inesperado aconteceu!" + error.message 
             }
         }
@@ -62,7 +72,7 @@ class UserAuthorization {
         }catch(error){
             result.status = 500
             result.errors = {
-                errors: error,
+                errors: error.message,
                 message: "Erro inesperado aconteceu!" + error.message 
             }
         }
@@ -71,8 +81,8 @@ class UserAuthorization {
     
     async register(userData) {
         let result = {}
-        const [email, password, fullname] = userData
         try{
+            const { email, password, fullname } = userData;
             const hash = await bcrypt.hash(password, this.saltRounds);
             this.userRepository.createUser(email, hash, fullname);
             result.status = 201;
