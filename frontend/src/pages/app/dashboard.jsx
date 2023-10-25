@@ -7,7 +7,7 @@ const Dashboard = () => {
     return (
         <>
             <Navbar/>
-            <div className="p-4 sm:ml-64 bg-gray-900">
+            <div className="p-4 sm:ml-64 dark:bg-gradient-to-r from-gray-950 to-gray-900">
                 <div className=" mt-14">
                     <AllStatus/>
                     <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">

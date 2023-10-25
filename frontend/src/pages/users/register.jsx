@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import authServices from "../../services/authServices";
 import Logo from "../../assets/2-removebg-preview.png";
 import RegisterImage from "../../assets/Login-rafiki.svg";
@@ -44,7 +44,7 @@ const Register = () => {
                                     type="text"
                                     autoComplete="text"
                                     required
-                                    className="bg-gray-800 block w-full rounded-md border-0 py-3 text-white ring-inset"
+                                    className="bg-gray-800 block w-full rounded-lg border-0 py-3 text-white ring-inset"
                                 />
                             </label>
                         </div>
@@ -59,7 +59,7 @@ const Register = () => {
                                     type="email"
                                     autoComplete="email"
                                     required
-                                    className="bg-gray-800 block w-full rounded-md border-0 py-3 text-white ring-inset"
+                                    className="bg-gray-800 block w-full rounded-lg border-0 py-3 text-white ring-inset"
                                 />
                             </label>
                         </div>
@@ -74,14 +74,14 @@ const Register = () => {
                                 type="password"
                                 autoComplete="current-password"
                                 required
-                                className="bg-gray-800 block w-full rounded-md border-0 py-3 text-white ring-inset"
+                                className="bg-gray-800 block w-full rounded-lg border-0 py-3 text-white ring-inset"
                                 />
                             </label>
                         </div>
                         <div>
                             <button
                                 type="submit"
-                                className="font-sans font-bold text-lg flex w-full justify-center rounded-md bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 px-3 py-2 leading-6 text-white"
+                                className="font-sans font-bold text-lg flex w-full justify-center rounded-lg bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 px-3 p-2.5 leading-6 text-white"
                             >
                                 Cadastre-se
                             </button>

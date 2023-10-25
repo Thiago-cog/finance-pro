@@ -41,14 +41,14 @@ const Login = () => {
                         <div className="mb-5 font-sans font-bold text-gray-300">
                             <label>
                                 Email
-                                <input className="font-sans w-full p-3 font-bold text-base text-white bg-gray-800 rounded-md ring-inset border-0" value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
+                                <input className="font-sans w-full p-3 font-bold text-base text-white bg-gray-800 rounded-lg ring-inset border-0" value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
                             </label>
                         </div>
 
                         <div className="mb-5 font-sans font-bold text-gray-300">
                             <label>
                                 Senha
-                                <input className="font-sans w-full p-3 font-bold text-base text-white bg-gray-800 rounded-md ring-inset border-0" value={pass} onChange={(e) => setPass(e.target.value)} type="password" />
+                                <input className="font-sans w-full p-3 font-bold text-base text-white bg-gray-800 rounded-lg ring-inset border-0" value={pass} onChange={(e) => setPass(e.target.value)} type="password" />
                             </label>
                         </div>
 
@@ -60,7 +60,7 @@ const Login = () => {
                         </div> */}
 
                         <div className="mb-5">
-                            <input className="font-sans text-lg rounded-md bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 text-white font-bold w-full p-2.5 cursor-pointer" type="submit" value="Entrar" />
+                            <input className="font-sans text-lg rounded-lg bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 text-white font-bold w-full p-2.5 cursor-pointer" type="submit" value="Entrar" />
                         </div>
 
                         <div className="mb-5 w-full">
