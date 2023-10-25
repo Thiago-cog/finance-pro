@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Wallet } from 'lucide-react';
+import { Wallet, PenSquare, XCircle } from 'lucide-react';
 
 import { InputMoney } from "../input/inputMoney";
 import accountsServices from "../../services/accountsServices";
@@ -17,20 +17,19 @@ function FormAccount() {
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
         const response = await accountsServices.getAccounts(token, userId);
+        response.accounts.forEach(function(account, indice) {
+            const balanceSplit = String(account.balance).split('.');
+            if(balanceSplit.length == 1){
+                response.accounts[indice].isInteger = true;
+            }else{
+                response.accounts[indice].isInteger = false;
+            }
+        });
         setListAccounts(response.accounts)
     }
 
-    function teste(){
-        listAccounts.forEach(function(account, indice) {
-            const balanceSplit = String(account.balance).split('.');
-            if(balanceSplit.length > 1){
-                // adicionar identificador que tem decimal ao array.
-            }
-        });
-    }
     useEffect(() => {
         getAccounts();
-        teste();
     }, []);
 
     function setValueTypeAccount(e) {
@@ -55,37 +54,45 @@ function FormAccount() {
                     <table class="w-full text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
                             <tr>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" className="px-6 py-3">
                                     nome da conta
                                 </th>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" className="px-6 py-3">
                                     tipo da conta
                                 </th>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" className="px-6 py-3">
                                     status
                                 </th>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" className="px-6 py-3">
                                     saldo
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    ações
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             {listAccounts.map((account, index) => (
-                                <tr class="bg-white border-b ">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <tr className="bg-white border-b ">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap font-sans">
                                         {account.name}
                                     </th>
-                                    <td class="px-6 py-4">
+                                    <td className="px-6 py-4">
                                         {account.type_account}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td className="px-6 py-4">
                                         Ativa
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td className="px-6 py-4">
                                         R$ {
-                                            account.balance  &&
-                                            String(account.balance+ '00').replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")
+                                            account.isInteger 
+                                            ? String(account.balance+ '00').replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".") 
+                                            : String(account.balance).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")
                                         }
+                                    </td>
+                                    <td className="px-6 py-4 flex">
+                                        <PenSquare className="w-5 h-5 mr-1"/>
+                                        <XCircle className="w-5 h-5"/>
                                     </td>
                                 </tr>
                             ))}

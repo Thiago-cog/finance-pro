@@ -4,9 +4,6 @@ import Navbar from "./navbar";
 import FormAccount from "../../components/account/formAccount";
 
 const Transactions = () => {
-    useEffect(() => {
-        alert('A página ainda está em desenvolvimento!')
-    }, [])
     return (
         <>
             <Navbar/>
