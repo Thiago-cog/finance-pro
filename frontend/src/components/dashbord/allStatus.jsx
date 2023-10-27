@@ -12,20 +12,22 @@ function AllStatus() {
         const userId = decodeToken.userToken.id;
         const response = await accountsServices.getAccounts(token, userId);
         let value = 0;
-        let isInteger = false;
+
         response.accounts.forEach(account => {
             value += account.balance;
         });
     
         const valueSplit = String(value).split('.');
         if(valueSplit.length == 1){
-            isInteger = true;
+            value = value + '00';
         }else{
-            isInteger = false;
+            if(valueSplit[1].length == 1){
+                value = value + '0';
+            }
         }
         
         // cria validação para quando for número decimal terminado em 0, colocar 0 no valor para fechar a conta certo.
-        value = isInteger ? String(value + '00').replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".") : String(value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+        value = String(value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
         setTotalBalance(value);
     }
     useEffect(() => {
