@@ -1,11 +1,10 @@
-FROM node:latest
-
-WORKDIR /app/backend
-
-COPY ./ ./
-RUN npm install
+FROM node:20
 
 WORKDIR /app/backend/api/accounts-api
+
+COPY ./ ./
+
+RUN npm install
 
 EXPOSE 3002
 

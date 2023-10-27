@@ -26,7 +26,6 @@ function AllStatus() {
             }
         }
         
-        // cria validação para quando for número decimal terminado em 0, colocar 0 no valor para fechar a conta certo.
         value = String(value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
         setTotalBalance(value);
     }
