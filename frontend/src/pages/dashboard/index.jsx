@@ -1,6 +1,6 @@
 import React from "react";
 
-import Navbar from "./navbar";
+import Navbar from "../../components/navbar/index";
 import AllStatus from "../../components/dashbord/allStatus";
 
 const Dashboard = () => {

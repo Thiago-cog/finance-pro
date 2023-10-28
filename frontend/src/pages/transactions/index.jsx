@@ -1,7 +1,7 @@
 import {useEffect} from "react";
 
-import Navbar from "./navbar";
-import FormAccount from "../../components/account/formAccount";
+import Navbar from "../../components/navbar/index";
+import FormAccount from "../../components/formAccount/index";
 
 const Transactions = () => {
     return (

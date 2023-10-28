@@ -31,6 +31,36 @@ class AccountsService {
             throw error;
         }
     }
+
+    async createCard(token, accountsId, numberCard, dueDay, limitCard, value) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.post(`${BASE_URL}/create-card`, { accountsId, numberCard, dueDay, limitCard, value }, config);
+            return response.data;
+        }catch (error){
+            throw error;
+        }
+    }
+
+    async getCards (token, userId) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        
+        try{
+            const response = await axios.get(`${BASE_URL}/get-card/${userId}`, config);
+            return response.data;
+        }catch (error){
+            throw error;
+        }
+    }
 }
 
 

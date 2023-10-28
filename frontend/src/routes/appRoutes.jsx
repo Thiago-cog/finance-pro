@@ -1,11 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Login from "../pages/users/login";
-import Register from "../pages/users/register";
-import Dashboard from "../pages/app/dashboard";
-import Accounts from "../pages/app/accounts";
-import Transactions from "../pages/app/transactions";
-import Cards from "../pages/app/cards";
+import Login from "../pages/login/index";
+import Register from "../pages/register/index";
+import Dashboard from "../pages/dashboard/index";
+import Accounts from "../pages/accounts/index";
+import Transactions from "../pages/transactions/index";
+import Cards from "../pages/cards/index";
 import { PrivateRoute } from "./privateRoute";
 
 const AppRoutes = () => {

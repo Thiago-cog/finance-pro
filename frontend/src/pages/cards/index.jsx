@@ -1,7 +1,5 @@
-import {useEffect} from "react";
-
-import Navbar from "./navbar";
-import FormCard from "../../components/account/formCard";
+import Navbar from "../../components/navbar/index";
+import FormCard from "../../components/formCard/index";
 
 const Cards = () => {
     return (

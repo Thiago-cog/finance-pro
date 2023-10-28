@@ -7,34 +7,42 @@ import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
 
 function FormCard() {
-    const [nameAccount, setNameAccount] = useState("");
-    const [typeAccount, setTypeAccount] = useState(1);
-    const [valueBalance, setValueBalance] = useState(0);
+
+    const [numberCard, setNumberCard] = useState("");
+    const [accountId, setAccountId] = useState(0);
+    const [dueDay, setDueDay] = useState(null);
+    const [valueLimitCard, setValueLimitCard] = useState(null);
+    const [valueInvoice, setValueInvoice] = useState(null);
     const [listAccounts, setListAccounts] = useState([]);
     const token = GetCookie("user_session");
 
 
     async function getAccounts() {
+        // implementar lógica de puxar os cartões.
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
         const response = await accountsServices.getAccounts(token, userId);
+        const selectObject = {"id": 0, "name": "Selecione"}
+        response.accounts.unshift(selectObject)
         setListAccounts(response.accounts)
     }
     useEffect(() => {
         getAccounts();
     }, []);
 
-    function setValueTypeAccount(e) {
-        let valueTypeAccount = e.target.value;
-        setTypeAccount(valueTypeAccount);
+    function setAccountIdSelect(e) {
+        let accountId = e.target.value;
+        setAccountId(accountId);
     }
 
     const handleSave = async (e) => {
         e.preventDefault();
-        const decodeToken = await authServices.decodeToken(token);
-        const userId = decodeToken.userToken.id;
-        const response = await accountsServices.createAccount(token, nameAccount, typeAccount, valueBalance, userId);
-        setNameAccount("");
+        const response = await accountsServices.createCard(token, accountId, numberCard, dueDay, valueLimitCard, valueInvoice);
+        setNumberCard("");
+        setAccountId(0);
+        setDueDay('');
+        setValueLimitCard(null);
+        setValueInvoice(null);
         getAccounts();
         alert(response.message);
     }
@@ -42,37 +50,37 @@ function FormCard() {
     return (
         <>
             <div className="py-4 px-2">
-                <div class="relative overflow-x-auto rounded-md">
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
+                <div className="relative overflow-x-auto rounded-md">
+                    <table className="w-full text-sm text-left text-gray-500">
+                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                             <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    nome da conta
+                                <th scope="col" className="px-6 py-3">
+                                    titular
                                 </th>
-                                <th scope="col" class="px-6 py-3">
-                                    tipo da conta
+                                <th scope="col" className="px-6 py-3">
+                                    conta
                                 </th>
-                                <th scope="col" class="px-6 py-3">
-                                    status
+                                <th scope="col" className="px-6 py-3">
+                                    valor da fatura
                                 </th>
-                                <th scope="col" class="px-6 py-3">
-                                    saldo
+                                <th scope="col" className="px-6 py-3">
+                                    limite disponível 
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             {listAccounts.map((account, index) => (
-                                <tr class="bg-white border-b ">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                <tr className="bg-white border-b ">
+                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                         {account.name}
                                     </th>
-                                    <td class="px-6 py-4">
+                                    <td className="px-6 py-4">
                                         {account.type_account}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td className="px-6 py-4">
                                         Ativa
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td className="px-6 py-4">
                                         R$ {String(account.balance).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")}
                                     </td>
                                 </tr>
@@ -85,11 +93,11 @@ function FormCard() {
                         <div className="px-7 header flex bg-white lg:justify-around md:justify-around justify-start pb-8 pt-2 border-b-[2px] border-slate-100 flex-wrap gap-x-4 ">
                             <a className="cursor-pointer">
                                 <div className="flex items-center instance group">
-                                    <div className="svg-container group-hover:text-sky-600">
+                                    <div className="svg-container">
                                         <CreditCard />
                                     </div>
                                     <div className="pl-3 heading-container">
-                                        <p className="text-base font-medium leading-none text-slate-800 group-hover:text-sky-600 ">
+                                        <p className="text-base font-semibold font-sans leading-none text-slate-800">
                                             Cartão
                                         </p>
                                     </div>
@@ -106,8 +114,8 @@ function FormCard() {
                                 <p className="text-base font-medium leading-none text-gray-800">
                                     Número do Cartão
                                 </p>
-                                <div className="mb-5">
-                                    <input className="font-sans font-normal text-base  w-full p-3 mt-4 border border-gray-300 rounded outline-none focus:bg-gray-50" value={nameAccount} onChange={(e) => setNameAccount(e.target.value)} type="text" />
+                                <div>
+                                    <input className="font-sans font-normal text-base w-1/2 p-3 mt-4 border border-gray-300 rounded-lg outline-none focus:bg-gray-50" value={numberCard} onChange={(e) => setNumberCard(e.target.value)} type="text" />
                                 </div>
                             </div>
                             <div>
@@ -115,7 +123,7 @@ function FormCard() {
                                     Conta
                                 </p>
                                 <div className="relative top-1">
-                                    <select className=" border-gray-300 relative flex items-center justify-between w-full h-14 px-5 py-4 rounded outline-none focus:bg-gray-50" onChange={setValueTypeAccount}>
+                                    <select className=" border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setAccountIdSelect} value={accountId}>
                                         {listAccounts.map((account, index) => (
                                             <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={account.id}>{account.name}</option>
                                         ))}
@@ -128,9 +136,9 @@ function FormCard() {
                                 </p>
                                 <div className="flex pt-4">
                                     <InputMoney
-                                        onValue={setValueBalance}
-                                        classP="border flex items-center p-3 bg-color bg-gray-200 rounded-l"
-                                        classInput="w-full p-3 border border-gray-300 rounded-r outline-none focus:bg-gray-50"
+                                        onValue={setValueLimitCard}
+                                        classP="border flex items-center p-3 bg-color bg-gray-200 rounded-l-lg"
+                                        classInput="w-[44%] p-3 border border-gray-300 rounded-r-lg outline-none focus:bg-gray-50"
                                     />
                                 </div>
                             </div>
@@ -140,9 +148,9 @@ function FormCard() {
                                 </p>
                                 <div className="flex pt-4">
                                     <InputMoney
-                                        onValue={setValueBalance}
-                                        classP="border flex items-center p-3 bg-color bg-gray-200 rounded-l"
-                                        classInput="w-full p-3 border border-gray-300 rounded-r outline-none focus:bg-gray-50"
+                                        onValue={setValueInvoice}
+                                        classP="border flex items-center p-3 bg-color bg-gray-200 rounded-l-lg"
+                                        classInput="w-[44%] p-3 border border-gray-300 rounded-r-lg outline-none focus:bg-gray-50"
                                     />
                                 </div>
                             </div>
@@ -151,14 +159,14 @@ function FormCard() {
                                     Data de Vencimento
                                 </p>
                                 <div className="mb-5">
-                                    <input className="font-sans font-normal text-base  w-full p-3 mt-4 border border-gray-300 rounded outline-none focus:bg-gray-50" value={nameAccount} onChange={(e) => setNameAccount(e.target.value)} type="text" />
+                                    <input className="font-sans font-normal text-base w-1/2 p-3 mt-4 border border-gray-300 rounded-lg outline-none focus:bg-gray-50" value={dueDay} onChange={(e) => setDueDay(e.target.value)} type="text" />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <hr className="h-[1px] bg-gray-100 my-14" />
                     <div className="flex flex-col flex-wrap items-center justify-center w-full px-7 lg:flex-row lg:justify-end md:justify-end gap-x-4 gap-y-4">
-                        <button onClick={handleSave} className="bg-sky-500 rounded hover:bg-sky-400 transform duration-300 ease-in-out text-sm font-medium px-6 py-4 text-white lg:max-w-[144px] w-full ">
+                        <button onClick={handleSave} className="bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-lg transform font-bold px-6 py-4 text-white lg:max-w-[144px] w-full ">
                             Salvar
                         </button>
                     </div>

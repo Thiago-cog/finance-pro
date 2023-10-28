@@ -58,6 +58,33 @@ class AccountsMaintenance {
         return result;
     }
 
+    async getCardByAccountId(accountId) {
+        let result = {};
+        try {
+            if (!accountId) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Id da conta não enviado',
+                    message: "Conta não identificado."
+                }
+                return result;
+            }
+
+            const dataCard = await this.accountsRepository.getCardById(userId);
+            result.status = 200;
+            result.data = {
+                cards: dataCard
+            }
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+        return result;
+    }
+
     async createAccount(accountData) {
         let result = {};
         try {
