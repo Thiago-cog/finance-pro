@@ -53,7 +53,7 @@ class AccountsService {
                 'Authorization': `Bearer ${token}`
             }
         }
-        
+
         try{
             const response = await axios.get(`${BASE_URL}/get-card/${userId}`, config);
             return response.data;

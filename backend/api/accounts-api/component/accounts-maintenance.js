@@ -58,19 +58,19 @@ class AccountsMaintenance {
         return result;
     }
 
-    async getCardByAccountId(accountId) {
+    async getAllCardsByUserId(userId) {
         let result = {};
         try {
-            if (!accountId) {
+            if (!userId) {
                 result.status = 400;
                 result.errors = {
-                    errors: 'Id da conta não enviado',
-                    message: "Conta não identificado."
+                    errors: 'Id do usuário não enviado',
+                    message: "Usuário não identificado."
                 }
                 return result;
             }
 
-            const dataCard = await this.accountsRepository.getCardById(userId);
+            const dataCard = await this.accountsRepository.getAllCardsByUserId(userId);
             result.status = 200;
             result.data = {
                 cards: dataCard

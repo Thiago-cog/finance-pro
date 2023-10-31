@@ -17,15 +17,15 @@ const applyResult = (result, res) => {
 
 router.get('/get-accounts/:userId', authenticateToken, async(req, res) => {
     const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
-    const userId = parseInt(req.params.userId)
+    const userId = parseInt(req.params.userId);
     const result = await accountsMaintenance.getAccountsByUserId(userId);
     applyResult(result, res);
 });
 
-router.get('/get-card/:accountId', authenticateToken, async(req, res) => {
+router.get('/get-card/:userId', authenticateToken, async(req, res) => {
     const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
-    const accountId = parseInt(req.params.accountId)
-    const result = await accountsMaintenance.getCardByAccountId(accountId);
+    const userId = parseInt(req.params.userId);
+    const result = await accountsMaintenance.getAllCardsByUserId(userId);
     applyResult(result, res);
 });
 

@@ -14,17 +14,44 @@ function FormCard() {
     const [valueLimitCard, setValueLimitCard] = useState(null);
     const [valueInvoice, setValueInvoice] = useState(null);
     const [listAccounts, setListAccounts] = useState([]);
+    const [listCards, setListCards] = useState([]);
     const token = GetCookie("user_session");
 
 
     async function getAccounts() {
-        // implementar lógica de puxar os cartões.
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
-        const response = await accountsServices.getAccounts(token, userId);
+        const allAccounts = await accountsServices.getAccounts(token, userId);
+        const allCards = await accountsServices.getCards(token, userId);
+
         const selectObject = {"id": 0, "name": "Selecione"}
-        response.accounts.unshift(selectObject)
-        setListAccounts(response.accounts)
+        allAccounts.accounts.unshift(selectObject)
+
+        allCards.cards.forEach(function(card, indice) {
+            const valueSplit = String(card.value).split('.');
+            const limitAvailableSplit =  String(card.limit_available).split('.');
+            
+            if(valueSplit.length == 1){
+                allCards.cards[indice].value = allCards.cards[indice].value + '00';
+            }else{
+                if(valueSplit[1].length == 1){
+                    allCards.cards[indice].value = allCards.cards[indice].value + '0';
+                }
+            }
+
+            if(limitAvailableSplit.length == 1){
+                allCards.cards[indice].limit_available = allCards.cards[indice].limit_available + '00';
+            }else{
+                if(limitAvailableSplit[1].length == 1){
+                    allCards.cards[indice].limit_available = allCards.cards[indice].limit_available + '0';
+                }
+            }
+            allCards.cards[indice].value = String(allCards.cards[indice].value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+            allCards.cards[indice].limit_available = String(allCards.cards[indice].limit_available).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+        });
+        
+        setListAccounts(allAccounts.accounts)
+        setListCards(allCards.cards)
     }
     useEffect(() => {
         getAccounts();
@@ -55,7 +82,7 @@ function FormCard() {
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                             <tr>
                                 <th scope="col" className="px-6 py-3">
-                                    titular
+                                    número do cartão
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     conta
@@ -69,19 +96,20 @@ function FormCard() {
                             </tr>
                         </thead>
                         <tbody>
-                            {listAccounts.map((account, index) => (
+                            {listCards.map((card, index) => (
                                 <tr className="bg-white border-b ">
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {account.name}
+                                    <th scope="row" className="px-6 py-4">
+                                        {card.number_card}
                                     </th>
                                     <td className="px-6 py-4">
-                                        {account.type_account}
+                                        {card.name}
                                     </td>
                                     <td className="px-6 py-4">
-                                        Ativa
+                                    R$ {String(card.value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")}
+                                        
                                     </td>
                                     <td className="px-6 py-4">
-                                        R$ {String(account.balance).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")}
+                                    R$ {String(card.limit_available).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")}
                                     </td>
                                 </tr>
                             ))}

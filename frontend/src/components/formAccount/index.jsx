@@ -20,10 +20,13 @@ function FormAccount() {
         response.accounts.forEach(function(account, indice) {
             const balanceSplit = String(account.balance).split('.');
             if(balanceSplit.length == 1){
-                response.accounts[indice].isInteger = true;
+                response.accounts[indice].balance = response.accounts[indice].balance + '00';
             }else{
-                response.accounts[indice].isInteger = false;
+                if(balanceSplit[1].length == 1){
+                    response.accounts[indice].balance = response.accounts[indice].balance + '0';
+                }
             }
+            response.accounts[indice].balance = String(response.accounts[indice].balance).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
         });
         setListAccounts(response.accounts)
     }
