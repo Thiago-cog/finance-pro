@@ -16,7 +16,16 @@ function AllStatus() {
         response.accounts.forEach(account => {
             value += account.balance;
         });
-
+    
+        const valueSplit = String(value).split('.');
+        if(valueSplit.length == 1){
+            value = value + '00';
+        }else{
+            if(valueSplit[1].length == 1){
+                value = value + '0';
+            }
+        }
+        
         value = String(value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
         setTotalBalance(value);
     }

@@ -31,8 +31,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-      - ./frontend:/app/frontend
     networks:
       - finance-pro
   
@@ -42,8 +40,6 @@ services:
       context: ./backend/api/auth-api
     ports:
       - "3001:3001"
-    volumes:
-      - ./backend:/app/backend
     networks:
       - finance-pro
 
@@ -53,8 +49,6 @@ services:
       context: ./backend/api/accounts-api
     ports:
       - "3002:3002"
-    volumes:
-      - ./backend:/app/backend
     networks:
       - finance-pro
 

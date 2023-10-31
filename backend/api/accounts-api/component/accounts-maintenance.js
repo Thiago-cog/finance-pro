@@ -58,6 +58,33 @@ class AccountsMaintenance {
         return result;
     }
 
+    async getAllCardsByUserId(userId) {
+        let result = {};
+        try {
+            if (!userId) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Id do usuário não enviado',
+                    message: "Usuário não identificado."
+                }
+                return result;
+            }
+
+            const dataCard = await this.accountsRepository.getAllCardsByUserId(userId);
+            result.status = 200;
+            result.data = {
+                cards: dataCard
+            }
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+        return result;
+    }
+
     async createAccount(accountData) {
         let result = {};
         try {

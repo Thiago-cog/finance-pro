@@ -1,11 +1,9 @@
-FROM node:latest
+FROM node:20
 
-WORKDIR /app/backend
+WORKDIR /app/backend/api/auth-api
 
 COPY ./ ./
 RUN npm install
-
-WORKDIR /app/backend/api/auth-api
 
 EXPOSE 3001
 

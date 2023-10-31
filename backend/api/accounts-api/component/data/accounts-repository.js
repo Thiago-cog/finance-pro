@@ -49,10 +49,19 @@ class AccountsRepository {
         return result.rows[0];
     }
 
-    async getCardById(cardId) {
+    async getAllCardsByUserId(userId) {
         const conn = await this.databaseConnector.generateConnection();
-        const result = await conn.query(`SELECT * FROM cards WHERE id = $1`, [cardId]);
-        return result.rows[0];
+        const result = await conn.query(`SELECT c.id,
+                                                c.number_card,
+                                                c.value,
+                                                c.limit_card - c.value AS limit_available,
+                                                u.fullname,
+                                                a.name
+                                        FROM cards c
+                                        INNER JOIN accounts a ON c.accounts_id = a.id
+                                        INNER JOIN users u ON a.user_id = u.id
+                                        WHERE u.id = $1;`, [userId]);
+        return result.rows;
     }
 
     async createMovementExtract(movementExtractData) {

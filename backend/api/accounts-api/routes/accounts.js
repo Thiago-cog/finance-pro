@@ -17,8 +17,15 @@ const applyResult = (result, res) => {
 
 router.get('/get-accounts/:userId', authenticateToken, async(req, res) => {
     const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
-    const userId = parseInt(req.params.userId)
+    const userId = parseInt(req.params.userId);
     const result = await accountsMaintenance.getAccountsByUserId(userId);
+    applyResult(result, res);
+});
+
+router.get('/get-card/:userId', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    const userId = parseInt(req.params.userId);
+    const result = await accountsMaintenance.getAllCardsByUserId(userId);
     applyResult(result, res);
 });
 
@@ -38,16 +45,16 @@ router.post('/create-card', authenticateToken, async(req, res) => {
 
 router.post('/create-movement-extract', authenticateToken, async(req, res) => {
     const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
-    const movementData = req.body;
-    const result = await accountsMaintenance.createMovementExtract(movementData);
+    const movementExtractData = req.body;
+    const result = await accountsMaintenance.createMovementExtract(movementExtractData);
     applyResult(result, res);
 });
 
 router.post('/create-movement-invoice', authenticateToken, async(req, res) => {
-    console.log('ok');
-    // const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
-    
-    // applyResult(result, res);
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    const movementInvoiceData = req.body;
+    const result = await accountsMaintenance.createMovementInvoice(movementInvoiceData);
+    applyResult(result, res);
 });
 
 module.exports = router;
