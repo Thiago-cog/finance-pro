@@ -17,7 +17,7 @@ class AccountsService {
         }
     }
 
-    async getAccounts (token, userId) {
+    async getAccounts(token, userId) {
         const config = {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -47,7 +47,7 @@ class AccountsService {
         }
     }
 
-    async getCards (token, userId) {
+    async getCards(token, userId) {
         const config = {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -56,6 +56,21 @@ class AccountsService {
 
         try{
             const response = await axios.get(`${BASE_URL}/get-card/${userId}`, config);
+            return response.data;
+        }catch (error){
+            throw error;
+        }
+    }
+    
+    async getAllStatus(token, userId) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.get(`${BASE_URL}/get-all-status/${userId}`, config);
             return response.data;
         }catch (error){
             throw error;

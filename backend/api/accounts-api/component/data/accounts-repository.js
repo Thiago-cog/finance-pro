@@ -49,6 +49,19 @@ class AccountsRepository {
         return result.rows[0];
     }
 
+    async getAllStatusByUserId(userId) {
+        const conn = await this.databaseConnector.generateConnection();
+        const result = await conn.query(`SELECT a.id,
+                                                a.balance AS balance,
+                                                c.value AS expense
+                                        FROM users u
+                                        LEFT JOIN accounts a ON u.id = a.user_id
+                                        LEFT JOIN cards c ON a.id = c.accounts_id
+                                        WHERE u.id = $1
+                                        ORDER BY a.id`, [userId]);
+        return result.rows;
+    }
+
     async getAllCardsByUserId(userId) {
         const conn = await this.databaseConnector.generateConnection();
         const result = await conn.query(`SELECT c.id,

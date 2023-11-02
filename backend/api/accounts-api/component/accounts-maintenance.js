@@ -85,6 +85,78 @@ class AccountsMaintenance {
         return result;
     }
 
+    async getAllStatusByUserId(userId) {
+        let result = {};
+        
+        try {
+            if (!userId) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Id do usuário não enviado',
+                    message: "Usuário não identificado."
+                }
+                return result;
+            }
+
+            const allStatusData = await this.accountsRepository.getAllStatusByUserId(userId);
+            let accountId = 0;
+            let returnStatusData = {};
+            returnStatusData.balanceTotal = 0;
+            returnStatusData.expenseTotal = 0;
+
+            allStatusData.forEach(statusData => {
+                if(accountId != statusData.id){
+                    returnStatusData.balanceTotal += statusData.balance;
+                    returnStatusData.expenseTotal += statusData.expense;
+                    accountId = statusData.id;
+                }else{
+                    returnStatusData.expenseTotal += statusData.expense;
+                    accountId = statusData.id;
+                }
+            });
+            
+            const grossProfit = returnStatusData.balanceTotal - returnStatusData.expenseTotal;
+            const profitMargin = grossProfit/returnStatusData.balanceTotal;
+
+            let balance = returnStatusData.balanceTotal;
+            let expense = returnStatusData.expenseTotal;
+            const balanceSplit = String(balance).split('.');
+            const expenseSplit = String(expense).split('.');
+
+            if(balanceSplit.length == 1){
+                balance = balance + '00';
+            }else{
+                if(balanceSplit[1].length == 1){
+                    balance = balance + '0';
+                }
+            }
+
+            if(expenseSplit.length == 1){
+                expense = expense + '00';
+            }else{
+                if(expenseSplit[1].length == 1){
+                    expense = expense + '0';
+                }
+            }
+            
+            returnStatusData.balanceTotal = String(balance).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+            returnStatusData.expenseTotal = String(expense).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+            returnStatusData.profitMargin = String((profitMargin * 100).toFixed(2)).replace(".", ",");
+
+            result.status = 200;
+            result.data = {
+                allStatusData: returnStatusData
+            }
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+        return result;
+    }
+
     async createAccount(accountData) {
         let result = {};
         try {
