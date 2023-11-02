@@ -5,6 +5,7 @@ CREATE SEQUENCE seq_accounts_id START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_cards_id START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_invoices_id START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE seq_extracts_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_categories_id START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE accounts(
     id BIGINT NOT NULL DEFAULT nextval('seq_accounts_id'),
@@ -28,6 +29,7 @@ ALTER TABLE
 CREATE TABLE extracts(
     id BIGINT NOT NULL DEFAULT nextval('seq_extracts_id'),
     account_id BIGINT NOT NULL,
+    category_id BIGINT NOT NULL,
     value DOUBLE PRECISION NOT NULL,
     type_movement INTEGER NOT NULL,
     date_movement DATE NOT NULL,
@@ -47,6 +49,7 @@ ALTER TABLE
 CREATE TABLE invoices(
     id BIGINT NOT NULL DEFAULT nextval('seq_invoices_id'),
     card_id BIGINT NOT NULL,
+    category_id BIGINT NOT NULL,
     value DOUBLE PRECISION NOT NULL,
     type_movement INTEGER NOT NULL,
     date_movement DATE NOT NULL,
@@ -55,13 +58,42 @@ CREATE TABLE invoices(
 );
 ALTER TABLE
     invoices ADD PRIMARY KEY(id);
+
+CREATE TABLE categories(
+    id BIGINT NOT NULL DEFAULT nextval('seq_categories_id'),
+    name_category VARCHAR(255) NOT NULL,
+    type_category INTEGER NOT NULL
+);
+ALTER TABLE
+    categories ADD PRIMARY KEY(id);
+
 ALTER TABLE
     extracts ADD CONSTRAINT extracts_account_id_foreign FOREIGN KEY(account_id) REFERENCES accounts(id);
+
+ALTER TABLE
+    extracts ADD CONSTRAINT extracts_category_id_foreign FOREIGN KEY(category_id) REFERENCES categories(id);
+
+ALTER TABLE
+    invoices ADD CONSTRAINT invoices_category_id_foreign FOREIGN KEY(category_id) REFERENCES categories(id);
+
 ALTER TABLE
     cards ADD CONSTRAINT cards_accounts_id_foreign FOREIGN KEY(accounts_id) REFERENCES accounts(id);
+
 ALTER TABLE
     accounts ADD CONSTRAINT accounts_user_id_foreign FOREIGN KEY(user_id) REFERENCES users(id);
+
 ALTER TABLE
     invoices ADD CONSTRAINT invoices_card_id_foreign FOREIGN KEY(card_id) REFERENCES cards(id);
 
 INSERT INTO users(email, password, fullname) VALUES('adm@gmail.com', '$2b$10$oOZiInZ9Z2qHHac6TNQlH.0G7dGhZ3SoW.vIDK/yymrSPfEM0FpZ6', 'Admin');
+
+INSERT INTO categories(name_category, type_category) VALUES('Alimentação', 1);
+INSERT INTO categories(name_category, type_category) VALUES('Carro', 1);
+INSERT INTO categories(name_category, type_category) VALUES('Estudos', 1);
+INSERT INTO categories(name_category, type_category) VALUES('Lazer', 1);
+INSERT INTO categories(name_category, type_category) VALUES('Casa', 1);
+INSERT INTO categories(name_category, type_category) VALUES('Saúde', 1);
+INSERT INTO categories(name_category, type_category) VALUES('Transporte', 1);
+INSERT INTO categories(name_category, type_category) VALUES('Salário', 2);
+INSERT INTO categories(name_category, type_category) VALUES('Vendas', 2);
+INSERT INTO categories(name_category, type_category) VALUES('Rendimentos', 2);
