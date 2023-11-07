@@ -10,9 +10,9 @@ function FormCard() {
 
     const [numberCard, setNumberCard] = useState("");
     const [accountId, setAccountId] = useState(0);
-    const [dueDay, setDueDay] = useState(null);
-    const [valueLimitCard, setValueLimitCard] = useState(null);
-    const [valueInvoice, setValueInvoice] = useState(null);
+    const [dueDay, setDueDay] = useState("");
+    const [valueLimitCard, setValueLimitCard] = useState("");
+    const [valueInvoice, setValueInvoice] = useState("");
     const [listAccounts, setListAccounts] = useState([]);
     const [listCards, setListCards] = useState([]);
     const token = GetCookie("user_session");
@@ -97,7 +97,7 @@ function FormCard() {
                         </thead>
                         <tbody>
                             {listCards.map((card, index) => (
-                                <tr className="bg-white border-b ">
+                                <tr className="bg-white border-b" key={index}>
                                     <th scope="row" className="px-6 py-4">
                                         {card.number_card}
                                     </th>
@@ -153,7 +153,7 @@ function FormCard() {
                                 <div className="relative top-1">
                                     <select className=" border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setAccountIdSelect} value={accountId}>
                                         {listAccounts.map((account, index) => (
-                                            <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={account.id}>{account.name}</option>
+                                            <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={account.id}>{account.name}</option>
                                         ))}
                                     </select>
                                 </div>

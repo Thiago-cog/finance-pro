@@ -17,17 +17,6 @@ function FormAccount() {
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
         const response = await accountsServices.getAccounts(token, userId);
-        response.accounts.forEach(function(account, indice) {
-            const balanceSplit = String(account.balance).split('.');
-            if(balanceSplit.length == 1){
-                response.accounts[indice].balance = response.accounts[indice].balance + '00';
-            }else{
-                if(balanceSplit[1].length == 1){
-                    response.accounts[indice].balance = response.accounts[indice].balance + '0';
-                }
-            }
-            response.accounts[indice].balance = String(response.accounts[indice].balance).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
-        });
         setListAccounts(response.accounts)
     }
 
@@ -53,9 +42,9 @@ function FormAccount() {
     return (
         <>
             <div className="py-4 px-2">
-                <div class="relative overflow-x-auto rounded-md">
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
+                <div className="relative overflow-x-auto rounded-md">
+                    <table className="w-full text-sm text-left text-gray-500">
+                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                             <tr>
                                 <th scope="col" className="px-6 py-3">
                                     nome da conta
@@ -76,8 +65,8 @@ function FormAccount() {
                         </thead>
                         <tbody>
                             {listAccounts.map((account, index) => (
-                                <tr className="bg-white border-b ">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap font-sans">
+                                <tr className="bg-white border-b" key={index}>
+                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap font-sans">
                                         {account.name}
                                     </th>
                                     <td className="px-6 py-4">

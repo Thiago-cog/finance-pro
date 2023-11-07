@@ -44,6 +44,19 @@ class AccountsMaintenance {
             }
 
             const accountsUser = await this.accountsRepository.getAccountsByUserId(userId);
+
+            accountsUser.forEach(function (account, indice) {
+                const balanceSplit = String(account.balance).split('.');
+                if (balanceSplit.length == 1) {
+                    accountsUser[indice].balance = accountsUser[indice].balance + '00';
+                } else {
+                    if (balanceSplit[1].length == 1) {
+                        accountsUser[indice].balance = accountsUser[indice].balance + '0';
+                    }
+                }
+                accountsUser[indice].balance = String(accountsUser[indice].balance).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+            });
+
             result.status = 200;
             result.data = {
                 accounts: accountsUser
