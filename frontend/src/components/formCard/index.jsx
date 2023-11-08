@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { CreditCard } from 'lucide-react';
+import InputMask from "react-input-mask";
 
 import { InputMoney } from "../input/inputMoney";
 import accountsServices from "../../services/accountsServices";
@@ -23,14 +24,15 @@ function FormCard() {
         const userId = decodeToken.userToken.id;
         const allAccounts = await accountsServices.getAccounts(token, userId);
         const allCards = await accountsServices.getCards(token, userId);
-
-        const selectObject = {"id": 0, "name": "Selecione"}
-        allAccounts.accounts.unshift(selectObject)
+        console.log(allCards);
+        const selectObject = {"id": 0, "name": "Selecione"};
+        allAccounts.accounts.unshift(selectObject);
 
         allCards.cards.forEach(function(card, indice) {
             const valueSplit = String(card.value).split('.');
             const limitAvailableSplit =  String(card.limit_available).split('.');
-            
+            // console.log(card.limit_available);
+            // console.log(limitAvailableSplit);
             if(valueSplit.length == 1){
                 allCards.cards[indice].value = allCards.cards[indice].value + '00';
             }else{
@@ -139,15 +141,15 @@ function FormCard() {
                         </p>
                         <div className="grid w-full grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-7 mt-7 ">
                             <div>
-                                <p className="text-base font-medium leading-none text-gray-800">
+                                <p className="text-base  font-semibold font-sans leading-none text-gray-800">
                                     Número do Cartão
                                 </p>
                                 <div>
-                                    <input className="font-sans font-normal text-base w-1/2 p-3 mt-4 border border-gray-300 rounded-lg outline-none focus:bg-gray-50" value={numberCard} onChange={(e) => setNumberCard(e.target.value)} type="text" />
+                                    <InputMask mask="9999 9999 9999 9999" maskPlaceholder={null} className="font-sans font-normal text-base w-1/2 p-3 mt-4 border border-gray-300 rounded-lg outline-none focus:bg-gray-50" value={numberCard} onChange={(e) => setNumberCard(e.target.value)} type="text" />
                                 </div>
                             </div>
                             <div>
-                                <p className="text-base font-medium leading-none text-gray-800 pb-2">
+                                <p className="text-base  font-semibold font-sans leading-none text-gray-800 pb-2">
                                     Conta
                                 </p>
                                 <div className="relative top-1">
@@ -159,7 +161,7 @@ function FormCard() {
                                 </div>
                             </div>
                             <div>
-                                <p className="text-base font-medium leading-none text-gray-800">
+                                <p className="text-base  font-semibold font-sans leading-none text-gray-800">
                                     Limite do Cartão
                                 </p>
                                 <div className="flex pt-4">
@@ -171,7 +173,7 @@ function FormCard() {
                                 </div>
                             </div>
                             <div>
-                                <p className="text-base font-medium leading-none text-gray-800">
+                                <p className="text-base  font-semibold font-sans leading-none text-gray-800">
                                     Valor da Fatura
                                 </p>
                                 <div className="flex pt-4">
@@ -183,7 +185,7 @@ function FormCard() {
                                 </div>
                             </div>
                             <div>
-                                <p className="text-base font-medium leading-none text-gray-800">
+                                <p className="text-base  font-semibold font-sans leading-none text-gray-800">
                                     Data de Vencimento
                                 </p>
                                 <div className="mb-5">

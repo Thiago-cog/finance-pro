@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { ArrowLeftRight, PenSquare, XCircle } from 'lucide-react';
+import { PenSquare, XCircle, Receipt, GanttChartSquare } from 'lucide-react';
+import InputMask from "react-input-mask";
 
 import { InputMoney } from "../input/inputMoney";
 import accountsServices from "../../services/accountsServices";
@@ -9,22 +10,41 @@ import GetCookie from "../../hooks/getCookie";
 function FormAccount() {
     const [nameAccount, setNameAccount] = useState("");
     const [typeAccount, setTypeAccount] = useState(1);
-    const [valueBalance, setValueBalance] = useState(0);
+    const [value, setValue] = useState(0);
     const [listAccounts, setListAccounts] = useState([]);
+    const [accountId, setAccountId] = useState(0);
     const [activeTab, setActiveTab] = useState('extract');
+    const [typeMovement, setTypeMovement] = useState(1);
+    const [monthValue, setMonthValue] = useState(0);
 
     const token = GetCookie("user_session");
+    const arrayMonth = [
+        'Selecione',
+        'Janeiro',
+        'Fevereiro',
+        'Março',
+        'Abril',
+        'Maio',
+        'Junho',
+        'Julho',
+        'Agosto',
+        'Setembro',
+        'Outubro',
+        'Novembro',
+        'Dezembro'
+    ]
 
     const changeTab = (tab) => {
-        console.log('click');
         setActiveTab(tab);
     };
 
     async function getAccounts() {
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
-        const response = await accountsServices.getAccounts(token, userId);
-        setListAccounts(response.accounts)
+        const allAccounts = await accountsServices.getAccounts(token, userId);
+        const selectObject = { "id": 0, "name": "Selecione" };
+        allAccounts.accounts.unshift(selectObject);
+        setListAccounts(allAccounts.accounts)
     }
 
     useEffect(() => {
@@ -35,6 +55,22 @@ function FormAccount() {
         let valueTypeAccount = e.target.value;
         setTypeAccount(valueTypeAccount);
     }
+
+    function setValueTypeMovement(e) {
+        let valueTypeMovement = e.target.value;
+        setTypeMovement(valueTypeMovement);
+    }
+
+    function setAccountIdSelect(e) {
+        let accountId = e.target.value;
+        setAccountId(accountId);
+    }
+
+    function setValueMonthMovement(e) {
+        let monthValue = e.target.value;
+        setMonthValue(monthValue);
+    }
+    
 
     const handleSave = async (e) => {
         e.preventDefault();
@@ -101,25 +137,25 @@ function FormAccount() {
                 <div className="bg-white rounded-md shadow mt-7 py-7">
                     <div className="hidden lg:block md:hidden">
                         <div className="px-7 header flex bg-white lg:justify-around md:justify-around justify-start pb-8 pt-2 border-b-[2px] border-slate-100 flex-wrap gap-x-2">
-                            <a className="cursor-pointer" onClick={() => changeTab('extract')}>
+                            <a className="cursor-pointer hover:text-sky-500" onClick={() => changeTab('extract')}>
                                 <div className="flex items-center instance group">
                                     <div className="svg-container">
-                                        <ArrowLeftRight />
+                                        <Receipt />
                                     </div>
                                     <div className="pl-3 heading-container">
-                                        <p className="text-base font-semibold font-sans leading-none text-slate-800">
+                                        <p className="text-base font-semibold font-sans leading-none text-slate-800 hover:text-sky-500">
                                             Extrato
                                         </p>
                                     </div>
                                 </div>
                             </a>
-                            <a className="cursor-pointer" onClick={() => changeTab('invoice')}>
+                            <a className="cursor-pointer hover:text-sky-500" onClick={() => changeTab('invoice')}>
                                 <div className="flex items-center instance group">
                                     <div className="svg-container">
-                                        <ArrowLeftRight />
+                                        <GanttChartSquare />
                                     </div>
                                     <div className="pl-3 heading-container">
-                                        <p className="text-base font-semibold font-sans leading-none text-slate-800">
+                                        <p className="text-base font-semibold font-sans leading-none text-slate-800 hover:text-sky-500">
                                             Fatura
                                         </p>
                                     </div>
@@ -135,34 +171,55 @@ function FormAccount() {
                             </p>
                             <div className="grid w-full grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-4 mt-10">
                                 <div>
-                                    <p className="text-base font-semibold font-sans leading-none text-gray-800">
-                                        Nome da conta
+                                    <p className="text-base font-semibold font-sans leading-none text-gray-800 ">
+                                        Conta
                                     </p>
-                                    <div className="mb-5">
-                                        <input className="font-sans font-normal text-base w-1/2 p-3 mt-4 border border-gray-300 rounded-lg outline-none focus:bg-gray-50" value={nameAccount} onChange={(e) => setNameAccount(e.target.value)} type="text" />
+                                    <div className="relative top-1">
+                                        <select className=" border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setAccountIdSelect} value={accountId}>
+                                            {listAccounts.map((account, index) => (
+                                                <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={account.id}>{account.name}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                 </div>
-
                                 <div>
                                     <p className="text-base font-semibold font-sans leading-none text-gray-800 ">
-                                        Tipo de Conta
+                                        Tipo de Movimentação
                                     </p>
-                                    <select className="border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setValueTypeAccount}>
-                                        <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={1}>Conta Corrente</option>
-                                        <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={2}>Conta Poupança</option>
+                                    <select className="border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setValueTypeMovement}>
+                                        <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={1}>Receita</option>
+                                        <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={2}>Despesa</option>
                                     </select>
                                 </div>
                                 <div>
                                     <p className="text-base font-semibold font-sans leading-none text-gray-800">
-                                        Saldo
+                                        Valor
                                     </p>
                                     <div className="flex pt-4">
                                         <InputMoney
-                                            onValue={setValueBalance}
+                                            onValue={setValue}
                                             classP="border flex items-center p-3 bg-color bg-gray-200 rounded-l-lg"
                                             classInput="w-[44%] p-3 border border-gray-300 rounded-r-lg outline-none focus:bg-gray-50"
                                         />
                                     </div>
+                                </div>
+                                <div>
+                                    <p className="text-base font-semibold font-sans leading-none text-gray-800">
+                                        Data da Movimentação
+                                    </p>
+                                    <div className="mb-5">
+                                        <InputMask mask="99/99/9999" maskPlaceholder={null} className="font-sans font-normal text-base w-1/2 p-3 mt-4 border border-gray-300 rounded-lg outline-none focus:bg-gray-50" value={nameAccount} onChange={(e) => setNameAccount(e.target.value)} type="text" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <p className="text-base font-semibold font-sans leading-none text-gray-800 ">
+                                        Mês
+                                    </p>
+                                    <select className="border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setValueMonthMovement}>
+                                        {arrayMonth.map((month, index) => (
+                                            <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={index}>{month}</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -198,7 +255,7 @@ function FormAccount() {
                                     </p>
                                     <div className="flex pt-4">
                                         <InputMoney
-                                            onValue={setValueBalance}
+                                            onValue={setValue}
                                             classP="border flex items-center p-3 bg-color bg-gray-200 rounded-l-lg"
                                             classInput="w-[44%] p-3 border border-gray-300 rounded-r-lg outline-none focus:bg-gray-50"
                                         />

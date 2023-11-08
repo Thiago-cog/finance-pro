@@ -67,7 +67,7 @@ class AccountsRepository {
         const result = await conn.query(`SELECT c.id,
                                                 c.number_card,
                                                 c.value,
-                                                c.limit_card - c.value AS limit_available,
+                                                ROUND((c.limit_card - c.value)::numeric, 2) AS limit_available,
                                                 u.fullname,
                                                 a.name
                                         FROM cards c

@@ -129,7 +129,7 @@ class AccountsMaintenance {
             });
             
             const grossProfit = returnStatusData.balanceTotal - returnStatusData.expenseTotal;
-            const profitMargin = grossProfit/returnStatusData.balanceTotal;
+            let profitMargin = grossProfit/returnStatusData.balanceTotal;
 
             let balance = returnStatusData.balanceTotal;
             let expense = returnStatusData.expenseTotal;
@@ -152,6 +152,10 @@ class AccountsMaintenance {
                 }
             }
             
+            if(returnStatusData.balanceTotal === 0 && returnStatusData.expenseTotal === 0){
+                profitMargin = 0;
+            }
+
             returnStatusData.balanceTotal = String(balance).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
             returnStatusData.expenseTotal = String(expense).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
             returnStatusData.profitMargin = String((profitMargin * 100).toFixed(2)).replace(".", ",");
