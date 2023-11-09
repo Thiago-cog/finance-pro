@@ -7,7 +7,7 @@ import accountsServices from "../../services/accountsServices";
 import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
 
-function FormAccount() {
+function FormAccount() { 
     const [value, setValue] = useState(0);
     const [listAccounts, setListAccounts] = useState([]);
     const [listCategories, setListCategories] = useState([]);
