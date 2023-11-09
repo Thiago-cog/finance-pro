@@ -174,6 +174,24 @@ class AccountsMaintenance {
         return result;
     }
 
+    async getcategories() {
+        let result = {};
+        try {
+            const categoriesResult =  await this.accountsRepository.getCategories();
+            result.status = 200;
+            result.data = {
+                categories: categoriesResult
+            }
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                error: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            };
+        }
+        return result;
+    }
+
     async createAccount(accountData) {
         let result = {};
         try {

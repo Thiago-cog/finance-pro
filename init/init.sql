@@ -87,13 +87,13 @@ ALTER TABLE
 
 INSERT INTO users(email, password, fullname) VALUES('adm@gmail.com', '$2b$10$oOZiInZ9Z2qHHac6TNQlH.0G7dGhZ3SoW.vIDK/yymrSPfEM0FpZ6', 'Admin');
 
-INSERT INTO categories(name_category, type_category) VALUES('Alimentação', 1);
-INSERT INTO categories(name_category, type_category) VALUES('Carro', 1);
-INSERT INTO categories(name_category, type_category) VALUES('Estudos', 1);
-INSERT INTO categories(name_category, type_category) VALUES('Lazer', 1);
-INSERT INTO categories(name_category, type_category) VALUES('Casa', 1);
-INSERT INTO categories(name_category, type_category) VALUES('Saúde', 1);
-INSERT INTO categories(name_category, type_category) VALUES('Transporte', 1);
-INSERT INTO categories(name_category, type_category) VALUES('Salário', 2);
-INSERT INTO categories(name_category, type_category) VALUES('Vendas', 2);
-INSERT INTO categories(name_category, type_category) VALUES('Rendimentos', 2);
+INSERT INTO categories(name_category, type_category) VALUES('Alimentação', 2);
+INSERT INTO categories(name_category, type_category) VALUES('Carro', 2);
+INSERT INTO categories(name_category, type_category) VALUES('Estudos', 2);
+INSERT INTO categories(name_category, type_category) VALUES('Lazer', 2);
+INSERT INTO categories(name_category, type_category) VALUES('Casa', 2);
+INSERT INTO categories(name_category, type_category) VALUES('Saúde', 2);
+INSERT INTO categories(name_category, type_category) VALUES('Transporte', 2);
+INSERT INTO categories(name_category, type_category) VALUES('Salário', 1);
+INSERT INTO categories(name_category, type_category) VALUES('Vendas', 1);
+INSERT INTO categories(name_category, type_category) VALUES('Rendimentos', 1);

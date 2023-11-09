@@ -62,6 +62,12 @@ class AccountsRepository {
         return result.rows;
     }
 
+    async getCategories() {
+        const conn = await this.databaseConnector.generateConnection();
+        const result = await conn.query(`SELECT * FROM categories`);
+        return result.rows;
+    }
+
     async getAllCardsByUserId(userId) {
         const conn = await this.databaseConnector.generateConnection();
         const result = await conn.query(`SELECT c.id,

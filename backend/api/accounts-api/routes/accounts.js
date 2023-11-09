@@ -36,6 +36,12 @@ router.get('/get-all-status/:userId', authenticateToken, async(req, res) => {
     applyResult(result, res);
 });
 
+router.get('/get-categories', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    const result = await accountsMaintenance.getcategories();
+    applyResult(result, res);
+});
+
 router.post('/create-accounts', authenticateToken, async(req, res) => {
     const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
     const accountData = req.body;

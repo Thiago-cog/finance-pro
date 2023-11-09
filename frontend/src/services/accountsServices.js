@@ -76,6 +76,21 @@ class AccountsService {
             throw error;
         }
     }
+
+    async getCategories(token) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.get(`${BASE_URL}/get-categories`, config);
+            return response.data;
+        }catch (error){
+            throw error;
+        }
+    }
 }
 
 

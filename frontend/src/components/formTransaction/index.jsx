@@ -8,16 +8,29 @@ import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
 
 function FormAccount() {
-    const [nameAccount, setNameAccount] = useState("");
-    const [typeAccount, setTypeAccount] = useState(1);
     const [value, setValue] = useState(0);
     const [listAccounts, setListAccounts] = useState([]);
+    const [listCategories, setListCategories] = useState([]);
     const [accountId, setAccountId] = useState(0);
+    const [categoryId, setCategoryId] = useState(0);
     const [activeTab, setActiveTab] = useState('extract');
-    const [typeMovement, setTypeMovement] = useState(1);
+    const [typeMovement, setTypeMovement] = useState(0);
+    const [dateMovement, setDateMovement] = useState("");
     const [monthValue, setMonthValue] = useState(0);
-
+    const [yearValue, setYearValue] = useState(0);
+    const [arrayCategories, setArrayCategories] = useState([])
     const token = GetCookie("user_session");
+
+    const currentDate = new Date();
+    const formatCurrentDate = currentDate.toLocaleDateString('pt-BR');
+    const currentYear = currentDate.getFullYear();
+    const arrayYears = []; 
+
+
+    for (let i = 0; i < 5; i++) {
+        arrayYears.push(currentYear - i);
+    }
+
     const arrayMonth = [
         'Selecione',
         'Janeiro',
@@ -47,18 +60,44 @@ function FormAccount() {
         setListAccounts(allAccounts.accounts)
     }
 
+    async function getCategories() {
+        const resultCategories = await accountsServices.getCategories(token);
+        const selectObject = { "id": 0, "name_category": "Selecione" };
+        resultCategories.categories.unshift(selectObject);
+        setListCategories(resultCategories.categories);
+        setArrayCategories(resultCategories.categories);
+    }
+
+    const handleSave = async (e) => {
+        e.preventDefault();
+        const decodeToken = await authServices.decodeToken(token);
+        const userId = decodeToken.userToken.id;
+        const response = await accountsServices.createAccount(token, nameAccount, typeAccount, valueBalance, userId);
+        setNameAccount("");
+        getAccounts();
+        alert(response.message);
+    }
+
     useEffect(() => {
         getAccounts();
+        getCategories();
+        setDateMovement(formatCurrentDate);
     }, []);
-
-    function setValueTypeAccount(e) {
-        let valueTypeAccount = e.target.value;
-        setTypeAccount(valueTypeAccount);
-    }
 
     function setValueTypeMovement(e) {
         let valueTypeMovement = e.target.value;
+        let arrayFindCategories = [];
+
+        arrayCategories.find(function(category) {
+            if(category.type_category == valueTypeMovement){
+                arrayFindCategories.push(category);
+            }
+        });
+
+        const selectObject = { "id": 0, "name_category": "Selecione" };
+        arrayFindCategories.unshift(selectObject);
         setTypeMovement(valueTypeMovement);
+        setListCategories(arrayFindCategories)
     }
 
     function setAccountIdSelect(e) {
@@ -70,16 +109,27 @@ function FormAccount() {
         let monthValue = e.target.value;
         setMonthValue(monthValue);
     }
-    
 
-    const handleSave = async (e) => {
-        e.preventDefault();
-        const decodeToken = await authServices.decodeToken(token);
-        const userId = decodeToken.userToken.id;
-        const response = await accountsServices.createAccount(token, nameAccount, typeAccount, valueBalance, userId);
-        setNameAccount("");
-        getAccounts();
-        alert(response.message);
+    function setValueYearMovement(e) {
+        let yearValue = e.target.value;
+        setYearValue(yearValue);
+    }
+
+    function setValueDateCurrentMovement(e) {
+        let dateValue = e;
+        setDateMovement(dateValue);
+    }
+
+    function handleBlurDateCurrentMovement(e) {
+        if (e == '') {
+            setDateMovement(formatCurrentDate);
+        }
+    }
+
+    function setValueCategories(e) {
+        let categoryValue = e.target.value;
+        
+        setCategoryId(categoryValue);
     }
 
     return (
@@ -187,6 +237,7 @@ function FormAccount() {
                                         Tipo de Movimentação
                                     </p>
                                     <select className="border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setValueTypeMovement}>
+                                        <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={0}>Selecione</option>
                                         <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={1}>Receita</option>
                                         <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={2}>Despesa</option>
                                     </select>
@@ -204,11 +255,21 @@ function FormAccount() {
                                     </div>
                                 </div>
                                 <div>
+                                    <p className="text-base font-semibold font-sans leading-none text-gray-800 ">
+                                        Categorias
+                                    </p>
+                                    <select className="border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setValueCategories}>
+                                        {listCategories.map((category, index) => (
+                                            <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={index}>{category.name_category}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
                                     <p className="text-base font-semibold font-sans leading-none text-gray-800">
                                         Data da Movimentação
                                     </p>
                                     <div className="mb-5">
-                                        <InputMask mask="99/99/9999" maskPlaceholder={null} className="font-sans font-normal text-base w-1/2 p-3 mt-4 border border-gray-300 rounded-lg outline-none focus:bg-gray-50" value={nameAccount} onChange={(e) => setNameAccount(e.target.value)} type="text" />
+                                        <InputMask mask="99/99/9999" maskPlaceholder={null} className="font-sans font-normal text-base w-1/2 p-3 mt-4 border border-gray-300 rounded-lg outline-none focus:bg-gray-50" value={dateMovement} onChange={(e) => setValueDateCurrentMovement(e.target.value)} onBlur={(e) => handleBlurDateCurrentMovement(e.target.value)} type="text" />
                                     </div>
                                 </div>
                                 <div>
@@ -218,6 +279,16 @@ function FormAccount() {
                                     <select className="border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setValueMonthMovement}>
                                         {arrayMonth.map((month, index) => (
                                             <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={index}>{month}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <p className="text-base font-semibold font-sans leading-none text-gray-800 ">
+                                        Ano
+                                    </p>
+                                    <select className="border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setValueYearMovement}>
+                                        {arrayYears.map((year, index) => (
+                                            <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={year}>{year}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -231,24 +302,6 @@ function FormAccount() {
                                 Cadastro de Movimentação da Fatura
                             </p>
                             <div className="grid w-full grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-4 mt-10">
-                                <div>
-                                    <p className="text-base font-semibold font-sans leading-none text-gray-800">
-                                        Nome da conta
-                                    </p>
-                                    <div className="mb-5">
-                                        <input className="font-sans font-normal text-base w-1/2 p-3 mt-4 border border-gray-300 rounded-lg outline-none focus:bg-gray-50" value={nameAccount} onChange={(e) => setNameAccount(e.target.value)} type="text" />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <p className="text-base font-semibold font-sans leading-none text-gray-800 ">
-                                        Tipo de Conta
-                                    </p>
-                                    <select className="border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setValueTypeAccount}>
-                                        <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={1}>Conta Corrente</option>
-                                        <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={2}>Conta Poupança</option>
-                                    </select>
-                                </div>
                                 <div>
                                     <p className="text-base font-semibold font-sans leading-none text-gray-800">
                                         Saldo
