@@ -11,26 +11,25 @@ class AuthService {
             const response = await axios.get(`${BASE_URL}/decode-token`, config);
             return response.data;
         }catch (error){
-            throw error;
+            return error.response;
         }
     }
 
     async login(email, password){
         try {
             const response = await axios.post(`${BASE_URL}/login`, { email, password });
-            return response.data;
+            return response;
         } catch (error) {
-            throw error;
+            return error.response;
         }
     }
 
     async registerUser(email, password, fullname){
         try {
             const response = await axios.put(`${BASE_URL}/register`, { email, password, fullname });
-            console.log(response);
             return response;
         } catch (error) {
-            throw error;
+            return error.response;
         }
     }
 }

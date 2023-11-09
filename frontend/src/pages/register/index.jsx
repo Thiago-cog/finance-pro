@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import authServices from "../../services/authServices";
 import Logo from "../../assets/2-removebg-preview.png";
 import RegisterImage from "../../assets/Login-rafiki.svg";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Register = () => {
@@ -15,13 +17,25 @@ const Register = () => {
         e.preventDefault();
         const response = await authServices.registerUser(email, password, fullname);
         if (response.status == 201) {
-            alert(response.data.message);
-            return navigate("/");
+            toast.success(`${response.data.message}`, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+
+            setTimeout(() => {
+                return navigate("/");
+            }, 2500);
         }
     }
     return (
-
         <div className=" w-full h-screen flex bg-gradient-to-tr from-gray-950 to-gray-900">
+            <ToastContainer />
             <div className="flex justify-center items-center h-full basis-5/12">
                 <div className="w-3/6"> 
                     <img
