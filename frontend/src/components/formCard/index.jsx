@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { CreditCard } from 'lucide-react';
 import InputMask from "react-input-mask";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { InputMoney } from "../input/inputMoney";
 import accountsServices from "../../services/accountsServices";
@@ -24,36 +26,34 @@ function FormCard() {
         const userId = decodeToken.userToken.id;
         const allAccounts = await accountsServices.getAccounts(token, userId);
         const allCards = await accountsServices.getCards(token, userId);
-        console.log(allCards);
-        const selectObject = {"id": 0, "name": "Selecione"};
-        allAccounts.accounts.unshift(selectObject);
 
-        allCards.cards.forEach(function(card, indice) {
+        const selectObject = {"id": 0, "name": "Selecione"};
+        allAccounts.data.accounts.unshift(selectObject);
+
+        allCards.data.cards.forEach(function(card, indice) {
             const valueSplit = String(card.value).split('.');
             const limitAvailableSplit =  String(card.limit_available).split('.');
-            // console.log(card.limit_available);
-            // console.log(limitAvailableSplit);
             if(valueSplit.length == 1){
-                allCards.cards[indice].value = allCards.cards[indice].value + '00';
+                allCards.data.cards[indice].value = allCards.data.cards[indice].value + '00';
             }else{
                 if(valueSplit[1].length == 1){
-                    allCards.cards[indice].value = allCards.cards[indice].value + '0';
+                    allCards.data.cards[indice].value = allCards.data.cards[indice].value + '0';
                 }
             }
 
             if(limitAvailableSplit.length == 1){
-                allCards.cards[indice].limit_available = allCards.cards[indice].limit_available + '00';
+                allCards.data.cards[indice].limit_available = allCards.data.cards[indice].limit_available + '00';
             }else{
                 if(limitAvailableSplit[1].length == 1){
-                    allCards.cards[indice].limit_available = allCards.cards[indice].limit_available + '0';
+                    allCards.data.cards[indice].limit_available = allCards.data.cards[indice].limit_available + '0';
                 }
             }
-            allCards.cards[indice].value = String(allCards.cards[indice].value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
-            allCards.cards[indice].limit_available = String(allCards.cards[indice].limit_available).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+            allCards.data.cards[indice].value = String(allCards.data.cards[indice].value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+            allCards.data.cards[indice].limit_available = String(allCards.data.cards[indice].limit_available).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
         });
         
-        setListAccounts(allAccounts.accounts)
-        setListCards(allCards.cards)
+        setListAccounts(allAccounts.data.accounts)
+        setListCards(allCards.data.cards)
     }
     useEffect(() => {
         getAccounts();
@@ -66,18 +66,54 @@ function FormCard() {
 
     const handleSave = async (e) => {
         e.preventDefault();
-        const response = await accountsServices.createCard(token, accountId, numberCard, dueDay, valueLimitCard, valueInvoice);
+        const resultCreatCard = await accountsServices.createCard(token, accountId, numberCard, dueDay, valueLimitCard, valueInvoice);
+
+        if(resultCreatCard.status === 400){
+            toast.info(`${resultCreatCard.data.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }else if(resultCreatCard.status === 500){
+            toast.error('Internal Server Error!', {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }else{
+            toast.success(`${resultCreatCard.data.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }
+
         setNumberCard("");
         setAccountId(0);
         setDueDay('');
         setValueLimitCard(null);
         setValueInvoice(null);
         getAccounts();
-        alert(response.message);
     }
 
     return (
         <>
+            <ToastContainer />
             <div className="py-4 px-2">
                 <div className="relative overflow-x-auto rounded-md">
                     <table className="w-full text-sm text-left text-gray-500">

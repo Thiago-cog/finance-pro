@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Wallet, PenSquare, XCircle } from 'lucide-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { InputMoney } from "../input/inputMoney";
 import accountsServices from "../../services/accountsServices";
@@ -17,7 +19,7 @@ function FormAccount() {
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
         const response = await accountsServices.getAccounts(token, userId);
-        setListAccounts(response.accounts)
+        setListAccounts(response.data.accounts)
     }
 
     useEffect(() => {
@@ -33,14 +35,50 @@ function FormAccount() {
         e.preventDefault();
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
-        const response = await accountsServices.createAccount(token, nameAccount, typeAccount, valueBalance, userId);
+        const resultCreateAccount = await accountsServices.createAccount(token, nameAccount, typeAccount, valueBalance, userId);
+
+        if(resultCreateAccount.status === 400){
+            toast.info(`${resultCreateAccount.data.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }else if(resultCreateAccount.status === 500){
+            toast.error('Internal Server Error!', {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }else{
+            toast.success(`${resultCreateAccount.data.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }
+
         setNameAccount("");
         getAccounts();
-        alert(response.message);
     }
 
     return (
         <>
+            <ToastContainer />
             <div className="py-4 px-2">
                 <div className="relative overflow-x-auto rounded-md">
                     <table className="w-full text-sm text-left text-gray-500">

@@ -11,9 +11,9 @@ class AccountsService {
 
         try{
             const response = await axios.post(`${BASE_URL}/create-accounts`, { name, typeaccount, balance, userId }, config);
-            return response.data;
+            return response;
         }catch (error){
-            throw error;
+            return error.response;
         }
     }
 
@@ -26,9 +26,9 @@ class AccountsService {
         
         try{
             const response = await axios.get(`${BASE_URL}/get-accounts/${userId}`, config);
-            return response.data;
+            return response;
         }catch (error){
-            throw error;
+            return error.response;
         }
     }
 
@@ -41,9 +41,9 @@ class AccountsService {
 
         try{
             const response = await axios.post(`${BASE_URL}/create-card`, { accountsId, numberCard, dueDay, limitCard, value }, config);
-            return response.data;
+            return response;
         }catch (error){
-            throw error;
+            return error.response;
         }
     }
 
@@ -56,9 +56,9 @@ class AccountsService {
 
         try{
             const response = await axios.get(`${BASE_URL}/get-card/${userId}`, config);
-            return response.data;
+            return response;
         }catch (error){
-            throw error;
+            return error.response;
         }
     }
     
@@ -71,9 +71,9 @@ class AccountsService {
 
         try{
             const response = await axios.get(`${BASE_URL}/get-all-status/${userId}`, config);
-            return response.data;
+            return response;
         }catch (error){
-            throw error;
+            return error.response;
         }
     }
 
@@ -86,9 +86,9 @@ class AccountsService {
 
         try{
             const response = await axios.get(`${BASE_URL}/get-categories`, config);
-            return response.data;
+            return response;
         }catch (error){
-            throw error;
+            return error.response;
         }
     }
 }

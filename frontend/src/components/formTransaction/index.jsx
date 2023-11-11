@@ -56,16 +56,16 @@ function FormAccount() {
         const userId = decodeToken.userToken.id;
         const allAccounts = await accountsServices.getAccounts(token, userId);
         const selectObject = { "id": 0, "name": "Selecione" };
-        allAccounts.accounts.unshift(selectObject);
-        setListAccounts(allAccounts.accounts)
+        allAccounts.data.accounts.unshift(selectObject);
+        setListAccounts(allAccounts.data.accounts)
     }
 
     async function getCategories() {
         const resultCategories = await accountsServices.getCategories(token);
         const selectObject = { "id": 0, "name_category": "Selecione" };
-        resultCategories.categories.unshift(selectObject);
-        setListCategories(resultCategories.categories);
-        setArrayCategories(resultCategories.categories);
+        resultCategories.data.categories.unshift(selectObject);
+        setListCategories(resultCategories.data.categories);
+        setArrayCategories(resultCategories.data.categories);
     }
 
     const handleSave = async (e) => {
@@ -75,7 +75,6 @@ function FormAccount() {
         const response = await accountsServices.createAccount(token, nameAccount, typeAccount, valueBalance, userId);
         setNameAccount("");
         getAccounts();
-        alert(response.message);
     }
 
     useEffect(() => {
