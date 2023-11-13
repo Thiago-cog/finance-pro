@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import authServices from "../../services/authServices";
 import FinanceImage from '../../assets/Finance-pana.svg'
@@ -20,17 +22,43 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        const resultLogin = await authServices.login(email, pass);
 
-        const response = await authServices.login(email, pass);
-
-        if (response.token) {
-            SetCookie('user_session', response.token);
+        if(resultLogin.status === 401){
+            toast.warn(`${resultLogin.data.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }else if(resultLogin.status === 500){
+            toast.error('Internal Server Error!', {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        } 
+        
+        if(resultLogin.data.token) {
+            SetCookie('user_session', resultLogin.data.token);
             return navigate("/dashboard");
         }
+        
     }
 
     return (
         <div className="relative w-full h-screen flex bg-gradient-to-br from-gray-950 to-gray-900">
+            <ToastContainer />
             <div className="flex justify-center items-center h-full basis-5/12">
                 <div className="w-3/6">
                     <h1 className="font-sans font-bold text-white text-6xl my-9">

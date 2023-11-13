@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { CreditCard } from 'lucide-react';
+import InputMask from "react-input-mask";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { InputMoney } from "../input/inputMoney";
 import accountsServices from "../../services/accountsServices";
@@ -10,9 +13,9 @@ function FormCard() {
 
     const [numberCard, setNumberCard] = useState("");
     const [accountId, setAccountId] = useState(0);
-    const [dueDay, setDueDay] = useState(null);
-    const [valueLimitCard, setValueLimitCard] = useState(null);
-    const [valueInvoice, setValueInvoice] = useState(null);
+    const [dueDay, setDueDay] = useState("");
+    const [valueLimitCard, setValueLimitCard] = useState("");
+    const [valueInvoice, setValueInvoice] = useState("");
     const [listAccounts, setListAccounts] = useState([]);
     const [listCards, setListCards] = useState([]);
     const token = GetCookie("user_session");
@@ -24,34 +27,33 @@ function FormCard() {
         const allAccounts = await accountsServices.getAccounts(token, userId);
         const allCards = await accountsServices.getCards(token, userId);
 
-        const selectObject = {"id": 0, "name": "Selecione"}
-        allAccounts.accounts.unshift(selectObject)
+        const selectObject = {"id": 0, "name": "Selecione"};
+        allAccounts.data.accounts.unshift(selectObject);
 
-        allCards.cards.forEach(function(card, indice) {
+        allCards.data.cards.forEach(function(card, indice) {
             const valueSplit = String(card.value).split('.');
             const limitAvailableSplit =  String(card.limit_available).split('.');
-            
             if(valueSplit.length == 1){
-                allCards.cards[indice].value = allCards.cards[indice].value + '00';
+                allCards.data.cards[indice].value = allCards.data.cards[indice].value + '00';
             }else{
                 if(valueSplit[1].length == 1){
-                    allCards.cards[indice].value = allCards.cards[indice].value + '0';
+                    allCards.data.cards[indice].value = allCards.data.cards[indice].value + '0';
                 }
             }
 
             if(limitAvailableSplit.length == 1){
-                allCards.cards[indice].limit_available = allCards.cards[indice].limit_available + '00';
+                allCards.data.cards[indice].limit_available = allCards.data.cards[indice].limit_available + '00';
             }else{
                 if(limitAvailableSplit[1].length == 1){
-                    allCards.cards[indice].limit_available = allCards.cards[indice].limit_available + '0';
+                    allCards.data.cards[indice].limit_available = allCards.data.cards[indice].limit_available + '0';
                 }
             }
-            allCards.cards[indice].value = String(allCards.cards[indice].value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
-            allCards.cards[indice].limit_available = String(allCards.cards[indice].limit_available).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+            allCards.data.cards[indice].value = String(allCards.data.cards[indice].value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+            allCards.data.cards[indice].limit_available = String(allCards.data.cards[indice].limit_available).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
         });
         
-        setListAccounts(allAccounts.accounts)
-        setListCards(allCards.cards)
+        setListAccounts(allAccounts.data.accounts)
+        setListCards(allCards.data.cards)
     }
     useEffect(() => {
         getAccounts();
@@ -64,18 +66,54 @@ function FormCard() {
 
     const handleSave = async (e) => {
         e.preventDefault();
-        const response = await accountsServices.createCard(token, accountId, numberCard, dueDay, valueLimitCard, valueInvoice);
+        const resultCreatCard = await accountsServices.createCard(token, accountId, numberCard, dueDay, valueLimitCard, valueInvoice);
+
+        if(resultCreatCard.status === 400){
+            toast.info(`${resultCreatCard.data.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }else if(resultCreatCard.status === 500){
+            toast.error('Internal Server Error!', {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }else{
+            toast.success(`${resultCreatCard.data.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }
+
         setNumberCard("");
         setAccountId(0);
         setDueDay('');
         setValueLimitCard(null);
         setValueInvoice(null);
         getAccounts();
-        alert(response.message);
     }
 
     return (
         <>
+            <ToastContainer />
             <div className="py-4 px-2">
                 <div className="relative overflow-x-auto rounded-md">
                     <table className="w-full text-sm text-left text-gray-500">
@@ -97,7 +135,7 @@ function FormCard() {
                         </thead>
                         <tbody>
                             {listCards.map((card, index) => (
-                                <tr className="bg-white border-b ">
+                                <tr className="bg-white border-b" key={index}>
                                     <th scope="row" className="px-6 py-4">
                                         {card.number_card}
                                     </th>
@@ -139,27 +177,27 @@ function FormCard() {
                         </p>
                         <div className="grid w-full grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-7 mt-7 ">
                             <div>
-                                <p className="text-base font-medium leading-none text-gray-800">
+                                <p className="text-base  font-semibold font-sans leading-none text-gray-800">
                                     Número do Cartão
                                 </p>
                                 <div>
-                                    <input className="font-sans font-normal text-base w-1/2 p-3 mt-4 border border-gray-300 rounded-lg outline-none focus:bg-gray-50" value={numberCard} onChange={(e) => setNumberCard(e.target.value)} type="text" />
+                                    <InputMask mask="9999 9999 9999 9999" maskPlaceholder={null} className="font-sans font-normal text-base w-1/2 p-3 mt-4 border border-gray-300 rounded-lg outline-none focus:bg-gray-50" value={numberCard} onChange={(e) => setNumberCard(e.target.value)} type="text" />
                                 </div>
                             </div>
                             <div>
-                                <p className="text-base font-medium leading-none text-gray-800 pb-2">
+                                <p className="text-base  font-semibold font-sans leading-none text-gray-800 pb-2">
                                     Conta
                                 </p>
                                 <div className="relative top-1">
                                     <select className=" border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setAccountIdSelect} value={accountId}>
                                         {listAccounts.map((account, index) => (
-                                            <option className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={account.id}>{account.name}</option>
+                                            <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={account.id}>{account.name}</option>
                                         ))}
                                     </select>
                                 </div>
                             </div>
                             <div>
-                                <p className="text-base font-medium leading-none text-gray-800">
+                                <p className="text-base  font-semibold font-sans leading-none text-gray-800">
                                     Limite do Cartão
                                 </p>
                                 <div className="flex pt-4">
@@ -171,7 +209,7 @@ function FormCard() {
                                 </div>
                             </div>
                             <div>
-                                <p className="text-base font-medium leading-none text-gray-800">
+                                <p className="text-base  font-semibold font-sans leading-none text-gray-800">
                                     Valor da Fatura
                                 </p>
                                 <div className="flex pt-4">
@@ -183,7 +221,7 @@ function FormCard() {
                                 </div>
                             </div>
                             <div>
-                                <p className="text-base font-medium leading-none text-gray-800">
+                                <p className="text-base  font-semibold font-sans leading-none text-gray-800">
                                     Data de Vencimento
                                 </p>
                                 <div className="mb-5">

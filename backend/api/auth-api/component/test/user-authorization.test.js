@@ -27,14 +27,14 @@ jest.mock('bcrypt', () => {
 describe('Função decodeToken', () => {
     test('Funcionamento correto da função', async () => {
         const userAuthorization = new UserAuthorization(userRepository);
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVG9rZW4iOnsiaWQiOiIxIiwiZnVsbG5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtQGdtYWlsLmNvbSJ9LCJpYXQiOjE2OTc5MTU5NTcsImV4cCI6MTY5ODUyMDc1N30.W9dWILGtqZk34a_xzrUhkTRe8XrBfmWH_GIqIIXRi9c';
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVG9rZW4iOnsiaWQiOiIxIiwiZnVsbG5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtQGdtYWlsLmNvbSJ9LCJpYXQiOjE2OTk2MjU4MzEsImV4cCI6MTcwMDIzMDYzMX0.o30sTMFE-7G8b4f5NnwU_TsquCN5-u1NvpHqLmOs0cM';
         const result = await userAuthorization.decodeToken(token);
 
         expect(result).toStrictEqual(
             {
                 "data": {
-                    "exp": 1698520757,
-                    "iat": 1697915957,
+                    "exp": 1700230631,
+                    "iat": 1699625831,
                     "userToken":
                     {
                         "email": "adm@gmail.com",

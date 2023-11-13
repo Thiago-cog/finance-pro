@@ -14,9 +14,9 @@ function AllStatus() {
         const userId = decodeToken.userToken.id;
         const response = await accountsServices.getAllStatus(token, userId);
 
-        setTotalBalance(response.allStatusData.balanceTotal);
-        setTotalExpense(response.allStatusData.expenseTotal);
-        setProfitMargin(response.allStatusData.profitMargin);
+        setTotalBalance(response.data.allStatusData.balanceTotal);
+        setTotalExpense(response.data.allStatusData.expenseTotal);
+        setProfitMargin(response.data.allStatusData.profitMargin);
     }
     useEffect(() => {
         getAllStatus();

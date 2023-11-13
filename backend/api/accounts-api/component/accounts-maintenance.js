@@ -44,6 +44,19 @@ class AccountsMaintenance {
             }
 
             const accountsUser = await this.accountsRepository.getAccountsByUserId(userId);
+
+            accountsUser.forEach(function (account, indice) {
+                const balanceSplit = String(account.balance).split('.');
+                if (balanceSplit.length == 1) {
+                    accountsUser[indice].balance = accountsUser[indice].balance + '00';
+                } else {
+                    if (balanceSplit[1].length == 1) {
+                        accountsUser[indice].balance = accountsUser[indice].balance + '0';
+                    }
+                }
+                accountsUser[indice].balance = String(accountsUser[indice].balance).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+            });
+
             result.status = 200;
             result.data = {
                 accounts: accountsUser
@@ -116,7 +129,7 @@ class AccountsMaintenance {
             });
             
             const grossProfit = returnStatusData.balanceTotal - returnStatusData.expenseTotal;
-            const profitMargin = grossProfit/returnStatusData.balanceTotal;
+            let profitMargin = grossProfit/returnStatusData.balanceTotal;
 
             let balance = returnStatusData.balanceTotal;
             let expense = returnStatusData.expenseTotal;
@@ -139,6 +152,10 @@ class AccountsMaintenance {
                 }
             }
             
+            if(returnStatusData.balanceTotal === 0 && returnStatusData.expenseTotal === 0){
+                profitMargin = 0;
+            }
+
             returnStatusData.balanceTotal = String(balance).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
             returnStatusData.expenseTotal = String(expense).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
             returnStatusData.profitMargin = String((profitMargin * 100).toFixed(2)).replace(".", ",");
@@ -156,6 +173,63 @@ class AccountsMaintenance {
         }
         return result;
     }
+
+    async getcategories() {
+        let result = {};
+        try {
+            const categoriesResult =  await this.accountsRepository.getCategories();
+            result.status = 200;
+            result.data = {
+                categories: categoriesResult
+            }
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                error: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            };
+        }
+        return result;
+    }
+
+    async getAllMovimentsByUserId(userId) {
+        let result = {};
+        try {
+            if (!userId) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Id do usuário não enviado',
+                    message: "Usuário não identificado."
+                }
+                return result;
+            }
+
+            const allMoviments = await this.accountsRepository.getAllMovimentsByUserId(userId);
+            let moviments = allMoviments.extracts.concat(allMoviments.invoices);
+
+            moviments.forEach((moviment, index) => {
+                const valueSplit = String(moviment.value).split('.');
+                if (valueSplit.length == 1) {
+                    moviments[index].value = moviments[index].value + '00';
+                } else {
+                    if (valueSplit[1].length == 1) {
+                        moviments[index].value = moviments[index].value + '0';
+                    }
+                }
+                moviments[index].value = String(moviments[index].value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+            })
+
+            result.status = 200;
+            result.data = {moviments: moviments};
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+        return result;
+    } 
 
     async createAccount(accountData) {
         let result = {};
