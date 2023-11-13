@@ -192,6 +192,45 @@ class AccountsMaintenance {
         return result;
     }
 
+    async getAllMovimentsByUserId(userId) {
+        let result = {};
+        try {
+            if (!userId) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Id do usuário não enviado',
+                    message: "Usuário não identificado."
+                }
+                return result;
+            }
+
+            const allMoviments = await this.accountsRepository.getAllMovimentsByUserId(userId);
+            let moviments = allMoviments.extracts.concat(allMoviments.invoices);
+
+            moviments.forEach((moviment, index) => {
+                const valueSplit = String(moviment.value).split('.');
+                if (valueSplit.length == 1) {
+                    moviments[index].value = moviments[index].value + '00';
+                } else {
+                    if (valueSplit[1].length == 1) {
+                        moviments[index].value = moviments[index].value + '0';
+                    }
+                }
+                moviments[index].value = String(moviments[index].value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
+            })
+
+            result.status = 200;
+            result.data = {moviments: moviments};
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+        return result;
+    } 
+
     async createAccount(accountData) {
         let result = {};
         try {

@@ -91,6 +91,41 @@ class AccountsService {
             return error.response;
         }
     }
+
+    async createMovement(token, movementData) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            let response = {};
+            if(movementData.activeTab === 'extract'){
+                response = await axios.post(`${BASE_URL}/create-movement-extract`, movementData, config);
+            }else {
+                response = await axios.post(`${BASE_URL}/create-movement-invoice`, movementData, config);
+            }
+            return response;
+        }catch (error){
+            return error.response;
+        }
+    }
+
+    async getAllMoviments(token, userId) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.get(`${BASE_URL}/get-all-moviments/${userId}`, config);
+            return response;
+        }catch (error){
+            return error.response;
+        }
+    }
 }
 
 

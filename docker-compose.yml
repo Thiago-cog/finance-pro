@@ -7,7 +7,7 @@ services:
   #   ports:
   #     - 6379:6379
   #   networks:
-  #     - finance-pro
+  #     - my-networks
 
   postgres:
     container_name: postgres
@@ -20,7 +20,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - finance-pro
+      - my-networks
     volumes:
       - ./init:/docker-entrypoint-initdb.d
 
@@ -32,7 +32,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - finance-pro
+      - my-networks
   
   auth-api:
     container_name: auth-api
@@ -41,7 +41,7 @@ services:
     ports:
       - "3001:3001"
     networks:
-      - finance-pro
+      - my-networks
 
   accounts-api:
     container_name: accounts-api
@@ -50,7 +50,7 @@ services:
     ports:
       - "3002:3002"
     networks:
-      - finance-pro
+      - my-networks
 
 networks:
-  finance-pro:
+  my-networks:

@@ -49,6 +49,12 @@ class AccountsRepository {
         return result.rows[0];
     }
 
+    async getCardById(cardId) {
+        const conn = await this.databaseConnector.generateConnection();
+        const result = await conn.query(`SELECT * FROM cards WHERE id = $1`, [cardId]);
+        return result.rows[0];
+    }
+
     async getAllStatusByUserId(userId) {
         const conn = await this.databaseConnector.generateConnection();
         const result = await conn.query(`SELECT a.id,
@@ -83,18 +89,64 @@ class AccountsRepository {
         return result.rows;
     }
 
+    async getAllMovimentsByUserId(userId) {
+        const conn = await this.databaseConnector.generateConnection();  
+        const resultExtract = await conn.query(`SELECT
+                                                    a.name,
+                                                    e.id,
+                                                    e.value,
+                                                    c.name_category,
+                                                    CASE
+                                                        WHEN e.type_movement = 1 THEN 'Receita'
+                                                        ELSE 'Despesa'
+                                                    END AS type_movement,
+                                                    TO_CHAR(e.date_movement, 'DD/MM/YYYY') AS data_format,
+                                                    e.month
+                                                FROM
+                                                    extracts e
+                                                INNER JOIN accounts a ON
+                                                    e.account_id = a.id
+                                                INNER JOIN categories c ON
+                                                    e.category_id = c.id
+                                                WHERE
+                                                    a.user_id = $1;`, [userId]);
+
+        const resultInvoice = await conn.query(`SELECT
+                                                    a.name,
+                                                    i.id,
+                                                    i.value,
+                                                    ct.name_category,
+                                                    CASE
+                                                        WHEN i.type_movement = 1 THEN 'Receita'
+                                                        ELSE 'Despesa'
+                                                    END AS type_movement,
+                                                    TO_CHAR(i.date_movement, 'DD/MM/YYYY') AS data_format,
+                                                    i.month
+                                                FROM
+                                                    invoices i
+                                                INNER JOIN cards c ON
+                                                    i.card_id = c.id
+                                                INNER JOIN accounts a ON
+                                                    c.accounts_id = a.id
+                                                INNER JOIN categories ct ON
+                                                    i.category_id = ct.id
+                                                WHERE
+                                                    a.user_id = $1;`, [userId]);
+        return {extracts: resultExtract.rows, invoices: resultInvoice.rows};
+    }
+
     async createMovementExtract(movementExtractData) {
         const conn = await this.databaseConnector.generateConnection();
         await conn.query(`
-            INSERT INTO extracts(account_id, value, type_movement, date_movement, month, year) VALUES($1, $2, $3, $4, $5, $6)`,
-            [movementExtractData.accountsId, movementExtractData.value, movementExtractData.type_movement, movementExtractData.date_movement, movementExtractData.month, movementExtractData.year]);
+            INSERT INTO extracts(account_id, value, type_movement, date_movement, month, year, category_id) VALUES($1, $2, $3, $4, $5, $6, $7)`,
+            [movementExtractData.accountsId, movementExtractData.value, movementExtractData.type_movement, movementExtractData.date_movement, movementExtractData.month, movementExtractData.year, movementExtractData.category_id]);
     }
 
     async createMovementInvoice(movementInvoiceData) {
         const conn = await this.databaseConnector.generateConnection();
         await conn.query(`
-            INSERT INTO invoices(card_id, value, type_movement, date_movement, month, year) VALUES($1, $2, $3, $4, $5, $6)`,
-            [movementInvoiceData.cardId, movementInvoiceData.value, movementInvoiceData.type_movement, movementInvoiceData.date_movement, movementInvoiceData.month, movementInvoiceData.year]);
+            INSERT INTO invoices(card_id, value, type_movement, date_movement, month, year, category_id) VALUES($1, $2, $3, $4, $5, $6, $7)`,
+            [movementInvoiceData.cardId, movementInvoiceData.value, movementInvoiceData.type_movement, movementInvoiceData.date_movement, movementInvoiceData.month, movementInvoiceData.year, movementInvoiceData.category_id]);
     }
 
     async updateBalanceByAccountId(accountId, valueFinal) {
