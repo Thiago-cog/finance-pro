@@ -1,0 +1,881 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Api do projeto de finanças",
+        "description": "Rotas para o funcionamento do app",
+        "contact": {
+            "email": "deoliveirasantosthiago4@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3002",
+            "description": "Api Local"
+        }
+    ],
+    "paths": {
+        "/account/get-accounts/": {
+            "get": {
+                "summary": "Get Accounts",
+                "description": "Busca todas as contas daquele usuário logado",
+                "tags": [
+                    "Account"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "Id do Usuário logado",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/AllAccounts"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/get-card/": {
+            "get": {
+                "summary": "Get Card",
+                "description": "Busca todos os cartões do usuário logado.",
+                "tags": [
+                    "Account"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "Id do Usuário logado",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/AllCard"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/get-all-status/": {
+            "get": {
+                "summary": "Get All Status",
+                "description": "Busca as informações gerais de contasm cartões etc.",
+                "tags": [
+                    "Account"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "Id do Usuário logado",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/AllStatus"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/get-all-moviments/": {
+            "get": {
+                "summary": "Get All Moviments",
+                "description": "Busca todas as transações, compras e transferências feitas nas contas e cartões.",
+                "tags": [
+                    "Account"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "Id do Usuário logado",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/AllMoviments"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/get-categories/": {
+            "get": {
+                "summary": "Get Categories",
+                "description": "Busca todas as categorias.",
+                "tags": [
+                    "Account"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "Id do Usuário logado",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/AllCategories"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/create-accounts": {
+            "post": {
+                "summary": "Create Account",
+                "description": "Rota para criação de conta.",
+                "tags": [
+                    "Account"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateAccount"
+                            },
+                            "examples": {
+                                "create-account": {
+                                    "value": {
+                                        "userId": 1,
+                                        "name": "Nubank",
+                                        "typeaccount": 1,
+                                        "balance": 1500
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/create-card": {
+            "post": {
+                "summary": "Create Card",
+                "description": "Rota para criação de cartões.",
+                "tags": [
+                    "Account"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateCard"
+                            },
+                            "examples": {
+                                "create-card": {
+                                    "value": {
+                                        "accountsId": 1,
+                                        "numberCard": "5555 5555 5555 5555",
+                                        "dueDay": 10,
+                                        "limitCard": 1500,
+                                        "value": 1000
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/create-movement-extract": {
+            "post": {
+                "summary": "Create Movement Extract",
+                "description": "Rota para criação de movimentação de extrato.",
+                "tags": [
+                    "Account"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateMovementExtract"
+                            },
+                            "examples": {
+                                "create-card": {
+                                    "value": {
+                                        "accountsId": 1,
+                                        "value": 1000,
+                                        "type_movement": 1,
+                                        "date_movement": "2023-11-22",
+                                        "month": 1,
+                                        "year": 2023,
+                                        "category_id": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/create-movement-invoice": {
+            "post": {
+                "summary": "Create Movement Invoice",
+                "description": "Rota para criação de movimentação de fatura de cartão.",
+                "tags": [
+                    "Account"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateMovementInvoice"
+                            },
+                            "examples": {
+                                "create-card": {
+                                    "value": {
+                                        "cardId": 1,
+                                        "value": 1000,
+                                        "type_movement": 1,
+                                        "date_movement": "2023-11-22",
+                                        "month": 1,
+                                        "year": 2023,
+                                        "category_id": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": "string",
+                                        "message": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AllAccounts": {
+                "type": "object",
+                "properties": {
+                    "accounts": {
+                        "$ref": "#/components/schemas/AccountsResponse"
+                    }
+                }
+            },
+            "AccountsResponse": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/AccountsResponseArray"
+                }
+            },
+            "AccountsResponseArray": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "type_account": {
+                        "type": "string"
+                    },
+                    "balance": {
+                        "type": "number"
+                    }
+                }
+            },
+            "AllCard": {
+                "type": "object",
+                "properties": {
+                    "allStatusData": {
+                        "$ref": "#/components/schemas/CardResponse"
+                    }
+                }
+            },
+            "CardResponse": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/CardResponseArray"
+                }
+            },
+            "CardResponseArray": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "number_card": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "number"
+                    },
+                    "fullname": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AllStatus": {
+                "type": "object",
+                "properties": {
+                    "cards": {
+                        "$ref": "#/components/schemas/StatusResponse"
+                    }
+                }
+            },
+            "StatusResponse": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/StatusResponseArray"
+                }
+            },
+            "StatusResponseArray": {
+                "type": "object",
+                "properties": {
+                    "balanceTotal": {
+                        "type": "number"
+                    },
+                    "expenseTotal": {
+                        "type": "number"
+                    },
+                    "profitMargin": {
+                        "type": "number"
+                    }
+                }
+            },
+            "AllMoviments": {
+                "type": "object",
+                "properties": {
+                    "moviments": {
+                        "$ref": "#/components/schemas/MovimentsResponse"
+                    }
+                }
+            },
+            "MovimentsResponse": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/MovimentsResponseArray"
+                }
+            },
+            "MovimentsResponseArray": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "number"
+                    },
+                    "value": {
+                        "type": "number"
+                    },
+                    "name_category": {
+                        "type": "string"
+                    },
+                    "type_movement": {
+                        "type": "string"
+                    },
+                    "data_format": {
+                        "type": "string"
+                    },
+                    "month": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AllCategories": {
+                "type": "object",
+                "properties": {
+                    "moviments": {
+                        "$ref": "#/components/schemas/CategoriesResponse"
+                    }
+                }
+            },
+            "CategoriesResponse": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/CategoriesResponseArray"
+                }
+            },
+            "CategoriesResponseArray": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "name_category": {
+                        "type": "string"
+                    },
+                    "type_category": {
+                        "type": "number"
+                    }
+                }
+            },
+            "CreateAccount": {
+                "type": "object",
+                "properties": {
+                    "userId": {
+                        "type": "number"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "typeaccount": {
+                        "type": "number"
+                    },
+                    "balance": {
+                        "type": "number"
+                    }
+                }
+            },
+            "CreateCard": {
+                "type": "object",
+                "properties": {
+                    "accountsId": {
+                        "type": "number"
+                    },
+                    "numberCard": {
+                        "type": "string"
+                    },
+                    "dueDay": {
+                        "type": "number"
+                    },
+                    "limitCard": {
+                        "type": "number"
+                    },
+                    "value": {
+                        "type": "number"
+                    }
+                }
+            },
+            "CreateMovementExtract": {
+                "type": "object",
+                "properties": {
+                    "accountsId": {
+                        "type": "number"
+                    },
+                    "value": {
+                        "type": "number"
+                    },
+                    "type_movement": {
+                        "type": "number"
+                    },
+                    "date_movement": {
+                        "type": "string"
+                    },
+                    "month": {
+                        "type": "number"
+                    },
+                    "year": {
+                        "type": "number"
+                    },
+                    "category_id": {
+                        "type": "number"
+                    }
+                }
+            },
+            "CreateMovementInvoice": {
+                "type": "object",
+                "properties": {
+                    "cardId": {
+                        "type": "number"
+                    },
+                    "value": {
+                        "type": "number"
+                    },
+                    "type_movement": {
+                        "type": "number"
+                    },
+                    "date_movement": {
+                        "type": "string"
+                    },
+                    "month": {
+                        "type": "number"
+                    },
+                    "year": {
+                        "type": "number"
+                    },
+                    "category_id": {
+                        "type": "number"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
