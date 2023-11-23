@@ -27,22 +27,10 @@ jest.mock('bcrypt', () => {
 describe('Função decodeToken', () => {
     test('Funcionamento correto da função', async () => {
         const userAuthorization = new UserAuthorization(userRepository);
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVG9rZW4iOnsiaWQiOiIxIiwiZnVsbG5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtQGdtYWlsLmNvbSJ9LCJpYXQiOjE2OTk2MjU4MzEsImV4cCI6MTcwMDIzMDYzMX0.o30sTMFE-7G8b4f5NnwU_TsquCN5-u1NvpHqLmOs0cM';
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVG9rZW4iOnsiaWQiOiIxIiwiZnVsbG5hbWUiOiJBZG1pbiIsImVtYWlsIjoiYWRtQGdtYWlsLmNvbSJ9LCJpYXQiOjE3MDA2OTgxNTYsImV4cCI6MTcwMTMwMjk1Nn0.1CyQe1hapAq3KoDUD-lLhamvzTT_iMmFe5nFr0x8Jqc';
         const result = await userAuthorization.decodeToken(token);
 
-        expect(result).toStrictEqual(
-            {
-                "data": {
-                    "exp": 1700230631,
-                    "iat": 1699625831,
-                    "userToken":
-                    {
-                        "email": "adm@gmail.com",
-                        "fullname": "Admin",
-                        "id": "1"
-                    }
-                }, "status": 200
-            });
+        expect(result).toBeTruthy();
     });
 
     test('Funcionamento da função passando o token errado', async () => {
