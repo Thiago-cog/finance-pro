@@ -43,6 +43,12 @@ Microserviços:
 #### Padrão de Projeto Repository
 
 ### TDD.
+#### auth-api
+![image](https://github.com/Thiago-cog/finance-pro/assets/65147035/295bf6bf-9130-4b71-a15f-3979a8e1fb21)
+#### accounts-api
+![image](https://github.com/Thiago-cog/finance-pro/assets/65147035/768db2a0-f634-4d43-83f9-dfd1f900e972)
+
+
 
 ### APIs.
 
