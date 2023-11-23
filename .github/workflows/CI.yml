@@ -18,4 +18,22 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: cd backend/ && ls -la
+    - run: cd backend/api/auth-api
+    - run: npm i
+    - run: npm start
+    - run: npm test
+    - name: Buildando a API Accounts
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: cd backend/api/accounts-api
+    - run: npm i
+    - run: npm start
+    - run: npm test
+    - name: Buildando o FrontEnd
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: cd frontend
+    - run: npm i
+    - run: npm run build
