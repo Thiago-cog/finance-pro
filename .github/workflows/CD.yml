@@ -33,7 +33,7 @@ jobs:
               run: docker rm -f auth-api
 
             - name: Run Docker continer auth-api
-              run: docker run -d -p 3001:3001 -e AUTH_SECRET=${{secrets.AUTH_SECRET}} POSTGRES_USER=${{secrets.POSTGRES_USER}} POSTGRES_HOST=${{secrets.POSTGRES_HOST}} POSTGRES_PORT=${{secrets.POSTGRES_PORT}} POSTGRES_PASS=${{secrets.POSTGRES_PASS}} POSTGRES_DATABASE=${{secrets.POSTGRES_DATABASE}} --name auth-api thiagosantos007/auth-api
+              run: docker run -d -p 3001:3001 -e AUTH_SECRET=${{secrets.AUTH_SECRET}} -e POSTGRES_USER=${{secrets.POSTGRES_USER}} -e POSTGRES_HOST=${{secrets.POSTGRES_HOST}} -e POSTGRES_PORT=${{secrets.POSTGRES_PORT}} -e POSTGRES_PASS=${{secrets.POSTGRES_PASS}} -e POSTGRES_DATABASE=${{secrets.POSTGRES_DATABASE}} --name auth-api thiagosantos007/auth-api
 
             - name: Pull da image from Docker Hub accounts-api 
               run: docker pull thiagosantos007/accounts-api:latest
@@ -42,8 +42,8 @@ jobs:
               run: docker rm -f accounts-api
 
             - name: Run Docker continer accounts-api
-              run: docker run -d -p 3002:3002 -e AUTH_SECRET=${{secrets.AUTH_SECRET}} POSTGRES_USER=${{secrets.POSTGRES_USER}} POSTGRES_HOST=${{secrets.POSTGRES_HOST}} POSTGRES_PORT=${{secrets.POSTGRES_PORT}} POSTGRES_PASS=${{secrets.POSTGRES_PASS}} POSTGRES_DATABASE=${{secrets.POSTGRES_DATABASE}} --name accounts-api thiagosantos007/accounts-api
-            
+              run: docker run -d -p 3002:3002 -e AUTH_SECRET=${{secrets.AUTH_SECRET}} -e POSTGRES_USER=${{secrets.POSTGRES_USER}} -e POSTGRES_HOST=${{secrets.POSTGRES_HOST}} -e POSTGRES_PORT=${{secrets.POSTGRES_PORT}} -e POSTGRES_PASS=${{secrets.POSTGRES_PASS}} -e POSTGRES_DATABASE=${{secrets.POSTGRES_DATABASE}} --name accounts-api thiagosantos007/accounts-api
+
             - name: Pull da image from Docker Hub frontend
               run: docker pull thiagosantos007/frontend:latest
 
