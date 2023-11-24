@@ -8,15 +8,16 @@ A plataforma Finance Pro foi desenvolvida com intuito de auxíliar pessoas fisic
 As técnologia que usei foram estas listadas abaixo:
 
 ### Tecnologias utilizadas.
-![Static Badge](https://img.shields.io/badge/NODE.JS-68A063?style=for-the-badge&logo=nodedotjs&logoColor=%2368A063&labelColor=black)
-![Static Badge](https://img.shields.io/badge/POSTGRESQL-316192?style=for-the-badge&logo=postgresql&logoColor=%23316192&labelColor=black)
-![Static Badge](https://img.shields.io/badge/JEST-C21325?style=for-the-badge&logo=jest&logoColor=%23C21325&labelColor=black)
-![Static Badge](https://img.shields.io/badge/VITE%20JS-BD34FE?style=for-the-badge&logo=vite&logoColor=%23FFC51D&labelColor=black)
-![Static Badge](https://img.shields.io/badge/REACT-61DBFB?style=for-the-badge&logo=react&logoColor=%2361DBFB&labelColor=black)
-![Static Badge](https://img.shields.io/badge/TAILWIND%20CSS-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=%2338BDF8&labelColor=black)
-![Static Badge](https://img.shields.io/badge/DOCKER-0DB7ED?style=for-the-badge&logo=docker&logoColor=%230DB7ED&labelColor=black)
-![Static Badge](https://img.shields.io/badge/AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=%23FF9900&labelColor=black)
-![Static Badge](https://img.shields.io/badge/GIT-F05033?style=for-the-badge&logo=git&logoColor=%23F05033&labelColor=black)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
 #### BackEnd
 - Node Js foi utilizado para fazer o backend, feito todo em Javascript, usando express como roteamento.
@@ -30,6 +31,7 @@ As técnologia que usei foram estas listadas abaixo:
 - Docker e Docker Compose foram as tecnologias utilizadas para organizar os microserviços e o projeto do frontend.
 - AWS foi a plataforma de deploy utilizada para colocar o projeto no ar.
 - Git foi a tecnologia usada para o controle de versão do projeto.
+- Git Hub Actions foi utilizado para fazer o CI/CD.
 
 ### Arquitetura.
 
