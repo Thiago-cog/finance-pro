@@ -1,0 +1,24 @@
+name: Continuous Delivery
+on:
+    push:
+      branches: [ "main" ]
+    pull_request:
+      branches: [ "main" ]
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Login no Docker Hub
+              run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+            - name: Build docker image auth-api
+              run: cd backend/api/auth-api && docker build -t thiagosantos007/auth-api .
+            - name: Push image auth-api
+              run: docker push thiagosantos007/auth-api .
+            - name: Build docker image accounts-api
+              run: cd backend/api/accounts-api && docker build -t thiagosantos007/accounts-api .
+            - name: Push image accounts-api
+              run: docker push thiagosantos007/accounts-api .
+            - name: Build docker image frontend
+              run: cd frontend && docker build -t thiagosantos007/frontend .
+            - name: Push image frontend
+              run: docker push thiagosantos007/frontend .
