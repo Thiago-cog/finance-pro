@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "http://localhost:3002/account";
+const BASE_URL = "http://18.236.70.29:3002/account";
 
 class AccountsService {
     async createAccount(token, name, typeaccount, balance, userId) {
