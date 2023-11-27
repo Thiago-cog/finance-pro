@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { LogOut, Landmark, CreditCard, ArrowLeftRight } from 'lucide-react';
+import { LogOut, Landmark, CreditCard, ArrowLeftRight, Gem } from 'lucide-react';
 
 import Logo from "../../assets/2-removebg-preview.png";
 import GetCookie from "../../hooks/getCookie.jsx";
@@ -10,14 +10,14 @@ import authServices from "../../services/authServices.js";
 const Navbar = () => {
     const [name, setName] = useState("");
     const navigate = useNavigate();
-    
-    useEffect( () => {
+
+    useEffect(() => {
         async function getUser() {
             const token = GetCookie("user_session");
-            try{
+            try {
                 const response = await authServices.decodeToken(token);
                 setName(response.userToken.fullname);
-            }catch(error){
+            } catch (error) {
                 console.log(error);
             }
         }
@@ -30,20 +30,24 @@ const Navbar = () => {
         navigate("/");
     }
 
-    function dashboard(){
+    function dashboard() {
         navigate("/dashboard");
     }
 
-    function accounts(){
+    function accounts() {
         navigate("/account");
     }
 
-    function transaction(){
+    function transaction() {
         navigate("/transaction");
     }
 
-    function card(){
+    function card() {
         navigate("/card");
+    }
+
+    function signature() {
+        navigate("/signature");
     }
 
     return (
@@ -88,13 +92,10 @@ const Navbar = () => {
                             </button>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
-                                    <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
-                                </svg>
-                                <span className="flex-1 ml-3 whitespace-nowrap font-bold font-sans">Assinatura</span>
-                                <span className="inline-flex items-center justify-center px-2 ml-3 text-sm font-bold font-sans text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span>
-                            </a>
+                            <button onClick={signature} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                <Gem className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                                <span className="flex-1 ml-3 whitespace-nowrap font-bold font-sans">Planos</span>
+                            </button>
                         </li>
                         <li>
                             <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
@@ -106,25 +107,25 @@ const Navbar = () => {
                         </li>
                         <li>
                             <button onClick={transaction} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <ArrowLeftRight className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                                <ArrowLeftRight className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                                 <span className="flex-1 ml-3 whitespace-nowrap font-bold font-sans">Transações</span>
                             </button>
                         </li>
                         <li>
                             <button onClick={accounts} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <Landmark className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                                <Landmark className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                                 <span className="flex-1 ml-3 whitespace-nowrap font-bold font-sans">Contas</span>
                             </button>
                         </li>
                         <li>
                             <button onClick={card} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <CreditCard className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                                <CreditCard className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                                 <span className="flex-1 ml-3 whitespace-nowrap font-bold font-sans">Cartões</span>
                             </button>
                         </li>
                         <li>
                             <button onClick={logout} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <LogOut className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                                <LogOut className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                                 <span className="flex-1 ml-3 whitespace-nowrap font-bold font-sans">Sair</span>
                             </button>
                         </li>

@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "http://localhost:3001/user";
+const BASE_URL = "http://18.236.70.29:3001/user";
 class AuthService {
     async decodeToken(token) {
         const config = {
