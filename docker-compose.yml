@@ -9,9 +9,20 @@ services:
   #   networks:
   #     - my-networks
 
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+     - '3000:3000'
+    volumes:
+      - ./defaults.ini:/usr/share/grafana/conf/defaults.ini
+    networks:
+      - my-networks
+
   postgres:
     container_name: postgres
-    image: postgres:latest
+    image: postgres:14
     environment:
       POSTGRES_USER: postgres
       POSTGRES_HOST: postgres
@@ -30,7 +41,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3003:3003"
     networks:
       - my-networks
   

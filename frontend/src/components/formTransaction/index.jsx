@@ -342,7 +342,7 @@ function FormAccount() {
                                     </p>
                                     <select className="border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setValueCategories}>
                                         {listCategories.map((category, index) => (
-                                            <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={index}>{category.name_category}</option>
+                                            <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={category.id}>{category.name_category}</option>
                                         ))}
                                     </select>
                                 </div>
