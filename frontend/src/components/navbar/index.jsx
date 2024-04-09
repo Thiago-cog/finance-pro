@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { LogOut, Landmark, CreditCard, ArrowLeftRight, Gem } from 'lucide-react';
+import { LogOut, Landmark, CreditCard, ArrowLeftRight, TrendingUp } from 'lucide-react';
 
 import Logo from "../../assets/2-removebg-preview.png";
 import GetCookie from "../../hooks/getCookie.jsx";
@@ -46,8 +46,8 @@ const Navbar = () => {
         navigate("/card");
     }
 
-    function signature() {
-        navigate("/signature");
+    function investments() {
+        navigate("/investments");
     }
 
     return (
@@ -92,9 +92,9 @@ const Navbar = () => {
                             </button>
                         </li>
                         <li>
-                            <button onClick={signature} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <Gem className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-                                <span className="flex-1 ml-3 whitespace-nowrap font-bold font-sans">Planos</span>
+                            <button onClick={investments} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                <TrendingUp className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                                <span className="flex-1 ml-3 whitespace-nowrap font-bold font-sans">Investimentos</span>
                             </button>
                         </li>
                         <li>
