@@ -6,7 +6,7 @@ import Dashboard from "../pages/dashboard/index";
 import Accounts from "../pages/accounts/index";
 import Transactions from "../pages/transactions/index";
 import Cards from "../pages/cards/index";
-import Signature from "../pages/signature/index";
+import Investments from "../pages/investments/index";
 import { PrivateRoute } from "./privateRoute";
 
 const AppRoutes = () => {
@@ -43,10 +43,10 @@ const AppRoutes = () => {
                         </PrivateRoute>
                     }
                 />
-                <Route path="/signature" 
+                <Route path="/investments" 
                     element={
                         <PrivateRoute redirectTo="/">
-                            <Signature />
+                            <Investments />
                         </PrivateRoute>
                     }
                 />
