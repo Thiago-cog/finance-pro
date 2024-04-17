@@ -3,38 +3,45 @@ import { Bitcoin, CircleDollarSign, CandlestickChart, Building2, TrendingUp, Tre
 import investmentsServices from "../../services/investmentsServices";
 
 function Index() {
-    const [listQuote, setQuote] = useState([]);
-    const [listQuoteFilter, setListQuoteFilter] = useState([]);
+    const [listActions, setListActions] = useState([]);
+    const [listActionsFilter, setListActionsFilter] = useState([]);
+    const [listFunds, setListFunds] = useState([]);
+    const [listBRDs, setListBRDs] = useState([]);
 
-    async function getAllQuote() {
-        const response = await investmentsServices.getListQuote();
-        setQuote(response);
+    async function getAllRanks() {
+        const listActionsResponse = await investmentsServices.getListActions();
+        const listFundsResponse = await investmentsServices.getListFunds();
+        const listBRDsResponse = await investmentsServices.getListBDRs();
+
+        setListActions(listActionsResponse);
+        setListFunds(listFundsResponse);
+        setListBRDs(listBRDsResponse);
     }
 
-    function filtrarStocksUnicas(listQuote) {
+    function filterStocksUnique(listActions) {
         const letrasUnicas = {};
-        const quotesFiltradas = [];
+        const actionsFiltered = [];
 
-        listQuote.forEach(quote => {
+        listActions.forEach(quote => {
             const letrasStock = quote.stock.replace(/[^a-zA-Z]/g, '');
             const ehStockUnica = !letrasUnicas[letrasStock] && !quote.stock.endsWith('F');
             if (ehStockUnica) {
                 letrasUnicas[letrasStock] = true;
-                quotesFiltradas.push(quote);
+                actionsFiltered.push(quote);
             }
         });
-    
-        setListQuoteFilter(quotesFiltradas);
+
+        setListActionsFilter(actionsFiltered);
     }
-    
+
     useEffect(() => {
-        getAllQuote();
-        
+        getAllRanks();
+
     }, []);
 
     useEffect(() => {
-        filtrarStocksUnicas(listQuote); 
-    }, [listQuote]);
+        filterStocksUnique(listActions);
+    }, [listActions]);
 
     return (
         <>
@@ -114,33 +121,93 @@ function Index() {
                     </div>
                 </div>
             </div>
-            <div className=" w-96 p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mt-6 ">
-                <div className="flex items-center justify-between mb-4">
-                    <h5 className="text-xl font-bold leading-none text-gray-900 ">Maiores Valores de Mercado</h5>
+            <div className="flex">
+                <div className=" w-1/3 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mt-6 mr-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <h5 className="text-xl font-bold leading-none text-gray-900 ">Maiores Valores de Mercado</h5>
+                    </div>
+                    <div className="flow-root">
+                        <ul role="list" className="divide-y divide-gray-200 ">
+                            {listActionsFilter.map((action, index) => (
+                                <li className="py-3 sm:py-4" key={index}>
+                                    <div className="flex items-center">
+                                        <div className="flex-shrink-0">
+                                            <img className="w-8 h-8 rounded-full" src={action.logo} alt="Neil image" />
+                                        </div>
+                                        <div className="flex-1 min-w-0 ms-4">
+                                            <p className="text-sm font-medium text-gray-900 truncate ">
+                                                {action.stock}
+                                            </p>
+                                            <p className="text-sm text-gray-500 truncate ">
+                                                {action.name}
+                                            </p>
+                                        </div>
+                                        <div className="inline-flex items-center text-base font-semibold text-gray-900 ">
+                                            R$ {action.market_cap}
+                                        </div>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
-                <div className="flow-root">
-                    <ul role="list" className="divide-y divide-gray-200 ">
-                        {listQuoteFilter.map((quote, index) => (
-                            <li className="py-3 sm:py-4" key={index}>
-                                <div className="flex items-center">
-                                    <div className="flex-shrink-0">
-                                        <img className="w-8 h-8 rounded-full" src={quote.logo} alt="Neil image"/>
+                <div className=" w-1/3 p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mt-6 mr-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <h5 className="text-xl font-bold leading-none text-gray-900 ">Maiores Variações de (FIIs)</h5>
+                    </div>
+                    <div className="flow-root">
+                        <ul role="list" className="divide-y divide-gray-200 ">
+                            {listFunds.map((fund, index) => (
+                                <li className="py-3 sm:py-4" key={index}>
+                                    <div className="flex items-center">
+                                        <div className="flex-shrink-0">
+                                            <img className="w-8 h-8 rounded-full" src={fund.logo} alt="Neil image" />
+                                        </div>
+                                        <div className="flex-1 min-w-0 ms-4">
+                                            <p className="text-sm font-medium text-gray-900 truncate ">
+                                                {fund.stock}
+                                            </p>
+                                            <p className="text-sm text-gray-500 truncate ">
+                                                {fund.name}
+                                            </p>
+                                        </div>
+                                        <div className="inline-flex items-center text-base font-semibold text-gray-900 ">
+                                            {fund.change}%
+                                        </div>
                                     </div>
-                                    <div className="flex-1 min-w-0 ms-4">
-                                        <p className="text-sm font-medium text-gray-900 truncate ">
-                                            {quote.stock}
-                                        </p>
-                                        <p className="text-sm text-gray-500 truncate ">
-                                            {quote.name}
-                                        </p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+                <div className=" w-1/3 p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mt-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <h5 className="text-xl font-bold leading-none text-gray-900 ">Maiores Volumes de Negociações (BRDs)</h5>
+                    </div>
+                    <div className="flow-root">
+                        <ul role="list" className="divide-y divide-gray-200 ">
+                            {listBRDs.map((action, index) => (
+                                <li className="py-3 sm:py-4" key={index}>
+                                    <div className="flex items-center">
+                                        <div className="flex-shrink-0">
+                                            <img className="w-8 h-8 rounded-full" src={action.logo} alt="Neil image" />
+                                        </div>
+                                        <div className="flex-1 min-w-0 ms-4">
+                                            <p className="text-sm font-medium text-gray-900 truncate ">
+                                                {action.stock}
+                                            </p>
+                                            <p className="text-sm text-gray-500 truncate ">
+                                                {action.name}
+                                            </p>
+                                        </div>
+                                        <div className="inline-flex items-center text-base font-semibold text-gray-900 ">
+                                            R$ {action.volume}
+                                        </div>
                                     </div>
-                                    <div className="inline-flex items-center text-base font-semibold text-gray-900 ">
-                                        R$ {quote.market_cap}
-                                    </div>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </>
