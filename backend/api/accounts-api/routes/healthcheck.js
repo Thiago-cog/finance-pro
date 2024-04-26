@@ -30,4 +30,4 @@ router.get('/', async (req, res) => {
     res.json(connectionStatus);
 });
 
-export default router;
+module.exports = router;
