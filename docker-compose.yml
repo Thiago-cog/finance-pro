@@ -20,30 +20,30 @@ services:
     networks:
       - my-networks
 
-  postgres:
-    container_name: postgres
-    image: postgres:14
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_HOST: postgres
-      POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: finance
-    ports:
-      - "5432:5432"
-    networks:
-      - my-networks
-    volumes:
-      - ./init:/docker-entrypoint-initdb.d
+  # postgres:
+  #   container_name: postgres
+  #   image: postgres:14
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_HOST: postgres
+  #     POSTGRES_PASSWORD: 123456
+  #     POSTGRES_DB: finance
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - my-networks
+  #   volumes:
+  #     - ./init:/docker-entrypoint-initdb.d
 
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3003:3003"
-    networks:
-      - my-networks
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3003:3003"
+  #   networks:
+  #     - my-networks
   
   auth-api:
     container_name: auth-api

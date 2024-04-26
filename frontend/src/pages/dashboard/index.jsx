@@ -14,8 +14,8 @@ const Dashboard = () => {
                     <AllStatus />
                     {/* <RecentMoviments/> */}
                     <div className="flex items-center justify-center h-60 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-                        <iframe className="rounded-lg mr-2 h-full w-1/2" src="http://localhost:3000/d-solo/edfs6kzg9bjeob/dashboard?orgId=1&from=1710541180752&to=1710562780752&theme=light&panelId=1" frameborder="0"></iframe>
-                        <iframe className="rounded-lg ml-2 h-full w-1/2" src="http://localhost:3000/d-solo/edfs6kzg9bjeob/dashboard?orgId=1&from=1710541123746&to=1710562723747&theme=light&panelId=2" frameborder="0"></iframe>
+                        <iframe className="rounded-lg h-full w-1/2" src="http://localhost:3000/d-solo/ddjbbm3rk2ghsb/finance-pro?orgId=1&from=1713603549232&to=1713625149232&theme=light&panelId=1" frameborder="0"></iframe>
+                        <iframe className="rounded-lg ml-4 h-full w-1/2" src="http://localhost:3000/d-solo/edfs6kzg9bjeob/dashboard?orgId=1&from=1710541123746&to=1710562723747&theme=light&panelId=2" frameborder="0"></iframe>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 mb-4">

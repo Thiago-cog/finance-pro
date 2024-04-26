@@ -7,13 +7,23 @@ class InvestmentsService {
 
     }
 
-    async getQuote(){
+    async getListQuote(){
         try{
-            const response = await axios.get(`${BASE_URL}/quote/KLBN11?token=${token}`);
-            return response.data.results[0];
+            const response = await axios.get(`${BASE_URL}/quote/list?token=${token}`);
+            return response.data.stocks;
         }catch (error){
             return error.response;
         }
+    }
+
+    async getQuoteByName(name, type) {
+        try{
+            const response = await axios.get(`${BASE_URL}/${type}/${name}?range=5d&interval=1d&fundamental=true&dividends=true&modules=balanceSheetHistory&token=${token}`);
+            console.log(response);
+        }catch(error){
+
+        }
+        
     }
      
     async getListActions() {
