@@ -7,7 +7,7 @@ class Database {
                 host: process.env.POSTGRES_HOST || 'localhost',
                 database: process.env.POSTGRES_DATABASE || 'login_node',
                 password: process.env.POSTGRES_PASS || '123456',
-                ssl: {rejectUnauthorized: false}
+                ssl: {rejectUnauthorized: false, sslmode: 'require'}
             });
         }
         return global.databaseConnection;
