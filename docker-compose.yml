@@ -9,17 +9,6 @@ services:
   #   networks:
   #     - my-networks
 
-  grafana:
-    image: grafana/grafana-enterprise
-    container_name: grafana
-    restart: unless-stopped
-    ports:
-     - '3000:3000'
-    volumes:
-      - ./defaults.ini:/usr/share/grafana/conf/defaults.ini
-    networks:
-      - my-networks
-
   # postgres:
   #   container_name: postgres
   #   image: postgres:14
@@ -45,23 +34,23 @@ services:
   #   networks:
   #     - my-networks
   
-  auth-api:
-    container_name: auth-api
-    build:
-      context: ./backend/api/auth-api
-    ports:
-      - "3001:3001"
-    networks:
-      - my-networks
+  # auth-api:
+  #   container_name: auth-api
+  #   build:
+  #     context: ./backend/api/auth-api
+  #   ports:
+  #     - "3001:3001"
+  #   networks:
+  #     - my-networks
 
-  accounts-api:
-    container_name: accounts-api
-    build:
-      context: ./backend/api/accounts-api
-    ports:
-      - "3002:3002"
-    networks:
-      - my-networks
+  # accounts-api:
+  #   container_name: accounts-api
+  #   build:
+  #     context: ./backend/api/accounts-api
+  #   ports:
+  #     - "3002:3002"
+  #   networks:
+  #     - my-networks
 
 networks:
   my-networks:

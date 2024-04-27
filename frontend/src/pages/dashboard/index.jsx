@@ -3,6 +3,8 @@ import React from "react";
 import Navbar from "../../components/navbar/index";
 import AllStatus from "../../components/dashbord/allStatus";
 import RecentMoviments from "../../components/recentMoviments";
+import RevenueChart from "../../components/revenueChart/index";
+import ExpenseChart from "../../components/expenseChart/index";
 
 
 const Dashboard = () => {
@@ -13,9 +15,9 @@ const Dashboard = () => {
                 <div className=" mt-14">
                     <AllStatus />
                     {/* <RecentMoviments/> */}
-                    <div className="flex items-center justify-center h-60 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-                        <iframe className="rounded-lg h-full w-1/2" src="http://localhost:3000/d-solo/ddjbbm3rk2ghsb/finance-pro?orgId=1&from=1713603549232&to=1713625149232&theme=light&panelId=1" frameborder="0"></iframe>
-                        <iframe className="rounded-lg ml-4 h-full w-1/2" src="http://localhost:3000/d-solo/edfs6kzg9bjeob/dashboard?orgId=1&from=1710541123746&to=1710562723747&theme=light&panelId=2" frameborder="0"></iframe>
+                    <div className="flex items-center justify-center h-72 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+                        <RevenueChart/>
+                        <ExpenseChart/>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 mb-4">

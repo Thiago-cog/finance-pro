@@ -77,4 +77,18 @@ router.post('/create-movement-invoice', authenticateToken, async(req, res) => {
     applyResult(result, res);
 });
 
+router.get('/get-total-revenue/:userId', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    const userId = parseInt(req.params.userId);
+    const result = await accountsMaintenance.getTotalRevenueByUserId(userId);
+    applyResult(result, res);
+});
+
+router.get('/get-total-expenses/:userId', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    const userId = parseInt(req.params.userId);
+    const result = await accountsMaintenance.getTotalExpensesByUserId(userId);
+    applyResult(result, res);
+});
+
 module.exports = router;

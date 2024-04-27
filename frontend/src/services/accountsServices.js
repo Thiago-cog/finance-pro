@@ -1,4 +1,5 @@
 import axios from "axios";
+// const BASE_URL = "https://finance-pro-accounts-api.vercel.app/account";
 const BASE_URL = "http://localhost:3002/account";
 
 class AccountsService {
@@ -121,6 +122,36 @@ class AccountsService {
 
         try{
             const response = await axios.get(`${BASE_URL}/get-all-moviments/${userId}`, config);
+            return response;
+        }catch (error){
+            return error.response;
+        }
+    }
+
+    async getTotalRevenueByUserId(token, userId) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.get(`${BASE_URL}/get-total-revenue/${userId}`, config);
+            return response;
+        }catch (error){
+            return error.response;
+        }
+    }
+
+    async getTotalExpensesByUserId(token, userId) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.get(`${BASE_URL}/get-total-expenses/${userId}`, config);
             return response;
         }catch (error){
             return error.response;
