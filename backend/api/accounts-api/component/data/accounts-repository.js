@@ -57,14 +57,31 @@ class AccountsRepository {
 
     async getAllStatusByUserId(userId) {
         const conn = await this.databaseConnector.generateConnection();
-        const result = await conn.query(`SELECT a.id,
-                                                a.balance AS balance,
-                                                c.value AS expense
-                                        FROM users u
-                                        LEFT JOIN accounts a ON u.id = a.user_id
-                                        LEFT JOIN cards c ON a.id = c.accounts_id
-                                        WHERE u.id = $1
-                                        ORDER BY a.id`, [userId]);
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth() + 1;
+
+        const result = await conn.query(`SELECT
+                                            a.id,
+                                            a.balance AS balance,
+                                            SUM(c.value) AS expense,
+                                            SUM(e.value) AS expense_invoice
+                                        FROM
+                                            users u
+                                        INNER JOIN accounts a ON
+                                            u.id = a.user_id
+                                        LEFT JOIN cards c ON
+                                            a.id = c.accounts_id
+                                        LEFT JOIN extracts e ON
+                                            a.id = e.account_id
+                                            AND e.type_movement = 2
+                                            AND e."month" = $1
+                                        WHERE
+                                            a.user_id = $2
+                                        GROUP BY
+                                            a.id,
+                                            a.balance
+                                        ORDER BY
+                                            a.id`, [currentMonth, userId]);
         return result.rows;
     }
 
@@ -184,21 +201,42 @@ class AccountsRepository {
     async getTotalExpensesByUserId(userId) {
         const conn = await this.databaseConnector.generateConnection();
         const result = await conn.query(`SELECT
-                                    sum(value),
-                                    c.name_category
-                                FROM users u 
-                                INNER JOIN accounts a ON
-                                    u.id = a.user_id
-                                INNER JOIN extracts e ON
-                                    a.id = e.account_id 
-                                INNER JOIN categories c ON
-                                    e.category_id = c.id
-                                WHERE
-                                    e.type_movement = 2
-                                    AND u.id = $1
-                                GROUP BY
-                                    e.category_id,
-                                    c.name_category`, [userId]);
+                                            sum(i.value),
+                                            c.name_category
+                                        FROM
+                                            users u
+                                        INNER JOIN accounts a ON
+                                            u.id = a.user_id
+                                        LEFT JOIN cards cr ON
+                                            a.id = cr.accounts_id
+                                        LEFT JOIN invoices i ON
+                                            cr.id = i.card_id
+                                        INNER JOIN categories c ON
+                                            i.category_id = c.id
+                                        WHERE 
+                                            i.type_movement = 2
+                                            AND u.id = $1
+                                        GROUP BY
+                                            i.category_id,
+                                            c.name_category
+                                        UNION ALL
+                                        SELECT
+                                            sum(value),
+                                            c.name_category
+                                        FROM
+                                            users u
+                                        INNER JOIN accounts a ON
+                                            u.id = a.user_id
+                                        LEFT JOIN extracts e ON
+                                            a.id = e.account_id
+                                        INNER JOIN categories c ON
+                                            e.category_id = c.id
+                                        WHERE
+                                            e.type_movement = 2
+                                            AND u.id = $1
+                                        GROUP BY
+                                            e.category_id,
+                                            c.name_category`, [userId]);
         
         return result.rows;
     }

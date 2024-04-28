@@ -22,8 +22,8 @@ function Index() {
 
 	function generateColors(numColors) {
 		const colors = [];
-		const hueStart = 120;
-		const hueIncrement = 40;
+		const hueStart = 100;
+		const hueIncrement = 35;
 		for (let i = 0; i < numColors; i++) {
 			const hue = hueStart + (i * hueIncrement);
 			colors.push(`hsl(${hue}, 70%, 50%)`);

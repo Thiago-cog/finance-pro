@@ -118,14 +118,16 @@ class AccountsMaintenance {
             returnStatusData.expenseTotal = 0;
 
             allStatusData.forEach(statusData => {
-                if (accountId != statusData.id) {
+                if (accountId != statusData.id && accountId != 0) {
                     returnStatusData.balanceTotal += statusData.balance;
                     returnStatusData.expenseTotal += statusData.expense;
-                    accountId = statusData.id;
-                } else {
-                    returnStatusData.expenseTotal += statusData.expense;
-                    accountId = statusData.id;
+                    returnStatusData.expenseTotal += statusData.expense_invoice;
+                }else {
+                    returnStatusData.balanceTotal = statusData.balance;
+                    returnStatusData.expenseTotal = statusData.expense;
+                    returnStatusData.expenseTotal = statusData.expense_invoice;
                 }
+                accountId = statusData.id;
             });
 
             const grossProfit = returnStatusData.balanceTotal - returnStatusData.expenseTotal;
