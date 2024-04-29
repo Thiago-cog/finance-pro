@@ -100,7 +100,7 @@ class AccountsMaintenance {
 
     async getAllStatusByUserId(userId) {
         let result = {};
-        
+
         try {
             if (!userId) {
                 result.status = 400;
@@ -118,41 +118,43 @@ class AccountsMaintenance {
             returnStatusData.expenseTotal = 0;
 
             allStatusData.forEach(statusData => {
-                if(accountId != statusData.id){
+                if (accountId != statusData.id && accountId != 0) {
                     returnStatusData.balanceTotal += statusData.balance;
                     returnStatusData.expenseTotal += statusData.expense;
-                    accountId = statusData.id;
-                }else{
-                    returnStatusData.expenseTotal += statusData.expense;
-                    accountId = statusData.id;
+                    returnStatusData.expenseTotal += statusData.expense_invoice;
+                }else {
+                    returnStatusData.balanceTotal = statusData.balance;
+                    returnStatusData.expenseTotal = statusData.expense;
+                    returnStatusData.expenseTotal = statusData.expense_invoice;
                 }
+                accountId = statusData.id;
             });
-            
+
             const grossProfit = returnStatusData.balanceTotal - returnStatusData.expenseTotal;
-            let profitMargin = grossProfit/returnStatusData.balanceTotal;
+            let profitMargin = grossProfit / returnStatusData.balanceTotal;
 
             let balance = returnStatusData.balanceTotal;
             let expense = returnStatusData.expenseTotal;
             const balanceSplit = String(balance).split('.');
             const expenseSplit = String(expense).split('.');
 
-            if(balanceSplit.length == 1){
+            if (balanceSplit.length == 1) {
                 balance = balance + '00';
-            }else{
-                if(balanceSplit[1].length == 1){
+            } else {
+                if (balanceSplit[1].length == 1) {
                     balance = balance + '0';
                 }
             }
 
-            if(expenseSplit.length == 1){
+            if (expenseSplit.length == 1) {
                 expense = expense + '00';
-            }else{
-                if(expenseSplit[1].length == 1){
+            } else {
+                if (expenseSplit[1].length == 1) {
                     expense = expense + '0';
                 }
             }
-            
-            if(returnStatusData.balanceTotal === 0 && returnStatusData.expenseTotal === 0){
+
+            if (returnStatusData.balanceTotal === 0 && returnStatusData.expenseTotal === 0) {
                 profitMargin = 0;
             }
 
@@ -177,7 +179,7 @@ class AccountsMaintenance {
     async getcategories() {
         let result = {};
         try {
-            const categoriesResult =  await this.accountsRepository.getCategories();
+            const categoriesResult = await this.accountsRepository.getCategories();
             result.status = 200;
             result.data = {
                 categories: categoriesResult
@@ -220,7 +222,7 @@ class AccountsMaintenance {
             })
 
             result.status = 200;
-            result.data = {moviments: moviments};
+            result.data = { moviments: moviments };
         } catch (error) {
             result.status = 500
             result.errors = {
@@ -229,7 +231,61 @@ class AccountsMaintenance {
             }
         }
         return result;
-    } 
+    }
+
+    async getTotalRevenueByUserId(userId) {
+        let result = {};
+        try {
+            if (!userId) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Id do usuário não enviado',
+                    message: "Usuário não identificado."
+                }
+                return result;
+            }
+
+            const resultTotalRevenue = await this.accountsRepository.getTotalRevenueByUserId(userId);
+
+            result.status = 200;
+            result.data = { revenues: resultTotalRevenue };
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+
+        return result;
+    }
+
+    async getTotalExpensesByUserId(userId) {
+        let result = {};
+        try {
+            if (!userId) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Id do usuário não enviado',
+                    message: "Usuário não identificado."
+                }
+                return result;
+            }
+
+            const resultTotalExpenses = await this.accountsRepository.getTotalExpensesByUserId(userId);
+
+            result.status = 200;
+            result.data = { expenses: resultTotalExpenses };
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+
+        return result;
+    }
 
     async createAccount(accountData) {
         let result = {};
@@ -344,7 +400,7 @@ class AccountsMaintenance {
 
             await this.accountsRepository.createMovementInvoice(movementInvoiceData);
             await this.accountsRepository.updatValuesCardById(cardId, calculateValueResult.invoiceAmount, calculateValueResult.limitValue);
-            
+
             result.status = 200;
             result.data = {
                 message: 'Movimentação salva com sucesso'
