@@ -7,6 +7,7 @@ import Accounts from "../pages/accounts/index";
 import Transactions from "../pages/transactions/index";
 import Cards from "../pages/cards/index";
 import Investments from "../pages/investments/index";
+import QuotaDetails from "../pages/quotaDetails/index";
 import { PrivateRoute } from "./privateRoute";
 
 const AppRoutes = () => {
@@ -47,6 +48,13 @@ const AppRoutes = () => {
                     element={
                         <PrivateRoute redirectTo="/">
                             <Investments />
+                        </PrivateRoute>
+                    }
+                />
+                <Route path="/quote-details/:stock" 
+                    element={
+                        <PrivateRoute redirectTo="/">
+                            <QuotaDetails />
                         </PrivateRoute>
                     }
                 />
