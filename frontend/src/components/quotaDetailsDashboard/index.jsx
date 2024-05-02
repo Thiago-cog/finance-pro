@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { format } from 'date-fns';
 import investmentsServices from "../../services/investmentsServices";
 import { Wallet } from 'lucide-react';
@@ -13,11 +13,11 @@ function Index({ stock }) {
     async function getQuoteAllStatusByName() {
         const resultFinancialData = await investmentsServices.getQuoteFinancialDataByName(stock, null);
         const resultDefaultKeyStatistics = await investmentsServices.getQuoteDefaultKeyStatisticsByName(stock, null);
-        
+
         resultFinancialData?.historicalDataPrice.map((historicalDataPrice) => {
-            historicalDataPrice.date = format(new Date(historicalDataPrice.date*1000), 'dd/MM/yyyy');
+            historicalDataPrice.date = format(new Date(historicalDataPrice.date * 1000), 'dd/MM/yyyy');
         })
-        
+
         setQuoteFinancialData(resultFinancialData);
         setQuoteDefaultKeyStatistics(resultDefaultKeyStatistics);
         setQuoteValueChartData(resultFinancialData?.historicalDataPrice);
@@ -86,24 +86,24 @@ function Index({ stock }) {
             </div>
             <div className="flex-row justify-center bg-white mt-24 rounded-lg">
                 <p className="text-2xl m-4 mt-8">Cotação</p>
-                <AreaChart
-                    width={1600}
-                    height={400}
-                    data={quoteValueChartData}
-                    margin={{
-                        top: 20,
-                        right: 0,
-                        left: 0,
-                        bottom: 0,
-                    }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Area  dataKey="close" stroke="#8884d8"/>
-                </AreaChart>
+                <ResponsiveContainer width="100%" height={400}>
+                    <AreaChart
+                        data={quoteValueChartData}
+                        margin={{
+                            top: 20,
+                            right: 0,
+                            left: 0,
+                            bottom: 0,
+                        }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Area dataKey="close" stroke="#8884d8" />
+                    </AreaChart>
+                </ResponsiveContainer>
             </div>
 
         </>
