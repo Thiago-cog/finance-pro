@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { format } from 'date-fns';
 import investmentsServices from "../../services/investmentsServices";
 import { Wallet } from 'lucide-react';
@@ -9,14 +9,31 @@ function Index({ stock }) {
     const [quoteFinancialData, setQuoteFinancialData] = useState({});
     const [quoteDefaultKeyStatistics, setQuoteDefaultKeyStatistics] = useState({});
     const [quoteValueChartData, setQuoteValueChartData] = useState([]);
+    const [dividendData, setDividendData] = useState([]);
+    
 
     async function getQuoteAllStatusByName() {
         const resultFinancialData = await investmentsServices.getQuoteFinancialDataByName(stock, null);
         const resultDefaultKeyStatistics = await investmentsServices.getQuoteDefaultKeyStatisticsByName(stock, null);
 
+        const listDividend = resultDefaultKeyStatistics?.dividendsData?.cashDividends;
+        const dividendsPerYear = [];
+
+        listDividend.forEach(dividend => {
+            const year = new Date(dividend.paymentDate).getFullYear();
+            let yearExisting = dividendsPerYear.find(item => item.year === year);
+            if (!yearExisting) {
+                yearExisting = { year: year, total: 0 };
+                dividendsPerYear.push(yearExisting);
+            }
+            yearExisting.total += dividend.rate;
+        });
+
+        setDividendData(dividendsPerYear.reverse())
+        
         resultFinancialData?.historicalDataPrice.map((historicalDataPrice) => {
             historicalDataPrice.date = format(new Date(historicalDataPrice.date * 1000), 'dd/MM/yyyy');
-        })
+        });
 
         setQuoteFinancialData(resultFinancialData);
         setQuoteDefaultKeyStatistics(resultDefaultKeyStatistics);
@@ -101,11 +118,26 @@ function Index({ stock }) {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Area dataKey="close" stroke="#8884d8" />
+                        <Area dataKey="close" stroke="#0db7ed" />
                     </AreaChart>
                 </ResponsiveContainer>
             </div>
+            <div className="flex-row justify-center bg-white mt-24 rounded-lg">
+                <p className="text-2xl m-4 mt-8">Dividendos pagos</p>
+                <ResponsiveContainer width="100%" height={400}>
+                    <BarChart
+                        data={dividendData}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="year" />
+                        <YAxis dataKey="total" />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="total" fill="#005cbf" />
 
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
         </>
     );
 }
