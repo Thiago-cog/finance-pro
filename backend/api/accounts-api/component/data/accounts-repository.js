@@ -178,6 +178,9 @@ class AccountsRepository {
 
     async getTotalRevenueByUserId(userId) {
         const conn = await this.databaseConnector.generateConnection();
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth() + 1;
+
         const result = await conn.query(`SELECT
                                     sum(value),
                                     c.name_category
@@ -191,15 +194,19 @@ class AccountsRepository {
                                 WHERE
                                     e.type_movement = 1
                                     AND u.id = $1
+                                    AND e.month = $2
                                 GROUP BY
                                     e.category_id,
-                                    c.name_category`, [userId]);
+                                    c.name_category`, [userId, currentMonth]);
         
         return result.rows;
     }
 
     async getTotalExpensesByUserId(userId) {
         const conn = await this.databaseConnector.generateConnection();
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth() + 1;
+
         const result = await conn.query(`SELECT
                                             sum(i.value),
                                             c.name_category
@@ -216,6 +223,7 @@ class AccountsRepository {
                                         WHERE 
                                             i.type_movement = 2
                                             AND u.id = $1
+                                            AND i.month = $2
                                         GROUP BY
                                             i.category_id,
                                             c.name_category
@@ -234,9 +242,10 @@ class AccountsRepository {
                                         WHERE
                                             e.type_movement = 2
                                             AND u.id = $1
+                                            AND e.month = $2
                                         GROUP BY
                                             e.category_id,
-                                            c.name_category`, [userId]);
+                                            c.name_category`, [userId, currentMonth]);
         
         return result.rows;
     }

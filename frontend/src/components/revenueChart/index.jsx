@@ -89,31 +89,38 @@ function Index() {
 	};
 
 	return (
-		<ResponsiveContainer className="mr-4">
-			<PieChart className="rounded-lg h-full w-1/2  bg-white">
-				<text x="13%" y="30" textAnchor="middle" dominantBaseline="middle" fontSize="20">
-					Total de Receitas
-				</text>
-				<Pie
-					activeIndex={activeIndex}
-					activeShape={renderActiveShape}
-					data={data}
-					cx="50%"
-					cy="50%"
-					innerRadius={60}
-					outerRadius={80}
-					fill="#8884d8"
-					dataKey="value"
-					onMouseEnter={onPieEnter}
-				>
-					{
-						data.map((entry, index) => (
-							<Cell key={`cell-${index}`} fill={entry.color} />
-						))
-					}
-				</Pie>
-			</PieChart>
-		</ResponsiveContainer>
+		<>
+			{data && data.length > 0 ? (
+				<ResponsiveContainer className="mr-4" width="100%" height="100%">
+					<PieChart className="rounded-lg h-full w-1/2  bg-white">
+						<text x="13%" y="30" textAnchor="middle" dominantBaseline="middle" fontSize="20">
+							Total de receitas
+						</text>
+						<Pie
+							activeIndex={activeIndex}
+							activeShape={renderActiveShape}
+							data={data}
+							cx="50%"
+							cy="50%"
+							innerRadius={60}
+							outerRadius={80}
+							fill="#8884d8"
+							dataKey="value"
+							onMouseEnter={onPieEnter}
+						>
+							{data.map((entry, index) => (
+								<Cell key={`cell-${index}`} fill={entry.color} />
+							))}
+						</Pie>
+					</PieChart>
+				</ResponsiveContainer>
+			) : (
+
+				<div className='rounded-lg w-1/2 bg-white h-full flex justify-center items-center text-xl mr-2'>
+					<h1>Nenhum dado encontrado</h1>
+				</div>
+			)}
+		</>
 	);
 }
 

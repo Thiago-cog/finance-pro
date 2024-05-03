@@ -16,12 +16,22 @@ class InvestmentsService {
         }
     }
 
-    async getQuoteByName(name, type) {
+    async getQuoteFinancialDataByName(name, type) {
         try{
-            const response = await axios.get(`${BASE_URL}/${type}/${name}?range=5d&interval=1d&fundamental=true&dividends=true&modules=balanceSheetHistory&token=${token}`);
-            console.log(response);
+            const response = await axios.get(`${BASE_URL}/quote/${name}?range=6mo&interval=1d&fundamental=true&dividends=true&modules=financialData&token=${token}`);
+            return response.data.results[0];
         }catch(error){
+            return error.response;
+        }
+        
+    }
 
+    async getQuoteDefaultKeyStatisticsByName(name, type) {
+        try{
+            const response = await axios.get(`${BASE_URL}/quote/${name}?range=5d&interval=1d&fundamental=true&dividends=true&modules=defaultKeyStatistics&token=${token}`);
+            return response.data.results[0];
+        }catch(error){
+            return error.response;
         }
         
     }
