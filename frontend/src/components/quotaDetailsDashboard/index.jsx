@@ -8,16 +8,23 @@ function Index({ stock }) {
 
     const [quoteFinancialData, setQuoteFinancialData] = useState({});
     const [quoteDefaultKeyStatistics, setQuoteDefaultKeyStatistics] = useState({});
+    const [quoteSummaryProfile, setQuoteSummaryProfile] = useState({});
+    const [quoteIncomeStatementHistory, setQuoteIncomeStatementHistory] = useState({});
     const [quoteValueChartData, setQuoteValueChartData] = useState([]);
     const [dividendData, setDividendData] = useState([]);
-    
+
 
     async function getQuoteAllStatusByName() {
         const resultFinancialData = await investmentsServices.getQuoteFinancialDataByName(stock, null);
         const resultDefaultKeyStatistics = await investmentsServices.getQuoteDefaultKeyStatisticsByName(stock, null);
+        const resultSummaryProfile = await investmentsServices.getQuoteSummaryProfileByName(stock, null);
+        const resultIncomeStatementHistory = await investmentsServices.getQuoteIncomeStatementHistoryByName(stock, null);
+
+        const listIncomeStatementHistory = resultIncomeStatementHistory?.incomeStatementHistory?.incomeStatementHistory;
 
         const listDividend = resultDefaultKeyStatistics?.dividendsData?.cashDividends;
         const dividendsPerYear = [];
+
 
         listDividend.forEach(dividend => {
             const year = new Date(dividend.paymentDate).getFullYear();
@@ -29,8 +36,11 @@ function Index({ stock }) {
             yearExisting.total += dividend.rate;
         });
 
-        setDividendData(dividendsPerYear.reverse())
-        
+        dividendsPerYear.forEach(dividend => {
+            dividend.total = parseFloat(dividend.total.toFixed(2));
+        });
+
+        setDividendData(dividendsPerYear.reverse());
         resultFinancialData?.historicalDataPrice.map((historicalDataPrice) => {
             historicalDataPrice.date = format(new Date(historicalDataPrice.date * 1000), 'dd/MM/yyyy');
         });
@@ -38,6 +48,8 @@ function Index({ stock }) {
         setQuoteFinancialData(resultFinancialData);
         setQuoteDefaultKeyStatistics(resultDefaultKeyStatistics);
         setQuoteValueChartData(resultFinancialData?.historicalDataPrice);
+        setQuoteSummaryProfile(resultSummaryProfile?.summaryProfile);
+        setQuoteIncomeStatementHistory(listIncomeStatementHistory[0]);
     }
 
     useEffect(() => {
@@ -121,6 +133,76 @@ function Index({ stock }) {
                         <Area dataKey="close" stroke="#0db7ed" />
                     </AreaChart>
                 </ResponsiveContainer>
+            </div>
+            <div className="mt-24 bg-white rounded-lg">
+                <p className="font-sans text-2xl ml-4 mb-2">Indicadores</p>
+
+                <div className="grid grid-cols-4 gap-4 bg-white rounded-lg">
+                    <div className="rounded-lg m-4 border-2 h-28">
+                        <p className="text-xl text-gray-500 ml-4 mt-2 font-sans font-medium">
+                            P/L
+                        </p>
+                        <p className="text-2xl ml-4 mt-4 font-bold font-sans text-black">
+                            {quoteDefaultKeyStatistics?.defaultKeyStatistics?.forwardPE?.toFixed(2)}
+                        </p>
+                    </div>
+                    <div className="rounded-lg m-4 border-2 h-28">
+                        <p className="text-xl text-gray-500 ml-4 mt-2 font-sans font-medium">
+                            P/RECEITA (PSR)
+                        </p>
+                        <p className="text-2xl ml-4 mt-4 font-bold font-sans text-black">
+                            {(quoteFinancialData?.financialData?.currentPrice / quoteFinancialData?.financialData?.revenuePerShare).toFixed(2)}
+                        </p>
+                    </div>
+                    <div className="rounded-lg m-4 border-2 h-28">
+                        <p className="text-xl text-gray-500 ml-4 mt-2 font-sans font-medium">
+                            P/VP
+                        </p>
+                        <p className="text-2xl ml-4 mt-4 font-bold font-sans text-black">
+                            {quoteDefaultKeyStatistics?.defaultKeyStatistics?.priceToBook?.toFixed(2)}
+                        </p>
+                    </div>
+                    <div className="rounded-lg m-4 border-2 h-28">
+                        <p className="text-xl text-gray-500 ml-4 mt-2 font-sans font-medium">
+                            MARGEM LÍQUIDA
+                        </p>
+                        <p className="text-2xl ml-4 mt-4 font-bold font-sans text-black">
+                            {(quoteDefaultKeyStatistics?.defaultKeyStatistics?.profitMargins * 100).toFixed(2)}%
+                        </p>
+                    </div>
+                    <div className="rounded-lg m-4 border-2 h-28">
+                        <p className="text-xl text-gray-500 ml-4 mt-2 font-sans font-medium">
+                            MARGEM BRUTA
+                        </p>
+                        <p className="text-2xl ml-4 mt-4 font-bold font-sans text-black">
+                            {(quoteFinancialData?.financialData?.grossMargins * 100).toFixed(2)}%
+                        </p>
+                    </div>
+                    <div className="rounded-lg m-4 border-2 h-28">
+                        <p className="text-xl text-gray-500 ml-4 mt-2 font-sans font-medium">
+                            MARGEM EBITDA
+                        </p>
+                        <p className="text-2xl ml-4 mt-4 font-bold font-sans text-black">
+                            {(quoteFinancialData?.financialData?.ebitdaMargins * 100).toFixed(2)}%
+                        </p>
+                    </div>
+                    <div className="rounded-lg m-4 border-2 h-28">
+                        <p className="text-xl text-gray-500 ml-4 mt-2 font-sans font-medium">
+                            MARGEM EBIT
+                        </p>
+                        <p className="text-2xl ml-4 mt-4 font-bold font-sans text-black">
+                            {((quoteIncomeStatementHistory?.ebit / quoteIncomeStatementHistory?.totalRevenue)*100).toFixed(2)}%
+                        </p>
+                    </div>
+                    <div className="rounded-lg m-4 border-2 h-28">
+                        <p className="text-xl text-gray-500 ml-4 mt-2 font-sans font-medium">
+                            EV/EBITDA
+                        </p>
+                        <p className="text-2xl ml-4 mt-4 font-bold font-sans text-black">
+                            {quoteDefaultKeyStatistics?.defaultKeyStatistics?.enterpriseToEbitda?.toFixed(2)}
+                        </p>
+                    </div>
+                </div>
             </div>
             <div className="flex-row justify-center bg-white mt-24 rounded-lg">
                 <p className="text-2xl m-4 mt-8">Dividendos pagos</p>

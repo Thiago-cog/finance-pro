@@ -18,7 +18,7 @@ class InvestmentsService {
 
     async getQuoteFinancialDataByName(name, type) {
         try{
-            const response = await axios.get(`${BASE_URL}/quote/${name}?range=6mo&interval=1d&fundamental=true&modules=financialData&token=${token}`);
+            const response = await axios.get(`${BASE_URL}/quote/${name}?range=1y&interval=1d&fundamental=true&modules=financialData&token=${token}`);
             return response.data.results[0];
         }catch(error){
             return error.response;
@@ -29,6 +29,26 @@ class InvestmentsService {
     async getQuoteDefaultKeyStatisticsByName(name, type) {
         try{
             const response = await axios.get(`${BASE_URL}/quote/${name}?range=5d&interval=1d&fundamental=true&dividends=true&modules=defaultKeyStatistics&token=${token}`);
+            return response.data.results[0];
+        }catch(error){
+            return error.response;
+        }
+        
+    }
+
+    async getQuoteSummaryProfileByName(name, type) {
+        try{
+            const response = await axios.get(`${BASE_URL}/quote/${name}?fundamental=true&dividends=true&modules=summaryProfile&token=${token}`);
+            return response.data.results[0];
+        }catch(error){
+            return error.response;
+        }
+        
+    }
+
+    async getQuoteIncomeStatementHistoryByName(name, type) {
+        try{
+            const response = await axios.get(`${BASE_URL}/quote/${name}?fundamental=true&dividends=true&modules=incomeStatementHistory&token=${token}`);
             return response.data.results[0];
         }catch(error){
             return error.response;
