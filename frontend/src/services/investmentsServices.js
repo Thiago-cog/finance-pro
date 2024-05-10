@@ -55,7 +55,15 @@ class InvestmentsService {
         }
         
     }
-     
+    async getQuoteBalanceSheetHistoryByName(name, type) {
+        try{
+            const response = await axios.get(`${BASE_URL}/quote/${name}?fundamental=false&dividends=false&modules=balanceSheetHistory&token=${token}`);
+            return response.data.results[0];
+        }catch(error){
+            return error.response;
+        }
+        
+    }
     async getListActions() {
         try{
             const response = await axios.get(`${BASE_URL}/quote/list?token=${token}&sortBy=market_cap_basic&sortOrder=desc&type=stock&limit=14`);
