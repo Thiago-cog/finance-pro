@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { format } from 'date-fns';
-import investmentsServices from "../../services/investmentsServices";
+import { Link } from "react-router-dom";
 import { Wallet } from 'lucide-react';
+import investmentsServices from "../../services/investmentsServices";
+import Modal from "../modal/index";
 
 function Index({ stock }) {
 
@@ -13,6 +15,7 @@ function Index({ stock }) {
     const [quoteBalanceSheetHistory, setQuoteBalanceSheetHistory] = useState({});
     const [quoteValueChartData, setQuoteValueChartData] = useState([]);
     const [dividendData, setDividendData] = useState([]);
+    const [openToModal, setOpenToModal] = useState(false);
 
     async function getQuoteAllStatusByName() {
         const resultFinancialData = await investmentsServices.getQuoteFinancialDataByName(stock, null);
@@ -69,6 +72,7 @@ function Index({ stock }) {
 
     return (
         <>
+            <Modal isOpen={openToModal} setOpenToModal={setOpenToModal}/>
             <nav className="bg-gray-900 border-gray-800 rounded-lg border-4 mb-4">
                 <div className="max-w-screen-xl flex items-center mx-auto p-4">
                     <img src={quoteFinancialData?.logourl} alt={quoteFinancialData?.longName} className="h-16 w-16 rounded-md" />
@@ -76,11 +80,12 @@ function Index({ stock }) {
                         <p className=" text-2xl font-extrabold text-white">{stock}</p>
                         <p className="text-white ">{quoteFinancialData?.longName}</p>
                     </div>
-                    <button type="button" className="inline-flex items-center justify-center p-2 w-10 h-10 ml-auto rounded-lg  focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600">
+                    <button onClick={() => setOpenToModal(!openToModal)} type="button" className="inline-flex items-center justify-center p-2 w-10 h-10 ml-auto rounded-lg  focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600">
                         <Wallet />
                     </button>
                 </div>
             </nav>
+            
             <div className="w-full h-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
                 <div className="bg-white rounded-lg py-5 pl-6 flex items-start shadow">
                     <div className="pl-3 pr-10 mt-1">
