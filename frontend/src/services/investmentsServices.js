@@ -1,5 +1,6 @@
 import axios from "axios";
 const BASE_URL = "https://brapi.dev/api";
+const BASE_URL_BACK = "http://localhost:3003";
 const token = "fsg3B6QgZs5DfEn86UYdgE";
 
 class InvestmentsService {
@@ -113,6 +114,23 @@ class InvestmentsService {
            
             return response.data.stocks;
         }catch (error){
+            return error.response;
+        }
+    }
+
+    async getAllWalletsByUserId(token, userId) {
+
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+    
+            const response = await axios.get(`${BASE_URL_BACK}/investments/get-wallets/?userId=${userId}`, config);
+            
+            return response.data;
+        } catch(error) {
             return error.response;
         }
     }

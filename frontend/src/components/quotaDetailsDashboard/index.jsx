@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { format } from 'date-fns';
-import { Link } from "react-router-dom";
 import { Wallet } from 'lucide-react';
 import investmentsServices from "../../services/investmentsServices";
 import Modal from "../modal/index";
@@ -72,7 +71,7 @@ function Index({ stock }) {
 
     return (
         <>
-            <Modal isOpen={openToModal} setOpenToModal={setOpenToModal}/>
+            <Modal isOpen={openToModal} setOpenToModal={setOpenToModal} stock={stock}/>
             <nav className="bg-gray-900 border-gray-800 rounded-lg border-4 mb-4">
                 <div className="max-w-screen-xl flex items-center mx-auto p-4">
                     <img src={quoteFinancialData?.logourl} alt={quoteFinancialData?.longName} className="h-16 w-16 rounded-md" />

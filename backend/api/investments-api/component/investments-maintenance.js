@@ -92,6 +92,32 @@ class InvestmentsMaintenance {
         return result;
     }
 
+    async getAllWalletsByUserId(userId) {
+        let result = {};
+        try {
+            if (!userId) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Id não enviado',
+                    message: "Id não identificado."
+                }
+                return result;
+            }
+
+            const listWallets = await this.walletsRepository.getAllWalletsByUserId(userId);
+            result.data = listWallets;
+            result.status = 200;
+        } catch(error) {
+            result.status = 500
+            result.errors = {
+                errors: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+
+        return result;
+    }
+
     #getTypeInvestments(typeInvestmentsId) {
         const typeInvestmentsName = {
             [TypeInvestments.ACTION]: 'Ação',

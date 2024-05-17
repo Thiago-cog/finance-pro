@@ -32,4 +32,11 @@ router.post('/add-quote', authenticateToken, async (req, res) => {
     applyResult(result, res);
 });
 
+router.get('/get-wallets', authenticateToken, async (req, res) => {
+    const investmentsMaintenance = new InvestmentsMaintenance(new WalletsRepository(), null);
+    const userId = parseInt(req.query.userId);
+    const result = await investmentsMaintenance.getAllWalletsByUserId(userId);
+    applyResult(result, res);
+});
+
 module.exports = router;
