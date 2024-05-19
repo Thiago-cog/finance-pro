@@ -2,9 +2,10 @@ const jwt = require('jsonwebtoken');
 const TypeInvestments = require('./entity/type-investments');
 
 class InvestmentsMaintenance {
-    constructor(walletsRepository, investmentsRepository) {
+    constructor(walletsRepository, investmentsRepository, typeInvestmentsRepository) {
         this.walletsRepository = walletsRepository;
         this.investmentsRepository = investmentsRepository;
+        this.typeInvestmentsRepository = typeInvestmentsRepository;
     }
 
     async decodeToken(token) {
@@ -80,16 +81,15 @@ class InvestmentsMaintenance {
             result.data = {
                 message: `${typeInvestmentsName}: ${quoteData.stock} adicionada(o) a carteira com sucesso.`
             };
-
+            return result;
         } catch(error) {
             result.status = 500
             result.errors = {
                 errors: error.message,
                 message: "Erro inesperado aconteceu!" + error.message
             }
+            return result;
         }
-
-        return result;
     }
 
     async getAllWalletsByUserId(userId) {
@@ -106,6 +106,23 @@ class InvestmentsMaintenance {
 
             const listWallets = await this.walletsRepository.getAllWalletsByUserId(userId);
             result.data = listWallets;
+            result.status = 200;
+        } catch(error) {
+            result.status = 500
+            result.errors = {
+                errors: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+
+        return result;
+    }
+
+    async getTypeInvestments() {
+        let result = {}; 
+        try {
+            const listTypeInvestments = await this.typeInvestmentsRepository.getTypeInvestments();
+            result.data = listTypeInvestments;
             result.status = 200;
         } catch(error) {
             result.status = 500

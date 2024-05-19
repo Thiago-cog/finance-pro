@@ -71,7 +71,7 @@ function Index({ stock }) {
 
     return (
         <>
-            <Modal isOpen={openToModal} setOpenToModal={setOpenToModal} stock={stock}/>
+            <Modal isOpen={openToModal} setOpenToModal={setOpenToModal} stock={stock} quoteValue={quoteFinancialData?.financialData?.currentPrice}/>
             <nav className="bg-gray-900 border-gray-800 rounded-lg border-4 mb-4">
                 <div className="max-w-screen-xl flex items-center mx-auto p-4">
                     <img src={quoteFinancialData?.logourl} alt={quoteFinancialData?.longName} className="h-16 w-16 rounded-md" />
