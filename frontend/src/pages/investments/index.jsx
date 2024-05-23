@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../../components/navbar";
-import Index from "../../components/investmentsDashboard/index";
+import Index from "../investmentsDashboard/index";
 
 const Investments = () => {
     return (

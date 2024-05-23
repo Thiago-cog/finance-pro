@@ -1,5 +1,5 @@
 import Navbar from "../../components/navbar/index";
-import FormCard from "../../components/formCard/index";
+import FormCard from "../formCard/index";
 
 const Cards = () => {
     return (

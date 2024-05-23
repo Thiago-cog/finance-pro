@@ -4,6 +4,7 @@ import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
 import { X } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
+import Button from "../button";
 import 'react-toastify/dist/ReactToastify.css';
 
 function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
@@ -141,7 +142,7 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
                             </div>
                         </div>
                         <div>
-                            <button className="bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-lg font-medium transition duration-150 ease-in-out text-white px-6 py-2 text-sm  focus:outline-none" onClick={handleSave}>Salvar</button>
+                            <Button functionButton={handleSave} text='Salvar'/>
                         </div>
                     </div>
                 </div>

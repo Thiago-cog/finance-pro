@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Bitcoin, CircleDollarSign, CandlestickChart, Building2, TrendingUp, TrendingDown } from 'lucide-react';
+import { Bitcoin, CircleDollarSign, CandlestickChart, Building2, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
 import investmentsServices from "../../services/investmentsServices";
 
 function Index() {
@@ -11,7 +11,6 @@ function Index() {
     const [listQuoteAll, setListQuoteAll] = useState([]);
     const [search, setSearch] = useState('');
     const [filterSearch, setFilerSearch] = useState([]);
-
 
     const listFilterBySearch = listQuoteAll.filter((quote) => {
         if (search.length >= 3) {
@@ -79,7 +78,8 @@ function Index() {
 
     return (
         <>
-            <div className="w-full flex items-center justify-center mb-5 ">
+            <div className="w-full flex items-center justify-between mb-5 ">
+                <div></div>
                 {/* Colocar o checkbox para busca de cripto moeda. */}
                 <div className="relative">
                     <input className="w-96 py-2 rounded-lg" placeholder="Pesquisar" value={search} onChange={(ev) => setSearch(ev.target.value)} />
@@ -104,6 +104,11 @@ function Index() {
                             </li>
                         ))}
                     </ul>
+                </div>
+                <div>
+                    <Link to={`/investments-wallet`} className="flex items-center justify-center border-2 border-white hover:border-gray-300 hover:text-gray-300 rounded-full text-white font-semibold w-28 h-10">
+                        Carteira <Wallet/>
+                    </Link>
                 </div>
             </div>
             <div className="w-full grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
