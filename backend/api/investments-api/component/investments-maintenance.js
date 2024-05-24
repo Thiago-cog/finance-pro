@@ -51,7 +51,7 @@ class InvestmentsMaintenance {
             result.data = {
                 message: `Carteira: ${walletData.name} criada com sucesso.`
             };
-        } catch(error) {
+        } catch (error) {
             result.status = 500
             result.errors = {
                 errors: error.message,
@@ -73,16 +73,16 @@ class InvestmentsMaintenance {
                 }
                 return result;
             }
-            
+
             await this.investmentsRepository.insertQuoteInWallet(quoteData);
-            
+
             const typeInvestmentsName = this.#getTypeInvestments(quoteData.typeInvestments);
             result.status = 200;
             result.data = {
                 message: `${typeInvestmentsName}: ${quoteData.stock} adicionada(o) a carteira com sucesso.`
             };
             return result;
-        } catch(error) {
+        } catch (error) {
             result.status = 500
             result.errors = {
                 errors: error.message,
@@ -107,7 +107,7 @@ class InvestmentsMaintenance {
             const listWallets = await this.walletsRepository.getAllWalletsByUserId(userId);
             result.data = listWallets;
             result.status = 200;
-        } catch(error) {
+        } catch (error) {
             result.status = 500
             result.errors = {
                 errors: error.message,
@@ -119,12 +119,55 @@ class InvestmentsMaintenance {
     }
 
     async getTypeInvestments() {
-        let result = {}; 
+        let result = {};
         try {
             const listTypeInvestments = await this.typeInvestmentsRepository.getTypeInvestments();
             result.data = listTypeInvestments;
             result.status = 200;
-        } catch(error) {
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+
+        return result;
+    }
+
+    async getAllWalletData(userId) {
+        let result = {};
+        try {
+            if (!userId) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Id não enviado',
+                    message: "Id não identificado."
+                }
+                return result;
+            }
+
+            const resultListActive = await this.investmentsRepository.getAllWalletData(userId);
+            let listActive = {};
+            
+            resultListActive.forEach(({ name_type, total }) => {
+                if (!listActive[name_type]) {
+                    listActive[name_type] = {
+                        name_type: name_type,
+                        count: 0,
+                        total: 0
+                    };
+                }
+                listActive[name_type].count++;
+                listActive[name_type].total += total;
+            });
+            
+            const listActiveArray = Object.values(listActive);
+
+            result.data = listActiveArray;
+            result.status = 200;
+            return result;
+        } catch (error) {
             result.status = 500
             result.errors = {
                 errors: error.message,
