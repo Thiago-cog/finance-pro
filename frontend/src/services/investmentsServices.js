@@ -179,6 +179,17 @@ class InvestmentsService {
             return error.response;
         }
     }
+
+    async getStocks(stocks) {
+        try{
+            const response = await axios.get(`${BASE_URL}/quote/${stocks}?token=${token}`);
+            return response.data.results;
+        }catch(error){
+            return error.response;
+        }
+        
+    }
+
 }
 
 export default new InvestmentsService();

@@ -149,24 +149,36 @@ class InvestmentsMaintenance {
 
             const resultListActive = await this.investmentsRepository.getAllWalletData(userId);
             let listActive = {};
-            
-            resultListActive.forEach(({ name_type, total }) => {
+            let totalSum = 0;
+
+            resultListActive.forEach(({ name_type, stock, total_quantity, total_value }) => {
                 if (!listActive[name_type]) {
                     listActive[name_type] = {
                         name_type: name_type,
                         count: 0,
-                        total: 0
+                        total: 0,
+                        stocks: []
                     };
                 }
                 listActive[name_type].count++;
-                listActive[name_type].total += total;
+                listActive[name_type].total += total_value;
+                listActive[name_type].stocks.push({
+                    stock: stock,
+                    name_type: name_type,
+                    total_quantity: total_quantity,
+                    total_value: total_value.toFixed(2)
+                });
+                totalSum += total_value;
             });
+            
+            Object.values(listActive).forEach(item => item.totalSum = totalSum.toFixed(2));
             
             const listActiveArray = Object.values(listActive);
 
             result.data = listActiveArray;
             result.status = 200;
             return result;
+
         } catch (error) {
             result.status = 500
             result.errors = {
