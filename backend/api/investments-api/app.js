@@ -1,8 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const authUser = require('./routes/authUser.js');
-const swaggerUi = require('swagger-ui-express');
-const swaggerJsonDocs = require('./swagger.json');
+const investiments = require('./routes/investments.js');
+const healthcheck = require('./routes/healthcheck.js');
 
 class App {
     constructor() {
@@ -13,7 +12,7 @@ class App {
 
     listen(port) {
         this.app.listen(port, () => {
-            console.log(`Server started at ${port}`);
+            console.log(`Api rodando na porta: ${port}`);
         });
     }
 
@@ -24,8 +23,8 @@ class App {
     }
 
     routes() {
-        this.app.use('/user', authUser);
-        // this.app.use('/investments-api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJsonDocs));
+        this.app.use('/', healthcheck);
+        this.app.use('/investments', investiments);
     }
 }
 

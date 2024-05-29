@@ -1,10 +1,10 @@
 {
-  "name": "accounts-api",
+  "name": "investments-api",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "bin": {
-    "accounts-api": "bin/www.js"
+    "investments-api": "bin/www.js"
   },
   "scripts": {
     "test": "jest --coverage",

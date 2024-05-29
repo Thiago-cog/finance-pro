@@ -1,5 +1,6 @@
 import axios from "axios";
 const BASE_URL = "https://brapi.dev/api";
+const BASE_URL_BACK = "http://localhost:3003/investments";
 const token = "fsg3B6QgZs5DfEn86UYdgE";
 
 class InvestmentsService {
@@ -116,6 +117,94 @@ class InvestmentsService {
             return error.response;
         }
     }
+
+    async getAllWalletsByUserId(token, userId) {
+
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+    
+            const response = await axios.get(`${BASE_URL_BACK}/get-wallets/?userId=${userId}`, config);
+            
+            return response.data;
+        } catch(error) {
+            return error.response;
+        }
+    }
+
+    async getTypeInvestments(token) {
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+    
+            const response = await axios.get(`${BASE_URL_BACK}/get-type-investments`, config);
+            return response.data;
+        } catch(error) {
+            return error.response;
+        }
+    }
+
+    async addQuote(token, quoteData) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.post(`${BASE_URL_BACK}/add-quote`, quoteData, config);
+            return response;
+        }catch (error){
+            return error.response;
+        }
+    }
+
+    async getAllWalletData(token, userId) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.get(`${BASE_URL_BACK}/get-all-wallet-data?userId=${userId}`, config);
+            return response.data;
+        } catch(error) {
+            return error.response;
+        }
+    }
+
+    async getStocks(stocks) {
+        try{
+            const response = await axios.get(`${BASE_URL}/quote/${stocks}?token=${token}`);
+            return response.data.results;
+        }catch(error){
+            return error.response;
+        }
+        
+    }
+
+    async getAllStocks(token, userId) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.get(`${BASE_URL_BACK}/get-all-stocks?userId=${userId}`, config);
+            return response.data;
+        } catch(error) {
+            return error.response;
+        }
+    }
+
 }
 
 export default new InvestmentsService();

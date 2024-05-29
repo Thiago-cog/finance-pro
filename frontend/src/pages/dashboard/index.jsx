@@ -2,7 +2,6 @@ import React from "react";
 
 import Navbar from "../../components/navbar/index";
 import AllStatus from "../../components/dashbord/allStatus";
-import RecentMoviments from "../../components/recentMoviments";
 import RevenueChart from "../../components/revenueChart/index";
 import ExpenseChart from "../../components/expenseChart/index";
 
@@ -14,7 +13,6 @@ const Dashboard = () => {
             <div className="p-4 sm:ml-64 dark:bg-gradient-to-r h-auto min-h-screen from-gray-950 to-gray-900">
                 <div className=" mt-14">
                     <AllStatus />
-                    {/* <RecentMoviments/> */}
                     <div className="flex items-center justify-center h-72 mb-4 rounded bg-gray-50 dark:bg-gray-800">
                         <RevenueChart/>
                         <ExpenseChart/>

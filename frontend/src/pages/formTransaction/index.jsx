@@ -4,12 +4,13 @@ import InputMask from "react-input-mask";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { InputMoney } from "../input/inputMoney";
+import { InputMoney } from "../../components/input/inputMoney";
 import accountsServices from "../../services/accountsServices";
 import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
+import Button from "../../components/button";
 
-function FormAccount() {
+function FormTransaction() {
 
     const currentDate = new Date();
     const formatCurrentDate = currentDate.toLocaleDateString('pt-BR');
@@ -460,9 +461,7 @@ function FormAccount() {
                     )}
                     <hr className="h-[1px] bg-gray-100 my-14" />
                     <div className="flex flex-col flex-wrap items-center justify-center w-full px-7 lg:flex-row lg:justify-end md:justify-end gap-x-4 gap-y-4">
-                        <button onClick={handleSave} className="bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-lg transform font-bold px-6 py-4 text-white lg:max-w-[144px] w-full ">
-                            Salvar
-                        </button>
+                        <Button functionButton={handleSave} text='Salvar' className="bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-lg transform font-bold px-6 py-4 text-white lg:max-w-[144px] w-full"/>
                     </div>
                 </div>
             </div>
@@ -471,4 +470,4 @@ function FormAccount() {
     );
 }
 
-export default FormAccount;
+export default FormTransaction;

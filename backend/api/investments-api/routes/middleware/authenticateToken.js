@@ -1,9 +1,9 @@
-const UserAuthorization = require('../../component/user-authorization.js');
-const UserRepository = require('../../component/data/user-repository.js');
+const InvestmentsMaintenance = require('../../component/investments-maintenance.js');
+const WalletsRepository = require('../../component/data/wallets-repository.js');
 
 const authenticateToken = async (req, res, next) => {
     const authHeader = req.headers.authorization;
-    const userAuthorization = new UserAuthorization(new UserRepository());
+    const userAuthorization = new InvestmentsMaintenance(new WalletsRepository());
     
     if (!authHeader){
         return res.status(401).json({ error: 'Nenhum token fornecido' });

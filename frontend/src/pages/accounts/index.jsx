@@ -1,7 +1,7 @@
 import React from "react";
 
 import Navbar from "../../components/navbar/index";
-import FormAccount from "../../components/formAccount/index";
+import FormAccount from "../formAccount/index";
 
 const Accounts = () => {
     return (

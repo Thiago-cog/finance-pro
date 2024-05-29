@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from 'react-router-dom';
 import Navbar from "../../components/navbar";
-import QuoteDetailsDashboard from "../../components/quotaDetailsDashboard/index"
+import QuoteDetailsDashboard from "../quotaDetailsDashboard/index"
 
 const Investments = () => {
     const { stock } = useParams();
