@@ -59,6 +59,26 @@ class InvestmentsRepository {
                                             ti.name_type;`, [userId]);
         return result.rows;
     }
+
+    async getAllStocksByUserId(userId) {
+        const conn = await this.databaseConnector.generateConnection();
+        const result = await conn.query(`SELECT
+                                            ti.name_type,
+                                            SUM(i.quote_value) AS total
+                                        FROM
+                                            investments i
+                                        INNER JOIN type_investments ti ON
+                                            i.type_investments = ti.id
+                                        INNER JOIN wallets w ON
+                                            i.wallet_id = w.id
+                                        INNER JOIN users u ON
+                                            w.user_id = u.id
+                                        WHERE
+                                            u.id = $1
+                                        GROUP BY
+                                            ti.name_type;`, [userId]);
+        return result.rows;    
+    }
 }
 
 module.exports = InvestmentsRepository;

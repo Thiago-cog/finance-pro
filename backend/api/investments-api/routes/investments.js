@@ -51,4 +51,10 @@ router.get('/get-all-wallet-data', authenticateToken, async (req, res) => {
     applyResult(result, res);
 });
 
+router.get('/get-all-stocks', authenticateToken, async (req, res) => {
+    const investmentsMaintenance = new InvestmentsMaintenance(new WalletsRepository(), new InvestmentsRepository(), new TypeInvestmentsRepository());
+    const userId = parseInt(req.query.userId);
+    const result = await investmentsMaintenance.getAllStocksByUserId(userId);
+    applyResult(result, res);
+});
 module.exports = router;

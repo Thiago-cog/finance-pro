@@ -190,6 +190,21 @@ class InvestmentsService {
         
     }
 
+    async getAllStocks(token, userId) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.get(`${BASE_URL_BACK}/get-all-stocks?userId=${userId}`, config);
+            return response.data;
+        } catch(error) {
+            return error.response;
+        }
+    }
+
 }
 
 export default new InvestmentsService();

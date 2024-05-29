@@ -14,10 +14,16 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
     const [totalValue, setTotalValue] = useState(1);
     const [walletId, setWalletId] = useState(null);
     const [typeInvestmentId, setTypeInvestmentId] = useState(null);
+    const [localQuoteValue, setLocalQuoteValue] = useState(quoteValue);
+    const [localStockValue, setLocalStockValue] = useState(stock);
 
     const token = GetCookie("user_session");
 
     async function getWallets() {
+
+        setLocalQuoteValue(quoteValue);
+        setTotalValue((quoteValue * valueQuantity).toFixed(2));
+
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
         const resultWallets = await investmentsServices.getAllWalletsByUserId(token, userId);
@@ -26,14 +32,23 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
 
         resultWallets.unshift(selectObject);
         resultTypeInvestments.unshift(selectObject);
-
         setListWallets(resultWallets);
         setListTypeInvestments(resultTypeInvestments);
     }
 
+    async function getStockByTicker(ticker) {
+        if (ticker) {
+            const resultStock = await investmentsServices.getStocks(ticker);
+            const marketPrice = resultStock[0]?.regularMarketPrice;
+            setLocalStockValue(ticker);
+            setLocalQuoteValue(marketPrice?.toFixed(2));
+            setTotalValue((marketPrice * valueQuantity).toFixed(2));
+        }
+    }
+
     function setQuantity(quantity) {
         setValueQuantity(quantity);
-        const totalValue = quoteValue * quantity;
+        const totalValue = localQuoteValue * quantity;
         setTotalValue(totalValue.toFixed(2));
     }
 
@@ -51,7 +66,7 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
         const quoteData = {
             walletId: parseInt(walletId),
             typeInvestments: parseInt(typeInvestmentId),
-            stock: stock,
+            stock: localStockValue,
             quantity: parseInt(valueQuantity),
             quoteValue: parseFloat(totalValue)
         };
@@ -99,6 +114,12 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
         setQuantity(1);
     }, [isOpen]);
 
+    useEffect(() => {
+        setLocalQuoteValue(quoteValue);
+    }, [quoteValue]);
+    useEffect(() => {
+        setLocalStockValue(stock);
+    }, [stock]);
     if (isOpen) {
         return (
             <>
@@ -121,8 +142,12 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
                                 </select>
                             </div>
                             <div>
+                                <label>Ticker</label>
+                                <input type="text" defaultValue={localStockValue} onBlur={(e) => getStockByTicker(e.target.value)} className="rounded-lg border-gray-300 h-14" />
+                            </div>
+                            <div>
                                 <label>Cotação em R$</label>
-                                <input type="text" value={quoteValue} disabled className="rounded-lg border-gray-300 h-14" />
+                                <input type="text" value={localQuoteValue} disabled className="rounded-lg border-gray-300 h-14" />
                             </div>
                             <div className="mb-4">
                                 <label>Tipo do ativo</label>
@@ -149,6 +174,8 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
             </>
         );
     }
+
+    return null;
 }
 
 export default Modal;

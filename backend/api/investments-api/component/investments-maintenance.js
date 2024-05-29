@@ -170,9 +170,52 @@ class InvestmentsMaintenance {
                 });
                 totalSum += total_value;
             });
-            
+
             Object.values(listActive).forEach(item => item.totalSum = totalSum.toFixed(2));
-            
+
+            const listActiveArray = Object.values(listActive);
+
+            result.data = listActiveArray;
+            result.status = 200;
+            return result;
+
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+
+        return result;
+    }
+
+    async getAllStocksByUserId(userId) {
+        let result = {};
+        try {
+            if (!userId) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Id não enviado',
+                    message: "Id não identificado."
+                }
+                return result;
+            }
+
+            const resultListStocks = await this.investmentsRepository.getAllStocksByUserId(userId);
+
+            let listActive = {};
+
+            resultListStocks.forEach(({ name_type, total }) => {
+                if (!listActive[name_type]) {
+                    listActive[name_type] = {
+                        name_type: name_type,
+                        total: 0
+                    };
+                }
+                listActive[name_type].total += parseFloat(total.toFixed(2));
+            });
+
             const listActiveArray = Object.values(listActive);
 
             result.data = listActiveArray;
