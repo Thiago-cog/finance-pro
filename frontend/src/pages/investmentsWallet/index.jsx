@@ -5,6 +5,7 @@ import Loading from "../../components/loading";
 import Modal from "../../components/modal/index";
 import WalletChart from "../../components/walletChart";
 import TableInvestments from "../../components/table/tableInvestments";
+import TableRankStock from "../../components/table/tableRankStock";
 import investmentsServices from "../../services/investmentsServices";
 import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
@@ -36,7 +37,8 @@ const InvestmentsWallet = () => {
             <Loading disable={disabledLoading}/>
             <div className="p-4 sm:ml-64 h-auto min-h-screen bg-gray-900">
                 <div className="sm:px-6">
-                    <div className="flex bg-gray-900 w-full h-96 mt-16 rounded-lg">
+                    <div className="flex justify-between bg-gray-900 w-full h-96 mt-16 rounded-lg">
+                        <TableRankStock/>
                         <WalletChart/>
                     </div> 
                 </div>

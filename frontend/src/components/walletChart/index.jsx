@@ -91,7 +91,7 @@ function WalletChart({ totalSum }) {
 	return (
 		<>
 			{data && data.length > 0 ? (
-				<ResponsiveContainer className="mr-4" width="100%" height="100%">
+				<ResponsiveContainer className="mr-4" width="50%" height="100%">
 					<PieChart className="rounded-lg h-full w-1/2  bg-white">
 						<text x="13%" y="30" textAnchor="middle" dominantBaseline="middle" fontSize="20">
 							Ativos na carteira
