@@ -5,7 +5,7 @@ import { Wallet } from 'lucide-react';
 import investmentsServices from "../../services/investmentsServices";
 import Modal from "../../components/modal/index";
 import Loading from "../../components/loading";
-import Button from "../../components/button";
+import SaveButton from "../../components/button/saveButton";
 import GridCardDetails from "../../components/gridCard/gridCardDetails";
 import GridCardTop from "../../components/gridCard/gridCardTop";
 
@@ -164,7 +164,7 @@ function Index({ stock }) {
                             <img className="h-full w-full object-cover rounded-full shadow" src={quoteFinancialData?.logourl} alt />
                         </div>
                         <p className="mb-6 text-lg font-bold text-gray-900 ">{quoteFinancialData?.longName}</p>
-                        <Button functionButton={null} text={<a href={quoteSummaryProfile?.website}>Visit website</a>} className={null}/>
+                        <SaveButton functionButton={null} text={<a href={quoteSummaryProfile?.website}>Visit website</a>} className={null}/>
                     </div>
                 </div>
                 <div className="xl:w-3/5 lg:w-3/5 px-6 py-8">

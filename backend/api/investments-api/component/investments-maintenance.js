@@ -220,7 +220,6 @@ class InvestmentsMaintenance {
 
             result.data = listActiveArray;
             result.status = 200;
-            return result;
 
         } catch (error) {
             result.status = 500
@@ -230,6 +229,34 @@ class InvestmentsMaintenance {
             }
         }
 
+        return result;
+    }
+
+    async getRankStocksByUserId(userId) {
+        let result = {};
+        try {
+            if (!userId) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Id não enviado',
+                    message: "Id não identificado."
+                }
+                return result;
+            }
+
+            const resultListRankStocks = await this.investmentsRepository.getRankStocksByUserId(userId);
+            
+            result.data = resultListRankStocks;
+            result.status = 200;
+
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+        
         return result;
     }
 

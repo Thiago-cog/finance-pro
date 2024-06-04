@@ -4,7 +4,7 @@ import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
 import { X } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
-import Button from "../button";
+import SaveButton from "../button/saveButton";
 import 'react-toastify/dist/ReactToastify.css';
 
 function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
@@ -167,7 +167,7 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
                             </div>
                         </div>
                         <div>
-                            <Button functionButton={handleSave} text='Salvar'/>
+                            <SaveButton functionButton={handleSave} text='Salvar'/>
                         </div>
                     </div>
                 </div>

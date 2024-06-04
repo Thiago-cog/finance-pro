@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/navbar";
-import Button from "../../components/button";
+import SaveButton from "../../components/button/saveButton";
 import Loading from "../../components/loading";
 import Modal from "../../components/modal/index";
 import WalletChart from "../../components/walletChart";
@@ -9,6 +9,7 @@ import TableRankStock from "../../components/table/tableRankStock";
 import investmentsServices from "../../services/investmentsServices";
 import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
+import BackButton from "../../components/button/backButton";
 
 const InvestmentsWallet = () => {
     const [listActives, setListActives] = useState([]);
@@ -48,7 +49,7 @@ const InvestmentsWallet = () => {
                             <div className="sm:flex items-center justify-between">
                                 <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">Ativos</p>
                                 <div>
-                                    <Button text="Adicionar Ativo" functionButton={() => setOpenToModal(!openToModal)} />
+                                    <SaveButton text="Adicionar Ativo" functionButton={() => setOpenToModal(!openToModal)} />
                                 </div>
                             </div>
                         </div>

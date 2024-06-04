@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Bitcoin, CircleDollarSign, CandlestickChart, Building2, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
+import { Bitcoin, TrendingUp, Wallet } from 'lucide-react';
 import investmentsServices from "../../services/investmentsServices";
+import authServices from "../../services/authServices";
+import GetCookie from "../../hooks/getCookie";
+import Loading from "../../components/loading";
+import GridCardStatusWallet from "../../components/gridCard/gridCardStatusWallet";
 
 function Index() {
     const [listActions, setListActions] = useState([]);
@@ -11,6 +15,9 @@ function Index() {
     const [listQuoteAll, setListQuoteAll] = useState([]);
     const [search, setSearch] = useState('');
     const [filterSearch, setFilerSearch] = useState([]);
+    const [disabledLoading, setDisableLoading] = useState(false);
+    const [listActives, setListActives] = useState([]);
+    const token = GetCookie("user_session");
 
     const listFilterBySearch = listQuoteAll.filter((quote) => {
         if (search.length >= 3) {
@@ -20,10 +27,14 @@ function Index() {
 
 
     async function getAllRanks() {
+        const decodeToken = await authServices.decodeToken(token);
+        const userId = decodeToken.userToken.id;
+
         const listActionsResponse = await investmentsServices.getListActions();
         const listFundsResponse = await investmentsServices.getListFunds();
         const listBRDsResponse = await investmentsServices.getListBDRs();
         const listQuoteAllResponse = await investmentsServices.getListQuote();
+        const listActivesResponse = await investmentsServices.getAllWalletData(token, userId);
 
         const letrasUnicas = {};
         const actionsFiltered = [];
@@ -41,6 +52,8 @@ function Index() {
         setListFunds(listFundsResponse);
         setListBRDs(listBRDsResponse);
         setListQuoteAll(actionsFiltered);
+        setDisableLoading(true);
+        setListActives(listActivesResponse);
     }
 
     function filterStocksUnique(listActions) {
@@ -78,6 +91,7 @@ function Index() {
 
     return (
         <>
+            <Loading disable={disabledLoading} />
             <div className="w-full flex items-center justify-between mb-5 ">
                 <div></div>
                 {/* Colocar o checkbox para busca de cripto moeda. */}
@@ -107,68 +121,14 @@ function Index() {
                 </div>
                 <div>
                     <Link to={`/investments-wallet`} className="flex items-center justify-center border-2 border-white hover:border-gray-300 hover:text-gray-300 rounded-full text-white font-semibold w-28 h-10">
-                        Carteira <Wallet/>
+                        Carteira <Wallet />
                     </Link>
                 </div>
             </div>
             <div className="w-full grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                <div className="bg-white rounded py-5 pl-6 flex items-start shadow">
-                    <div className="text-gray-700 dark:text-gray-500">
-                        <div className="dark:text-gray-500">
-                            <CircleDollarSign />
-                        </div>
-                    </div>
-                    <div className="pl-3 pr-10 mt-1">
-                        <h3 className="font-bold font-sans leading-4 text-gray-700 text-base">Renda Fixa</h3>
-                        <div className="flex items-end mt-4">
-                            <h2 className="text-gray-800 text-2xl leading-normal font-bold">R$ 2.330,00</h2>
-                        </div>
-                        <div className="flex items-center mt-5">
-                            <div className="text-green-400">
-                                <TrendingUp />
-                            </div>
-                            <p className="text-green-400 text-xs tracking-wide font-bold leading-normal pl-1">7,2% Variação</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="bg-white rounded py-5 pl-6 flex items-start shadow">
-                    <div className="text-gray-700 ">
-                        <div className="text-gray-500">
-                            <CandlestickChart />
-                        </div>
-                    </div>
-                    <div className="pl-3 pr-10 mt-1">
-                        <h3 className="font-bold font-sans leading-4 text-gray-700 text-base">Ações</h3>
-                        <div className="flex items-end mt-4">
-                            <h2 className="text-gray-800 text-2xl leading-normal font-bold">R$ 375,80</h2>
-                        </div>
-                        <div className="flex items-center mt-5">
-                            <div className="text-green-400">
-                                <TrendingUp />
-                            </div>
-                            <p className="text-green-400 text-xs tracking-wide font-bold leading-normal pl-1">8,2% Variação</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="bg-white rounded py-5 pl-6 flex items-start shadow">
-                    <div className="text-gray-700 ">
-                        <div className="dark:text-gray-500">
-                            <Building2 />
-                        </div>
-                    </div>
-                    <div className="pl-3 pr-10 mt-1">
-                        <h3 className="font-bold font-sans leading-4 text-gray-700 text-base">FIIs</h3>
-                        <div className="flex items-end mt-4">
-                            <h2 className="text-gray-800  text-2xl leading-normal font-bold">R$ 1.642,23</h2>
-                        </div>
-                        <div className="flex items-center mt-5">
-                            <div className="text-red-400">
-                                <TrendingDown />
-                            </div>
-                            <p className="text-red-400 text-xs tracking-wide font-bold leading-normal pl-1">3,5% Variação</p>
-                        </div>
-                    </div>
-                </div>
+                {listActives.map((value) => (
+                    <GridCardStatusWallet stocks={value.stocks} totalBuyPrice={value.total} totalActive={value.count} totalSum={value.totalSum} type={value.name_type}/>
+                ))}
                 <div className="bg-white rounded py-5 pl-6 flex items-start shadow">
                     <div className="dark:text-gray-500">
                         <Bitcoin />
@@ -176,13 +136,13 @@ function Index() {
                     <div className="pl-3 pr-10 mt-1">
                         <h3 className="font-bold font-sans leading-4 text-gray-700 text-base">Criptomoedas</h3>
                         <div className="flex items-end mt-4">
-                            <h2 className="text-gray-800  text-2xl leading-normal font-bold">R$ 1200,00</h2>
+                            <h2 className="text-gray-800  text-2xl leading-normal font-bold">R$ 1200.00</h2>
                         </div>
                         <div className="flex items-center mt-5">
                             <div className="text-green-400">
                                 <TrendingUp />
                             </div>
-                            <p className="text-green-400 text-xs tracking-wide font-bold leading-normal pl-1">7,2% Variação</p>
+                            <p className="text-green-500 text-xs tracking-wide font-bold leading-normal pl-1">7,2% Variação</p>
                         </div>
                     </div>
                 </div>

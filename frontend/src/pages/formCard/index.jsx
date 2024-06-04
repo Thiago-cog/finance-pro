@@ -8,7 +8,7 @@ import { InputMoney } from "../../components/input/inputMoney";
 import accountsServices from "../../services/accountsServices";
 import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
-import Button from "../../components/button";
+import SaveButton from "../../components/button/saveButton";
 
 function FormCard() {
 
@@ -233,7 +233,7 @@ function FormCard() {
                     </div>
                     <hr className="h-[1px] bg-gray-100 my-14" />
                     <div className="flex flex-col flex-wrap items-center justify-center w-full px-7 lg:flex-row lg:justify-end md:justify-end gap-x-4 gap-y-4">
-                        <Button functionButton={handleSave} text='Salvar' className="bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-lg transform font-bold px-6 py-4 text-white lg:max-w-[144px] w-full"/>
+                        <SaveButton functionButton={handleSave} text='Salvar' className="bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-lg transform font-bold px-6 py-4 text-white lg:max-w-[144px] w-full"/>
                     </div>
                 </div>
             </div>

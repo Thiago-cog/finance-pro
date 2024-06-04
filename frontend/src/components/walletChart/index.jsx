@@ -12,7 +12,7 @@ function WalletChart({ totalSum }) {
 	async function getTotalRevenue() {
 		const decodeToken = await authServices.decodeToken(token);
 		const userId = decodeToken.userToken.id;
-		const response = await investmentsServices.getAllStocks(token, userId);
+		const response = await investmentsServices.getAllStocks(token, userId);		
 		setListAllStock(response);
 	}
 
@@ -22,7 +22,7 @@ function WalletChart({ totalSum }) {
 
 	function generateColors(numColors) {
 		const colors = [];
-		const hueStart = 100;
+		const hueStart = 80;
 		const hueIncrement = 70;
 		for (let i = 0; i < numColors; i++) {
 			const hue = hueStart + (i * hueIncrement);
