@@ -57,4 +57,11 @@ router.get('/get-all-stocks', authenticateToken, async (req, res) => {
     const result = await investmentsMaintenance.getAllStocksByUserId(userId);
     applyResult(result, res);
 });
+
+router.get('/get-rank-stocks', authenticateToken, async (req, res) => {
+    const investmentsMaintenance = new InvestmentsMaintenance(new WalletsRepository(), new InvestmentsRepository(), new TypeInvestmentsRepository());
+    const userId = parseInt(req.query.userId);
+    const result = await investmentsMaintenance.getRankStocksByUserId(userId);
+    applyResult(result, res);
+});
 module.exports = router;
