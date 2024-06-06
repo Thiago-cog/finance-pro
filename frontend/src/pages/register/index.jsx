@@ -44,7 +44,7 @@ const Register = () => {
                         alt="Finance Pro"
                     />
                     <h1 className="font-sans font-bold text-white text-6xl my-9">
-                        Sing Up
+                        Cadastre-se
                     </h1>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-5">
@@ -79,7 +79,7 @@ const Register = () => {
                         </div>
                         <div className="mb-5">
                             <label htmlFor="password" className="font-sans font-bold text-gray-300 block text-sm leading-6">
-                                Password
+                                Senha
                                 <input
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
