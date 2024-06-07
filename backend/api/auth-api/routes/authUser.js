@@ -36,4 +36,11 @@ router.put('/register', async (req, res) => {
     applyResult(result, res);
 });
 
+router.put('/update-user', authenticateToken, async (req, res) => {
+    const userAuthorization = new UserAuthorization(new UserRepository());
+    const userData = req.body;
+    const result = await userAuthorization.updateUser(userData);
+    applyResult(result, res);
+})
+
 module.exports = router;

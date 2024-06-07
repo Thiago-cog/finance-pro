@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { LogOut, Landmark, CreditCard, ArrowLeftRight, TrendingUp } from 'lucide-react';
+import { LogOut, Landmark, CreditCard, ArrowLeftRight, TrendingUp, User } from 'lucide-react';
 
 import Logo from "../../assets/2-removebg-preview.png";
 import GetCookie from "../../hooks/getCookie.jsx";
@@ -11,16 +11,17 @@ const Navbar = () => {
     const [name, setName] = useState("");
     const navigate = useNavigate();
 
-    useEffect(() => {
-        async function getUser() {
-            const token = GetCookie("user_session");
-            try {
-                const response = await authServices.decodeToken(token);
-                setName(response.userToken.fullname);
-            } catch (error) {
-                console.log(error);
-            }
+    async function getUser() {
+        const token = GetCookie("user_session");
+        try {
+            const response = await authServices.decodeToken(token);
+            setName(response.userToken.fullname);
+        } catch (error) {
+            console.log(error);
         }
+    }
+    
+    useEffect(() => {
         getUser();
     }, []);
 
@@ -50,9 +51,13 @@ const Navbar = () => {
         navigate("/investments");
     }
 
+    function profile() {
+        navigate("/profile");
+    }
+
     return (
         <div>
-            <nav className="fixed top-0 z-50 w-full bg-white dark:bg-gradient-to-r from-gray-950 to-gray-900">
+            <nav className="fixed top-0 z-50 w-full bg-white dark:bg-gradient-to-br from-gray-950 to-gray-900">
                 <div className="px-3 py-3 lg:px-5 lg:pl-3">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center justify-start">
@@ -98,12 +103,10 @@ const Navbar = () => {
                             </button>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <svg className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                                    <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
-                                </svg>
-                                <span className="flex-1 ml-3 whitespace-nowrap font-bold font-sans">Informações Pessoais</span>
-                            </a>
+                            <button onClick={profile} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                <User className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                                <span className="flex-1 ml-3 whitespace-nowrap font-bold font-sans">Perfil</span>
+                            </button>
                         </li>
                         <li>
                             <button onClick={transaction} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

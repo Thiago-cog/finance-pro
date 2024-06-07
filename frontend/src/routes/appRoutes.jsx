@@ -8,7 +8,8 @@ import Transactions from "../pages/transactions/index";
 import Cards from "../pages/cards/index";
 import Investments from "../pages/investments/index";
 import QuotaDetails from "../pages/quotaDetails/index";
-import InvestmentsWallet from "../pages/investmentsWallet/index"
+import InvestmentsWallet from "../pages/investmentsWallet/index";
+import Profile from "../pages/profile/index";
 import { PrivateRoute } from "./privateRoute";
 
 const AppRoutes = () => {
@@ -63,6 +64,13 @@ const AppRoutes = () => {
                     element={
                         <PrivateRoute redirectTo="/">
                             <InvestmentsWallet />
+                        </PrivateRoute>
+                    }
+                />
+                <Route path="/profile" 
+                    element={
+                        <PrivateRoute redirectTo="/">
+                            <Profile />
                         </PrivateRoute>
                     }
                 />
