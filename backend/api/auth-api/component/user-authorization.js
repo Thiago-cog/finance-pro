@@ -48,11 +48,12 @@ class UserAuthorization {
                 return result;
             }
 
-            const { id, fullname } = user;
+            const { id, fullname, phone } = user;
             const userToken = {
                 id,
                 fullname,
-                email
+                email,
+                phone
             }
 
             const token = jwt.sign({ userToken }, process.env.AUTH_SECRET, {
@@ -65,6 +66,7 @@ class UserAuthorization {
                     id,
                     fullname,
                     email,
+                    phone
                 },
                 token,
                 message: "Usuário logado com sucesso!"
@@ -84,12 +86,38 @@ class UserAuthorization {
         try{
             const { email, password, fullname } = userData;
             const hash = await bcrypt.hash(password, this.saltRounds);
-            this.userRepository.createUser(email, hash, fullname);
+            await this.userRepository.createUser(email, hash, fullname);
             result.status = 201;
             result.data = {
                 message: "Usuário cadastrado com sucesso!"
             }
         }catch(error){
+            result.status = 500
+            result.errors = {
+                errors: error,
+                message: "Erro inesperado aconteceu!" + error.message 
+            }
+        }
+        return result;
+    }
+
+    async updateUser(userData) {
+        let result = {};
+        
+        try {
+            const { email, password, fullname, phone, userId } = userData;
+            let hash = null;
+            
+            if(password) {
+                hash = await bcrypt.hash(password, this.saltRounds);
+            }
+
+            await this.userRepository.updateUserById(fullname, email, phone, hash, userId);
+            result.status = 201;
+            result.data = {
+                message: "Usuário alterado com sucesso!"
+            }
+        } catch(error) {
             result.status = 500
             result.errors = {
                 errors: error,
