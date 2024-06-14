@@ -198,7 +198,7 @@ class AccountsRepository {
                                 GROUP BY
                                     e.category_id,
                                     c.name_category`, [userId, currentMonth]);
-        
+
         return result.rows;
     }
 
@@ -246,7 +246,50 @@ class AccountsRepository {
                                         GROUP BY
                                             e.category_id,
                                             c.name_category`, [userId, currentMonth]);
-        
+
+        return result.rows;
+    }
+
+    async getRevenueAndExpenseByExtractsByUserId(userId) {
+        const conn = await this.databaseConnector.generateConnection();
+        const result = await conn.query(`SELECT
+                                            e."month",
+                                            e."year",
+                                            SUM(CASE WHEN e.type_movement = 1 THEN e.value ELSE 0 END) AS total_value_revenue,
+                                            SUM(CASE WHEN e.type_movement = 2 THEN e.value ELSE 0 END) AS total_value_expense
+                                        FROM
+                                            extracts e
+                                        INNER JOIN
+                                            accounts a ON
+                                            e.account_id = a.id
+                                        INNER JOIN users u ON
+                                            a.user_id = u.id
+                                        WHERE
+                                            u.id = $1
+                                        GROUP BY
+                                            e."month",
+                                            e."year";`, [userId]);
+        return result.rows;
+    }
+
+    async getExpenseByInvoicesByUserId(userId) {
+        const conn = await this.databaseConnector.generateConnection();
+        const result = await conn.query(`SELECT
+                                            SUM(i.value) AS total_value_expense,
+                                            i."month",
+                                            i."year"
+                                        FROM
+                                            invoices i
+                                        INNER JOIN cards c ON
+                                            i.card_id = c.id
+                                        LEFT JOIN accounts a ON
+                                            c.accounts_id = a.id
+                                        LEFT JOIN users u ON
+                                            a.user_id = u.id
+                                        WHERE u.id = $1
+                                            GROUP BY
+                                            i."month",
+                                            i."year";`, [userId]);
         return result.rows;
     }
 
