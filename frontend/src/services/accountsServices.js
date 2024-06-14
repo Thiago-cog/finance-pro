@@ -157,6 +157,21 @@ class AccountsService {
             return error.response;
         }
     }
+
+    async getAllRevenueExpenses(token, userId) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.get(`${BASE_URL}/get-revenue-expenses?userId=${userId}`, config);
+            return response.data;
+        }catch (error){
+            return error.response;
+        }
+    }
 }
 
 

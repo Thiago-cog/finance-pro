@@ -3,17 +3,20 @@ import { PieChart, Pie, Sector, ResponsiveContainer, Cell } from 'recharts';
 import accountsServices from "../../services/accountsServices";
 import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
+import Loading from '../loading';
 
 function Index() {
 	const [listExpenses, setListExpenses] = useState([]);
 	const [activeIndex, setActiveIndex] = useState(0);
+	const [disabledLoading, setDisableLoading] = useState(false);
 	const token = GetCookie("user_session");
 
 	async function getTotalExpenses() {
 		const decodeToken = await authServices.decodeToken(token);
 		const userId = decodeToken.userToken.id;
 		const response = await accountsServices.getTotalExpensesByUserId(token, userId);
-		setListExpenses(response.data.expenses)
+		setListExpenses(response.data.expenses);
+		setDisableLoading(true);
 	}
 
 	useEffect(() => {
@@ -90,8 +93,9 @@ function Index() {
 
 	return (
 		<>
+			<Loading disable={disabledLoading}/>
 			{data && data.length > 0 ? (
-				<ResponsiveContainer className="mr-4" width="100%" height="100%">
+				<ResponsiveContainer  width="100%" height="100%">
 					<PieChart className="rounded-lg h-full w-1/2  bg-white">
 						<text x="13%" y="30" textAnchor="middle" dominantBaseline="middle" fontSize="20">
 							Total de Despesas

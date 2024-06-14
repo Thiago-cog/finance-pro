@@ -122,7 +122,7 @@ class AccountsMaintenance {
                     returnStatusData.balanceTotal += statusData.balance;
                     returnStatusData.expenseTotal += statusData.expense;
                     returnStatusData.expenseTotal += statusData.expense_invoice;
-                }else {
+                } else {
                     returnStatusData.balanceTotal = statusData.balance;
                     returnStatusData.expenseTotal = statusData.expense;
                     returnStatusData.expenseTotal = statusData.expense_invoice;
@@ -284,6 +284,48 @@ class AccountsMaintenance {
             }
         }
 
+        return result;
+    }
+
+    async getRevenueAndExpensesByUserId(userId) {
+        let result = {};
+        try {
+            if (!userId) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Id do usuário não enviado',
+                    message: "Usuário não identificado."
+                }
+                return result;
+            }
+
+            const resultRevenueAndExpenseByExtracts = await this.accountsRepository.getRevenueAndExpenseByExtractsByUserId(userId);
+            const resultExpensesByInvoices = await this.accountsRepository.getExpenseByInvoicesByUserId(userId);
+
+            let mergedArray = [...resultRevenueAndExpenseByExtracts];
+
+            resultExpensesByInvoices.forEach(item2 => {
+                const found = mergedArray.find(item1 => item1.year === item2.year && item1.month === item2.month);
+
+                if (found) {
+                    found.total_value_expense += item2.total_value_expense;
+                } else {
+                    mergedArray.push({ ...item2 });
+                }
+            });
+
+            result.status = 200;
+            result.data = {
+                mergedArray
+            };
+
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
         return result;
     }
 

@@ -91,4 +91,10 @@ router.get('/get-total-expenses/:userId', authenticateToken, async(req, res) => 
     applyResult(result, res);
 });
 
+router.get('/get-revenue-expenses/', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    const userId = parseInt(req.query.userId);
+    const result = await accountsMaintenance.getRevenueAndExpensesByUserId(userId);
+    applyResult(result, res);
+});
 module.exports = router;

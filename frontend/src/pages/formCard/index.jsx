@@ -9,6 +9,7 @@ import accountsServices from "../../services/accountsServices";
 import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
 import SaveButton from "../../components/button/saveButton";
+import Loading from "../../components/loading";
 
 function FormCard() {
 
@@ -19,6 +20,7 @@ function FormCard() {
     const [valueInvoice, setValueInvoice] = useState("");
     const [listAccounts, setListAccounts] = useState([]);
     const [listCards, setListCards] = useState([]);
+    const [disabledLoading, setDisableLoading] = useState(false);
     const token = GetCookie("user_session");
 
 
@@ -53,8 +55,9 @@ function FormCard() {
             allCards.data.cards[indice].limit_available = String(allCards.data.cards[indice].limit_available).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
         });
         
-        setListAccounts(allAccounts.data.accounts)
-        setListCards(allCards.data.cards)
+        setListAccounts(allAccounts.data.accounts);
+        setListCards(allCards.data.cards);
+        setDisableLoading(true);
     }
     useEffect(() => {
         getAccounts();
@@ -114,9 +117,10 @@ function FormCard() {
 
     return (
         <>
+            <Loading disable={disabledLoading}/>
             <ToastContainer />
             <div className="py-4 px-2">
-                <div className="relative overflow-x-auto rounded-md">
+                <div className="relative rounded-lg max-h-96 overflow-y-auto overflow-x-auto">
                     <table className="w-full text-sm text-left text-gray-500">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                             <tr>
@@ -155,7 +159,7 @@ function FormCard() {
                         </tbody>
                     </table>
                 </div>
-                <div className="bg-white rounded-md shadow mt-7 py-7">
+                <div className="bg-white rounded-lg shadow mt-7 py-7">
                     <div className="hidden lg:block md:hidden">
                         <div className="px-7 header flex bg-white lg:justify-around md:justify-around justify-start pb-8 pt-2 border-b-[2px] border-slate-100 flex-wrap gap-x-4 ">
                             <a className="cursor-pointer">
