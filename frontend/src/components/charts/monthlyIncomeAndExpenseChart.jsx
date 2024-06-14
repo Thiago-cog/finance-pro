@@ -3,9 +3,11 @@ import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 import accountsServices from "../../services/accountsServices";
 import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
+import Loading from '../loading';
 
 function Index() {
     const [listAllRevenueExpenses, setListAllRevenueExpenses] = useState([]);
+    const [disabledLoading, setDisableLoading] = useState(false);
     const token = GetCookie("user_session");
 
     const monthNames = [
@@ -21,6 +23,7 @@ function Index() {
     
         const filledData = fillMissingMonths(response.mergedArray);
         setListAllRevenueExpenses(filledData);
+        setDisableLoading(true);
     }
     
     function fillMissingMonths(data) {
@@ -56,25 +59,28 @@ function Index() {
 
 
     return (
-        <ResponsiveContainer width="100%" height="100%">
-            <BarChart className='bg-white rounded-lg'
-                data={data}
-                margin={{
-                    top: 30,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                }}
-            >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="receita" fill="#44e57f" />
-                <Bar dataKey="despesa" fill="#ff3a3a" />
-            </BarChart>
-        </ResponsiveContainer>
+        <>
+            <Loading disable={disabledLoading}/>
+            <ResponsiveContainer width="100%" height="100%">
+                <BarChart className='bg-white rounded-lg'
+                    data={data}
+                    margin={{
+                        top: 30,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                    }}
+                >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="receita" fill="#44e57f" />
+                    <Bar dataKey="despesa" fill="#ff3a3a" />
+                </BarChart>
+            </ResponsiveContainer>
+        </>
     );
 }
 export default Index;

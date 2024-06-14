@@ -96,7 +96,8 @@ function Index() {
                 <div></div>
                 {/* Colocar o checkbox para busca de cripto moeda. */}
                 <div className="relative">
-                    <input className="w-96 py-2 rounded-lg" placeholder="Pesquisar" value={search} onChange={(ev) => setSearch(ev.target.value)} />
+                    <input className="w-96 py-2 rounded-lg" placeholder="Pesquisar" value={search} onChange={(ev) => setSearch(ev.target.value)}/>
+                    
                     <ul className="rounded-lg absolute  w-full h-12">
                         {filterSearch.map((quote) => (
                             <li className="bg-white rounded-lg w-full h-12 border" key={quote}>

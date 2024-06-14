@@ -1,6 +1,6 @@
 import axios from "axios";
-// const BASE_URL = "https://finance-pro-accounts-api.vercel.app/account";
-const BASE_URL = "http://localhost:3002/account";
+const BASE_URL = "https://finance-pro-accounts-api.vercel.app/account";
+// const BASE_URL = "http://localhost:3002/account";
 
 class AccountsService {
     async createAccount(token, name, typeaccount, balance, userId) {

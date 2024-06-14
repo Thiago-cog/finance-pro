@@ -90,14 +90,15 @@ function Index({ stock }) {
                     </button>
                 </div>
             </nav>
-            
-            <div className="w-full h-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
-                <GridCardTop text="Cotação" value={`R$ ${quoteFinancialData?.financialData?.currentPrice}`}/>
-                <GridCardTop text="Variação (dia)" value={`R$ ${parseFloat(quoteFinancialData?.regularMarketChange?.toFixed(2))} (${quoteFinancialData?.regularMarketChangePercent?.toFixed(2)}%)`}/>
-                <GridCardTop text="P/L" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.forwardPE?.toFixed(2)}/>
-                <GridCardTop text="P/VP" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.priceToBook?.toFixed(2)}/>
-                <GridCardTop text="DY" value="R$ 1200,00"/>
-            </div>
+            {disabledLoading == true && (
+                <div className="w-full h-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
+                    <GridCardTop text="Cotação" value={`R$ ${quoteFinancialData?.financialData?.currentPrice}`}/>
+                    <GridCardTop text="Variação (dia)" value={`R$ ${parseFloat(quoteFinancialData?.regularMarketChange?.toFixed(2))} (${quoteFinancialData?.regularMarketChangePercent?.toFixed(2)}%)`}/>
+                    <GridCardTop text="P/L" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.forwardPE?.toFixed(2)}/>
+                    <GridCardTop text="P/VP" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.priceToBook?.toFixed(2)}/>
+                    <GridCardTop text="DY" value="R$ 1200,00"/>
+                </div>
+            )}
             <div className="flex-row justify-center bg-white mt-24 rounded-lg">
                 <p className="text-2xl m-4 mt-8">Cotação</p>
                 <ResponsiveContainer width="100%" height={400}>
@@ -119,28 +120,29 @@ function Index({ stock }) {
                     </AreaChart>
                 </ResponsiveContainer>
             </div>
-            <div className="mt-14 bg-white rounded-lg">
-                <p className="font-sans text-2xl ml-4 mb-2">Indicadores</p>
-
-                <div className="grid grid-cols-4 gap-4 bg-white rounded-lg">
-                    <GridCardDetails text="P/L" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.forwardPE?.toFixed(2)}/>
-                    <GridCardDetails text="P/RECEITA (PSR)" value={(quoteFinancialData?.financialData?.currentPrice / quoteFinancialData?.financialData?.revenuePerShare).toFixed(2)}/>
-                    <GridCardDetails text="P/VP" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.priceToBook?.toFixed(2)}/>
-                    <GridCardDetails text="MARGEM LÍQUIDA" value={`${(quoteDefaultKeyStatistics?.defaultKeyStatistics?.profitMargins * 100).toFixed(2)}%`}/>
-                    <GridCardDetails text="MARGEM BRUTA" value={`${(quoteFinancialData?.financialData?.grossMargins * 100).toFixed(2)}%`}/>
-                    <GridCardDetails text="MARGEM EBITDA" value={`${(quoteFinancialData?.financialData?.ebitdaMargins * 100).toFixed(2)}%`}/>
-                    <GridCardDetails text="MARGEM EBIT" value={`${((quoteIncomeStatementHistory?.ebit / quoteIncomeStatementHistory?.totalRevenue) * 100).toFixed(2)}%`}/>
-                    <GridCardDetails text="EV/EBITDA" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.enterpriseToEbitda?.toFixed(2)}/>
-                    <GridCardDetails text="EV/EBIT" value={(quoteDefaultKeyStatistics?.defaultKeyStatistics?.enterpriseValue / quoteIncomeStatementHistory?.ebit).toFixed(2)}/>
-                    <GridCardDetails text="VPA" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue.toString().split('.')[1]?.length > 2 ? (quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue).toFixed(2) : quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue}/>
-                    <GridCardDetails text="LPA" value={(quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteDefaultKeyStatistics?.defaultKeyStatistics?.floatShares).toFixed(2)}/>
-                    <GridCardDetails text="ROE" value={`${((quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteBalanceSheetHistory?.totalStockholderEquity) * 100).toFixed(2)}%`}/>
-                    <GridCardDetails text="ROA" value={`${((quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteBalanceSheetHistory?.totalAssets) * 100).toFixed(2)}%`}/>
-                    <GridCardDetails text="DÍVIDA LÍQUIDA / PATRIMÔNIO" value={(quoteFinancialData?.financialData?.totalDebt / quoteBalanceSheetHistory?.totalStockholderEquity).toFixed(2)}/>
-                    <GridCardDetails text="DÍVIDA LÍQUIDA / EBIT" value={(quoteFinancialData?.financialData?.totalDebt / quoteIncomeStatementHistory?.ebit).toFixed(2)}/>
-                    <GridCardDetails text="DÍVIDA LÍQUIDA / EBITDA" value={(quoteFinancialData?.financialData?.totalDebt / quoteFinancialData?.financialData?.ebitda).toFixed(2)}/>
+            {disabledLoading == true && (
+                <div className="mt-14 bg-white rounded-lg">
+                    <p className="font-sans text-2xl ml-4 mb-2">Indicadores</p>
+                    <div className="grid grid-cols-4 gap-4 bg-white rounded-lg">
+                        <GridCardDetails text="P/L" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.forwardPE?.toFixed(2)}/>
+                        <GridCardDetails text="P/RECEITA (PSR)" value={(quoteFinancialData?.financialData?.currentPrice / quoteFinancialData?.financialData?.revenuePerShare).toFixed(2)}/>
+                        <GridCardDetails text="P/VP" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.priceToBook?.toFixed(2)}/>
+                        <GridCardDetails text="MARGEM LÍQUIDA" value={`${(quoteDefaultKeyStatistics?.defaultKeyStatistics?.profitMargins * 100).toFixed(2)}%`}/>
+                        <GridCardDetails text="MARGEM BRUTA" value={`${(quoteFinancialData?.financialData?.grossMargins * 100).toFixed(2)}%`}/>
+                        <GridCardDetails text="MARGEM EBITDA" value={`${(quoteFinancialData?.financialData?.ebitdaMargins * 100).toFixed(2)}%`}/>
+                        <GridCardDetails text="MARGEM EBIT" value={`${((quoteIncomeStatementHistory?.ebit / quoteIncomeStatementHistory?.totalRevenue) * 100).toFixed(2)}%`}/>
+                        <GridCardDetails text="EV/EBITDA" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.enterpriseToEbitda?.toFixed(2)}/>
+                        <GridCardDetails text="EV/EBIT" value={(quoteDefaultKeyStatistics?.defaultKeyStatistics?.enterpriseValue / quoteIncomeStatementHistory?.ebit).toFixed(2)}/>
+                        <GridCardDetails text="VPA" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue.toString().split('.')[1]?.length > 2 ? (quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue).toFixed(2) : quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue}/>
+                        <GridCardDetails text="LPA" value={(quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteDefaultKeyStatistics?.defaultKeyStatistics?.floatShares).toFixed(2)}/>
+                        <GridCardDetails text="ROE" value={`${((quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteBalanceSheetHistory?.totalStockholderEquity) * 100).toFixed(2)}%`}/>
+                        <GridCardDetails text="ROA" value={`${((quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteBalanceSheetHistory?.totalAssets) * 100).toFixed(2)}%`}/>
+                        <GridCardDetails text="DÍVIDA LÍQUIDA / PATRIMÔNIO" value={(quoteFinancialData?.financialData?.totalDebt / quoteBalanceSheetHistory?.totalStockholderEquity).toFixed(2)}/>
+                        <GridCardDetails text="DÍVIDA LÍQUIDA / EBIT" value={(quoteFinancialData?.financialData?.totalDebt / quoteIncomeStatementHistory?.ebit).toFixed(2)}/>
+                        <GridCardDetails text="DÍVIDA LÍQUIDA / EBITDA" value={(quoteFinancialData?.financialData?.totalDebt / quoteFinancialData?.financialData?.ebitda).toFixed(2)}/>
+                    </div>
                 </div>
-            </div>
+            )}
             <div className="flex-row justify-center bg-white mt-14 rounded-lg">
                 <p className="text-2xl m-4 mt-8">Dividendos pagos</p>
                 <ResponsiveContainer width="100%" height={400}>
