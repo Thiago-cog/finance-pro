@@ -126,7 +126,8 @@ class AccountsRepository {
                                                 INNER JOIN categories c ON
                                                     e.category_id = c.id
                                                 WHERE
-                                                    a.user_id = $1;`, [userId]);
+                                                    a.user_id = $1
+                                                ORDER BY e.date_movement DESC;`, [userId]);
 
         const resultInvoice = await conn.query(`SELECT
                                                     a.name,
@@ -148,7 +149,8 @@ class AccountsRepository {
                                                 INNER JOIN categories ct ON
                                                     i.category_id = ct.id
                                                 WHERE
-                                                    a.user_id = $1;`, [userId]);
+                                                    a.user_id = $1
+                                                ORDER BY i.date_movement DESC;`, [userId]);
         return { extracts: resultExtract.rows, invoices: resultInvoice.rows };
     }
 

@@ -81,7 +81,7 @@ function FormAccount() {
         <>
             <ToastContainer />
             <div className="py-4 px-2">
-                <div className="relative overflow-x-auto rounded-md">
+                <div className="relative rounded-lg max-h-96 overflow-y-auto overflow-x-auto">
                     <table className="w-full text-sm text-left text-gray-500">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
                             <tr>
@@ -130,7 +130,7 @@ function FormAccount() {
                         </tbody>
                     </table>
                 </div>
-                <div className="bg-white rounded-md shadow mt-7 py-7">
+                <div className="bg-white rounded-lg shadow mt-7 py-7">
                     <div className="hidden lg:block md:hidden">
                         <div className="px-7 header flex bg-white lg:justify-around md:justify-around justify-start pb-8 pt-2 border-b-[2px] border-slate-100 flex-wrap gap-x-4 ">
                             <a className="cursor-pointer">
