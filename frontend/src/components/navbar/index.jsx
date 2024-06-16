@@ -57,7 +57,7 @@ const Navbar = () => {
 
     return (
         <div>
-            <nav className="fixed top-0 z-50 w-full bg-white dark:bg-gradient-to-br from-gray-950 to-gray-900">
+            <nav className="fixed top-0 z-50 w-full bg-gradient-to-br from-gray-950 to-gray-900">
                 <div className="px-3 py-3 lg:px-5 lg:pl-3">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center justify-start">

@@ -32,14 +32,24 @@ function FormTransaction() {
     const [yearValue, setYearValue] = useState(currentYear);
     const [arrayCategories, setArrayCategories] = useState([]);
     const [disabledLoading, setDisableLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
     const token = GetCookie("user_session");
 
+    const itemsPerPage = 5;
     const arrayYears = [];
 
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = listMoviments.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(listMoviments.length / itemsPerPage);
 
     for (let i = 0; i < 5; i++) {
         arrayYears.push(currentYear - i);
     }
+
+    const handleClick = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
     const arrayMonth = [
         'Selecione',
@@ -227,32 +237,32 @@ function FormTransaction() {
 
     return (
         <>
-            <Loading disable={disabledLoading}/>
+            <Loading disable={disabledLoading} />
             <ToastContainer />
             <div className="py-4 px-2">
                 <div className="relative rounded-lg max-h-96 overflow-y-auto overflow-x-auto">
                     <table className="w-full text-sm text-left text-gray-500">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+                        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                             <tr>
                                 <th scope="col" className="px-6 py-3">
-                                    nome da conta
+                                    Nome da Conta
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    categoria
+                                    Categoria
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    tipo
+                                    Tipo
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-                                    valor
+                                    Valor
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {listMoviments.map((moviment, index) => (
+                            {currentItems.map((moviment, index) => (
                                 <tr className="bg-white border-b" key={index}>
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap font-sans flex">
-                                        {moviment.type_movement == "Despesa"
+                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap flex items-center">
+                                        {moviment.type_movement === "Despesa"
                                             ? <><ArrowDown className="w-4 h-5 text-red-600" /><DollarSign className="w-4 h-5 text-red-600" /></>
                                             : <><ArrowUp className="w-4 h-5 text-lime-600" /><DollarSign className="w-4 h-5 text-lime-600" /></>
                                         } {moviment.name}
@@ -270,6 +280,23 @@ function FormTransaction() {
                             ))}
                         </tbody>
                     </table>
+                    <div className="flex justify-center items-center px-6 py-3 bg-white border-t">
+                        <button
+                            onClick={() => handleClick(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            className={`px-4 py-2 border rounded ${currentPage === 1 ? 'text-gray-400' : 'text-gray-700'}`}
+                        >
+                            Anterior
+                        </button>
+                        <span className="mx-2">Página {currentPage} de {totalPages}</span>
+                        <button
+                            onClick={() => handleClick(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                            className={`px-4 py-2 border rounded ${currentPage === totalPages ? 'text-gray-400' : 'text-gray-700'}`}
+                        >
+                            Próxima
+                        </button>
+                    </div>
                 </div>
                 <div className="bg-white rounded-lg shadow mt-7 py-7">
                     <div className="hidden lg:block md:hidden">

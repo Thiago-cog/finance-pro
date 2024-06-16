@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Bitcoin, TrendingUp, Wallet } from 'lucide-react';
+import { Bitcoin, Building2, CandlestickChart, CircleDollarSign, TrendingUp, Wallet } from 'lucide-react';
 import investmentsServices from "../../services/investmentsServices";
 import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
@@ -96,8 +96,8 @@ function Index() {
                 <div></div>
                 {/* Colocar o checkbox para busca de cripto moeda. */}
                 <div className="relative">
-                    <input className="w-96 py-2 rounded-lg" placeholder="Pesquisar" value={search} onChange={(ev) => setSearch(ev.target.value)}/>
-                    
+                    <input className="w-96 py-2 rounded-lg" placeholder="Pesquisar" value={search} onChange={(ev) => setSearch(ev.target.value)} />
+
                     <ul className="rounded-lg absolute  w-full h-12">
                         {filterSearch.map((quote) => (
                             <li className="bg-white rounded-lg w-full h-12 border" key={quote}>
@@ -127,10 +127,91 @@ function Index() {
                 </div>
             </div>
             <div className="w-full grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {listActives.map((value) => (
-                    <GridCardStatusWallet stocks={value.stocks} totalBuyPrice={value.total} totalActive={value.count} totalSum={value.totalSum} type={value.name_type} />
-                ))}
-                {disabledLoading == true && (
+                {listActives.length > 0 ? (
+                    listActives.map((value) => (
+                        <GridCardStatusWallet
+                            key={value.name_type}
+                            stocks={value.stocks}
+                            totalBuyPrice={value.total}
+                            totalActive={value.count}
+                            totalSum={value.totalSum}
+                            type={value.name_type}
+                        />
+                    ))
+                ) : (
+                    <>
+                        <div className="bg-white rounded py-5 pl-6 flex items-start shadow">
+                            <div className="dark:text-gray-500">
+                                <CandlestickChart />
+                            </div>
+                            <div className="pl-3 pr-10 mt-1">
+                                <h3 className="font-bold font-sans leading-4 text-gray-700 text-base">Ações</h3>
+                                <div className="flex items-end mt-4">
+                                    <h2 className="text-gray-800 text-2xl leading-normal font-bold">R$ 0.00</h2>
+                                </div>
+                                <div className="flex items-center mt-5">
+                                    <div className="text-green-400">
+                                        <TrendingUp />
+                                    </div>
+                                    <p className="text-green-500 text-xs tracking-wide font-bold leading-normal pl-1">0,0% Variação</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bg-white rounded py-5 pl-6 flex items-start shadow">
+                            <div className="dark:text-gray-500">
+                                <Building2 />
+                            </div>
+                            <div className="pl-3 pr-10 mt-1">
+                                <h3 className="font-bold font-sans leading-4 text-gray-700 text-base">FIIs</h3>
+                                <div className="flex items-end mt-4">
+                                    <h2 className="text-gray-800 text-2xl leading-normal font-bold">R$ 0.00</h2>
+                                </div>
+                                <div className="flex items-center mt-5">
+                                    <div className="text-green-400">
+                                        <TrendingUp />
+                                    </div>
+                                    <p className="text-green-500 text-xs tracking-wide font-bold leading-normal pl-1">0,0% Variação</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bg-white rounded py-5 pl-6 flex items-start shadow">
+                            <div className="dark:text-gray-500">
+                                <CircleDollarSign />
+                            </div>
+                            <div className="pl-3 pr-10 mt-1">
+                                <h3 className="font-bold font-sans leading-4 text-gray-700 text-base">BRDs</h3>
+                                <div className="flex items-end mt-4">
+                                    <h2 className="text-gray-800 text-2xl leading-normal font-bold">R$ 0.00</h2>
+                                </div>
+                                <div className="flex items-center mt-5">
+                                    <div className="text-green-400">
+                                        <TrendingUp />
+                                    </div>
+                                    <p className="text-green-500 text-xs tracking-wide font-bold leading-normal pl-1">0,0% Variação</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bg-white rounded py-5 pl-6 flex items-start shadow">
+                            <div className="dark:text-gray-500">
+                                <Bitcoin />
+                            </div>
+                            <div className="pl-3 pr-10 mt-1">
+                                <h3 className="font-bold font-sans leading-4 text-gray-700 text-base">Criptomoedas</h3>
+                                <div className="flex items-end mt-4">
+                                    <h2 className="text-gray-800 text-2xl leading-normal font-bold">R$ 0.00</h2>
+                                </div>
+                                <div className="flex items-center mt-5">
+                                    <div className="text-green-400">
+                                        <TrendingUp />
+                                    </div>
+                                    <p className="text-green-500 text-xs tracking-wide font-bold leading-normal pl-1">0,0% Variação</p>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
+
+                {listActives.length > 0 && disabledLoading && (
                     <div className="bg-white rounded py-5 pl-6 flex items-start shadow">
                         <div className="dark:text-gray-500">
                             <Bitcoin />
@@ -138,7 +219,7 @@ function Index() {
                         <div className="pl-3 pr-10 mt-1">
                             <h3 className="font-bold font-sans leading-4 text-gray-700 text-base">Criptomoedas</h3>
                             <div className="flex items-end mt-4">
-                                <h2 className="text-gray-800  text-2xl leading-normal font-bold">R$ 1200.00</h2>
+                                <h2 className="text-gray-800 text-2xl leading-normal font-bold">R$ 1200.00</h2>
                             </div>
                             <div className="flex items-center mt-5">
                                 <div className="text-green-400">

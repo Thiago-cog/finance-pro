@@ -1,6 +1,6 @@
 import axios from "axios";
-const BASE_URL = "https://finance-pro-auth-api.vercel.app/user";
-// const BASE_URL = "http://localhost:3001/user";
+// const BASE_URL = "https://finance-pro-auth-api.vercel.app/user";
+const BASE_URL = "http://localhost:3001/user";
 class AuthService {
     async decodeToken(token) {
         const config = {
@@ -27,7 +27,7 @@ class AuthService {
 
     async registerUser(email, password, fullname){
         try {
-            const response = await axios.put(`${BASE_URL}/register`, { email, password, fullname });
+            const response = await axios.post(`${BASE_URL}/register`, { email, password, fullname });
             return response;
         } catch (error) {
             return error.response;
@@ -42,7 +42,52 @@ class AuthService {
         }
         const response = await axios.put(`${BASE_URL}/update-user`, { email, password, fullname, phone, userId }, config);
         return response.data;
+    }
+
+    async getEmailByTokenConfirm(token) {
+        try {
+            const response = await axios.get(`${BASE_URL}/get-email-token?token=${token}`);
+            return response.data;
+        } catch (error) {
+            return error.response;
+        }
     } 
+
+    async confirmEmail(token) {
+        try {
+            const response = await axios.post(`${BASE_URL}/confirm-email-token?token=${token}`);
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
+
+    async forgotPassword(email) {
+        try {
+            const response = await axios.post(`${BASE_URL}/forgot-password?email=${email}`);
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
+
+    async validateToken(passwordRefreshToken) {
+        try {
+            const response = await axios.get(`${BASE_URL}/validate-token?token=${passwordRefreshToken}`);
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
+
+    async resetPassword(password, token) {
+        try {
+            const response = await axios.post(`${BASE_URL}/reset-password`, {password, token});
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
 }
 
 export default new AuthService();

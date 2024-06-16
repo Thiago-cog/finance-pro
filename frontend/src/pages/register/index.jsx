@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from 'lucide-react';
 import authServices from "../../services/authServices";
 import Logo from "../../assets/2-removebg-preview.png";
 import RegisterImage from "../../assets/Login-rafiki.svg";
@@ -11,6 +12,7 @@ const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [fullname, setName] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -37,7 +39,7 @@ const Register = () => {
         <div className=" w-full h-screen flex bg-gradient-to-tr from-gray-950 to-gray-900">
             <ToastContainer />
             <div className="flex justify-center items-center h-full basis-5/12">
-                <div className="w-3/6"> 
+                <div className="w-3/6">
                     <img
                         className="mx-auto h-24 w-24"
                         src={Logo}
@@ -78,19 +80,28 @@ const Register = () => {
                             </label>
                         </div>
                         <div className="mb-5">
-                            <label htmlFor="password" className="font-sans font-bold text-gray-300 block text-sm leading-6">
+                            <label htmlFor="confirmPassword" className="block text-sm font-bold text-gray-300">
                                 Senha
-                                <input
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoComplete="current-password"
-                                required
-                                className="bg-gray-800 block w-full rounded-lg border-0 py-3 text-white ring-inset"
-                                />
                             </label>
+                            <div className="relative">
+                                <input
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    id="password"
+                                    name="password"
+                                    type={showPassword ? "text" : "password"}
+                                    autoComplete="current-password"
+                                    required
+                                    className="bg-gray-800 block w-full rounded-lg border-0 py-3 text-white ring-inset"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute inset-y-0 right-0 flex items-center pr-3"
+                                >
+                                    {showPassword ? <EyeOff size={20} color="white" /> : <Eye size={20} color="white" />}
+                                </button>
+                            </div>
                         </div>
                         <div>
                             <button
