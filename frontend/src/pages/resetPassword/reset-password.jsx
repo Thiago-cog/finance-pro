@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import authServices from "../../services/authServices";
 import SaveButton from "../../components/button/saveButton";
 import { ToastContainer, toast } from 'react-toastify';
@@ -12,11 +12,64 @@ const ResetPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [token, setToken] = useState(null);
+    const location = useLocation();
+
+    async function validateToken(passwordRefreshToken) {
+        const validate = await authServices.validateToken(passwordRefreshToken);
+        if (validate.status === 400) {
+            toast.warn(`${validate.data.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+        }else if (validate.status === 401) {
+            toast.warn(`${validate.data.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+            return navigate("/");
+        }
+
+        setToken(passwordRefreshToken);
+    }
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const passwordRefreshToken = params.get('token');
+        validateToken(passwordRefreshToken);
+    }, [location]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const result = await authServices.resetPassword(email);
-
+        
+        if (password !== confirmPassword) {
+            toast.warn('As senhas não coincidem. Por favor, tente novamente.', {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+            return;
+        }
+        
+        const result = await authServices.resetPassword(password, token);
+        
         if (result.status === 400) {
             toast.warn(`${result.data.message}`, {
                 position: "top-center",
@@ -58,18 +111,20 @@ const ResetPassword = () => {
     };
 
     return (
-        <div className="w-full h-screen flex bg-gradient-to-br from-gray-950 to-gray-900 justify-center items-center pb-64">
+        <div className="w-full h-screen flex bg-gradient-to-br from-gray-950 to-gray-900 justify-center items-center">
             <ToastContainer />
-            <div className="text-center">
-                <h1 className="font-sans font-bold text-white text-6xl my-6">
+            <div className="w-full max-w-md p-8 space-y-8 bg-gray-800 rounded-lg shadow-md">
+                <h1 className="text-center font-sans font-bold text-white text-4xl my-6">
                     Finance Pro
                     <span className="inline-block w-3 h-3 bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-full ml-2"></span>
                 </h1>
-                <h3 className="text-white text-2xl font-bold mb-20">Recuperação de senha</h3>
-                <div className="mb-5 font-sans font-bold text-gray-300">
-                    <label htmlFor="password" className="font-sans font-bold text-gray-300 block text-sm leading-6">
-                        Nova Senha
-                        <div className="relative">
+                <h3 className="text-center text-white text-xl font-semibold mb-4">Recuperação de senha</h3>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+                            Nova Senha
+                        </label>
+                        <div className="relative mt-1">
                             <input
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -78,7 +133,7 @@ const ResetPassword = () => {
                                 type={showPassword ? "text" : "password"}
                                 autoComplete="current-password"
                                 required
-                                className="bg-gray-800 block w-full rounded-lg border-0 py-3 text-white ring-inset"
+                                className="w-full px-3 py-2 bg-gray-700 text-white rounded-lg focus:outline-none"
                             />
                             <button
                                 type="button"
@@ -88,12 +143,12 @@ const ResetPassword = () => {
                                 {showPassword ? <EyeOff size={20} color="white" /> : <Eye size={20} color="white" />}
                             </button>
                         </div>
-                    </label>
-                </div>
-                <div className="mb-5 font-sans font-bold text-gray-300">
-                    <label htmlFor="confirmPassword" className="font-sans font-bold text-gray-300 block text-sm leading-6">
-                        Confirmar Senha
-                        <div className="relative">
+                    </div>
+                    <div>
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300">
+                            Confirmar Senha
+                        </label>
+                        <div className="relative mt-1">
                             <input
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -102,7 +157,7 @@ const ResetPassword = () => {
                                 type={showConfirmPassword ? "text" : "password"}
                                 autoComplete="current-password"
                                 required
-                                className="bg-gray-800 block w-full rounded-lg border-0 py-3 text-white ring-inset"
+                                className="w-full px-3 py-2 bg-gray-700 text-white rounded-lg focus:outline-none"
                             />
                             <button
                                 type="button"
@@ -112,9 +167,11 @@ const ResetPassword = () => {
                                 {showConfirmPassword ? <EyeOff size={20} color="white" /> : <Eye size={20} color="white" />}
                             </button>
                         </div>
-                    </label>
-                </div>
-                <SaveButton text="Salvar" functionButton={handleSubmit} />
+                    </div>
+                    <div>
+                        <SaveButton text="Salvar" functionButton={handleSubmit} />
+                    </div>
+                </form>
             </div>
         </div>
     );

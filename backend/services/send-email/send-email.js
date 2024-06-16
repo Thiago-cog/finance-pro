@@ -42,7 +42,7 @@ class SendEmail {
         const mailOptions = {
             from: 'no.reply.financepro24@gmail.com',
             to: to,
-            subject: 'Bem-vindo à FinancePro - Confirme seu email',
+            subject: 'Recuperação de senha',
             html: htmlContent
         };
 

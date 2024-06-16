@@ -63,17 +63,21 @@ const ConfirmEmail = () => {
     }
 
     return (
-        <div className="w-full h-screen flex bg-gradient-to-br from-gray-950 to-gray-900 justify-center items-center pb-64">
+        <div className="w-full h-screen flex bg-gradient-to-br from-gray-950 to-gray-900 justify-center items-center">
             <ToastContainer />
-            <div className="text-center">
-                <h1 className="font-sans font-bold text-white text-6xl my-6">
+            <div className="w-full max-w-md p-8 space-y-8 bg-gray-800 rounded-lg shadow-md">
+                <h1 className="text-center font-sans font-bold text-white text-4xl my-6">
                     Finance Pro
                     <span className="inline-block w-3 h-3 bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-full ml-2"></span>
                 </h1>
-                <h2 className="font-sans font-bold text-white text-3xl mb-12">{userEmail}</h2>
-                <SaveButton text="Confirmar Email" functionButton={handleSubmit} />
+                <h2 className="text-center text-white text-xl font-semibold mb-4">Confirmação de Email</h2>
+                <p className="text-center text-white text-sm mb-6">{userEmail}</p>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <SaveButton text="Confirmar Email" functionButton={handleSubmit} />
+                </form>
             </div>
         </div>
     )
 }
+
 export default ConfirmEmail;

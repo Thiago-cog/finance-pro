@@ -70,6 +70,24 @@ class AuthService {
             return error.response;
         }
     }
+
+    async validateToken(passwordRefreshToken) {
+        try {
+            const response = await axios.get(`${BASE_URL}/validate-token?token=${passwordRefreshToken}`);
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
+
+    async resetPassword(password, token) {
+        try {
+            const response = await axios.post(`${BASE_URL}/reset-password`, {password, token});
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
 }
 
 export default new AuthService();

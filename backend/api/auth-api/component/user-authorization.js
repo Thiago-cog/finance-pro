@@ -245,6 +245,70 @@ class UserAuthorization {
         }
         return result;
     }
+
+    async validateToken(token) {
+        let result = {};
+        try {
+
+            if (!token) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Token não informada ',
+                    message: "Usuário não identificado."
+                }
+                return result;
+            }
+
+            const resultValidateToken = await this.userRepository.validateExpiresToken(token);
+            const now = new Date();
+
+            if (now > resultValidateToken?.password_reset_expires) {
+                result.status = 401;
+                result.errors = {
+                    errors: 'Token expirado',
+                    message: "Token expirado."
+                }
+                await this.userRepository.removeInvalidToken(token);
+                return result;   
+            }
+            
+            result.status = 200;
+            result.data = {
+                message: 'Token válido'
+            }
+
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+        
+        return result;
+    }
+
+    async resetPassaword(resetBody) {
+        let result = {};
+        try {
+            const { password, token } = resetBody;
+            const hash = await bcrypt.hash(password, this.saltRounds);
+            await this.userRepository.updatePassword(hash, token);
+
+            result.status = 200;
+            result.data = {
+                message: 'Senha Alterada com sucesso.'
+            }
+
+        } catch(error) {
+            result.status = 500
+            result.errors = {
+                errors: error,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+        return result;
+    }
 }
 
 module.exports = UserAuthorization;

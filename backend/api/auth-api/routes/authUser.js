@@ -64,4 +64,19 @@ router.post('/forgot-password', async (req, res) => {
     applyResult(result, res);
 });
 
+router.get('/validate-token', async (req, res) => {
+    const userAuthorization = new UserAuthorization(new UserRepository());
+    const token = req.query.token;
+    const result = await userAuthorization.validateToken(token);
+    applyResult(result, res);
+});
+
+router.post('/reset-password', async (req, res) => {
+    const userAuthorization = new UserAuthorization(new UserRepository());
+    const resetBody = req.body;
+    const result = await userAuthorization.resetPassaword(resetBody);
+    applyResult(result, res);
+});
+
+
 module.exports = router;

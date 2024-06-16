@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { Eye, EyeOff } from 'lucide-react';
 import authServices from "../../services/authServices";
 import FinanceImage from '../../assets/Finance-pana.svg'
 import SetCookie from "../../hooks/setCookie.jsx";
@@ -10,7 +10,8 @@ import GetCookie from "../../hooks/getCookie.jsx";
 
 const Login = () => {
     const [email, setEmail] = useState("");
-    const [pass, setPass] = useState("");
+    const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const isUserAuthorized = GetCookie("user_session");
 
@@ -22,10 +23,10 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        const resultLogin = await authServices.login(email, pass);
 
-        if(resultLogin.status === 401){
+        const resultLogin = await authServices.login(email, password);
+
+        if (resultLogin.status === 401) {
             toast.warn(`${resultLogin.data.message}`, {
                 position: "top-center",
                 autoClose: 2500,
@@ -36,7 +37,7 @@ const Login = () => {
                 progress: undefined,
                 theme: "dark",
             });
-        }else if(resultLogin.status === 500){
+        } else if (resultLogin.status === 500) {
             toast.error('Internal Server Error!', {
                 position: "top-center",
                 autoClose: 2500,
@@ -47,13 +48,13 @@ const Login = () => {
                 progress: undefined,
                 theme: "dark",
             });
-        } 
-        
-        if(resultLogin.data.token) {
+        }
+
+        if (resultLogin.data.token) {
             SetCookie('user_session', resultLogin.data.token);
             return navigate("/dashboard");
         }
-        
+
     }
 
     return (
@@ -76,8 +77,25 @@ const Login = () => {
                         <div className="mb-5 font-sans font-bold text-gray-300">
                             <label>
                                 Senha
-                                <input className="font-sans w-full p-3 font-bold text-base text-white bg-gray-800 rounded-lg ring-inset border-0" value={pass} onChange={(e) => setPass(e.target.value)} type="password" />
-                            </label>
+                                <div className="relative">
+                                    <input
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        id="password"
+                                        name="password"
+                                        type={showPassword ? "text" : "password"}
+                                        autoComplete="current-password"
+                                        required
+                                        className="bg-gray-800 block w-full rounded-lg border-0 py-3 text-white ring-inset"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute inset-y-0 right-0 flex items-center pr-3"
+                                    >
+                                        {showPassword ? <EyeOff size={20} color="white" /> : <Eye size={20} color="white" />}
+                                    </button>
+                                </div>                            </label>
                         </div>
 
                         <div className="mb-5">
