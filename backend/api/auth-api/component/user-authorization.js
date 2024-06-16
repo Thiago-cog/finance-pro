@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const SendEmail = require('../../../services/send-email/send-email');
+const SendEmail = require('../send-email/send-email');
 
 
 class UserAuthorization {
