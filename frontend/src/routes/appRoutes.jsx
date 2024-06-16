@@ -11,6 +11,7 @@ import QuotaDetails from "../pages/quotaDetails/index";
 import InvestmentsWallet from "../pages/investmentsWallet/index";
 import Profile from "../pages/profile/index";
 import { PrivateRoute } from "./privateRoute";
+import ConfirmEmail from "../pages/confirmEmail/confirmEmail";
 
 const AppRoutes = () => {
     return (
@@ -18,6 +19,7 @@ const AppRoutes = () => {
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/confirm-email" element={<ConfirmEmail/>} />
                 <Route path="/dashboard" 
                     element={
                         <PrivateRoute redirectTo="/">

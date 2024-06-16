@@ -29,7 +29,7 @@ router.get('/decode-token', authenticateToken, async (req, res) => {
     applyResult(result, res);
 });
 
-router.put('/register', async (req, res) => {
+router.post('/register', async (req, res) => {
     const userAuthorization = new UserAuthorization(new UserRepository());
     const userData = req.body;
     const result = await userAuthorization.register(userData);
@@ -41,6 +41,20 @@ router.put('/update-user', authenticateToken, async (req, res) => {
     const userData = req.body;
     const result = await userAuthorization.updateUser(userData);
     applyResult(result, res);
-})
+});
+
+router.post('/confirm-email-token', async (req, res) => {
+    const userAuthorization = new UserAuthorization(new UserRepository());
+    const token = req.query.token;
+    const result = await userAuthorization.confirmEmail(token);
+    applyResult(result, res);
+});
+
+router.get('/get-email-token', async (req, res) => {
+    const userAuthorization = new UserAuthorization(new UserRepository());
+    const token = req.query.token;
+    const result = await userAuthorization.getEmailByToken(token);
+    applyResult(result, res);
+});
 
 module.exports = router;

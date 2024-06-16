@@ -1,21 +1,24 @@
-const bcrypt =  require('bcrypt');
-const jwt =  require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const SendEmail = require('../../../services/send-email/send-email');
 
 
 class UserAuthorization {
     constructor(userRepository) {
         this.userRepository = userRepository;
         this.saltRounds = 10;
+        this.sendEmail = new SendEmail();
     }
 
     async decodeToken(token) {
         let result = {}
-        try{
-            if(!token) {
+        try {
+            if (!token) {
                 result.status = 403
                 result.errors = {
                     errors: 'Token não enviado',
-                    message: "Token não identificado." 
+                    message: "Token não identificado."
                 }
                 return result;
             }
@@ -23,11 +26,11 @@ class UserAuthorization {
             const decoded = jwt.verify(token, process.env.AUTH_SECRET);
             result.status = 200;
             result.data = decoded;
-        }catch(error){
+        } catch (error) {
             result.status = 500
             result.errors = {
                 errors: error.message,
-                message: "Erro inesperado aconteceu!" + error.message 
+                message: "Erro inesperado aconteceu!" + error.message
             }
         }
         return result;
@@ -35,16 +38,16 @@ class UserAuthorization {
 
     async login(userData) {
         let result = {}
-        try{
+        try {
             const { email, password } = userData;
             const user = await this.userRepository.getUserByEmail(email);
             const passwordMatch = await bcrypt.compare(password, user.password);
 
-            if(!passwordMatch || email !== user.email) {
+            if (!passwordMatch || email !== user.email) {
                 result.status = 401,
-                result.errors = {
-                    message: "Email ou senha incorreto."
-                }
+                    result.errors = {
+                        message: "Email ou senha incorreto."
+                    }
                 return result;
             }
 
@@ -71,31 +74,39 @@ class UserAuthorization {
                 token,
                 message: "Usuário logado com sucesso!"
             }
-        }catch(error){
+        } catch (error) {
             result.status = 500
             result.errors = {
                 errors: error.message,
-                message: "Erro inesperado aconteceu!" + error.message 
+                message: "Erro inesperado aconteceu!" + error.message
             }
         }
         return result;
     }
-    
+
     async register(userData) {
         let result = {}
-        try{
+        try {
             const { email, password, fullname } = userData;
             const hash = await bcrypt.hash(password, this.saltRounds);
-            await this.userRepository.createUser(email, hash, fullname);
+            
+            const userId = await this.userRepository.createUser(email, hash, fullname);
+
+            const confirmToken = crypto.randomBytes(20).toString('hex');
+
+            await this.userRepository.setTokenByUserId(confirmToken, userId);
+            
+            this.sendEmail.sendAccountCreation(email, fullname, confirmToken);
+            
             result.status = 201;
             result.data = {
                 message: "Usuário cadastrado com sucesso!"
             }
-        }catch(error){
+        } catch (error) {
             result.status = 500
             result.errors = {
                 errors: error,
-                message: "Erro inesperado aconteceu!" + error.message 
+                message: "Erro inesperado aconteceu!" + error.message
             }
         }
         return result;
@@ -103,12 +114,12 @@ class UserAuthorization {
 
     async updateUser(userData) {
         let result = {};
-        
+
         try {
             const { email, password, fullname, phone, userId } = userData;
             let hash = null;
-            
-            if(password) {
+
+            if (password) {
                 hash = await bcrypt.hash(password, this.saltRounds);
             }
 
@@ -117,13 +128,75 @@ class UserAuthorization {
             result.data = {
                 message: "Usuário alterado com sucesso!"
             }
-        } catch(error) {
+        } catch (error) {
             result.status = 500
             result.errors = {
                 errors: error,
-                message: "Erro inesperado aconteceu!" + error.message 
+                message: "Erro inesperado aconteceu!" + error.message
             }
         }
+        return result;
+    }
+
+    async confirmEmail(token) {
+        let result = {};
+        try {
+
+            if (!token) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Token não informada ',
+                    message: "Usuário não identificado."
+                }
+                return result;
+            }
+
+            await this.userRepository.confirmUserEmail(token);
+
+            result.status = 200;
+            result.data = {
+                message: "Email confirmado com sucesso!"
+            }
+
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+
+        return result;
+    }
+
+    async getEmailByToken(token) {
+        let result = {};
+        try {
+
+            if (!token) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Token não informada ',
+                    message: "Usuário não identificado."
+                }
+                return result;
+            }
+
+            const resultUser = await this.userRepository.getEmailByTokenConfirmEmail(token);
+
+            result.status = 200;
+            result.data = {
+                userEmail: resultUser
+            }
+
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+
         return result;
     }
 }

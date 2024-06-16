@@ -13,7 +13,9 @@ class UserRepository {
 
     async createUser(email, hash, fullname){
         const conn = await this.databaseConnector.generateConnection();
-        await conn.query("INSERT INTO users(id, email, password, fullname) VALUES(nextval('seq_users_id'), $1, $2, $3)", [email, hash, fullname]);
+        const result = await conn.query("INSERT INTO users(id, email, password, fullname) VALUES(nextval('seq_users_id'), $1, $2, $3) RETURNING id", [email, hash, fullname]);
+
+        return result.rows[0].id;
     }
 
     async updateUserById(fullname, email, phone, hash, userId) {
@@ -23,6 +25,23 @@ class UserRepository {
         if(hash != null) {
             await conn.query("UPDATE users SET password = $1 WHERE id = $2;", [hash, userId]);
         }
+    }
+
+    async confirmUserEmail(token) {
+        const conn = await this.databaseConnector.generateConnection();
+        await conn.query("UPDATE users SET confirmed_email = true, confirm_email_token = null WHERE confirm_email_token = $1", [token]);
+    }
+
+    async getEmailByTokenConfirmEmail(token) {
+        const conn = await this.databaseConnector.generateConnection();
+        const result = await conn.query("SELECT email FROM users WHERE confirm_email_token = $1", [token]);
+        
+        return result.rows;
+    }
+
+    async setTokenByUserId(token, userId) {
+        const conn = await this.databaseConnector.generateConnection();
+        await conn.query("UPDATE users SET confirm_email_token = $1 WHERE id = $2", [token, userId]);
     }
 }
 

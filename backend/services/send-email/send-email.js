@@ -1,0 +1,76 @@
+require('dotenv').config();
+const nodemailer = require('nodemailer');
+const fs = require('fs');
+const path = require('path');
+
+class SendEmail {
+   
+    constructor() {
+        const transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            secure: false,
+            auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS
+            }
+        });
+
+        this.transporter = transporter;
+    }
+
+    sendAccountCreation(to, fullName, confirmToken) {
+        const emailTemplate = fs.readFileSync(path.join(__dirname, 'accountCreationTemplate.html'), 'utf8');
+        const confirmationLink = `http://localhost:3000/confirm-email?token=${confirmToken}`;
+        const htmlContent = emailTemplate.replace('[Nome do Usuário]', fullName).replace('[Link de Confirmação]', confirmationLink).replace(/\[Nome da Empresa\]/g, 'Finance Pro');
+
+        const mailOptions = {
+            from: 'no.reply.financepro24@gmail.com',
+            to: to,
+            subject: 'Bem-vindo à FinancePro - Confirme seu email',
+            html: htmlContent
+        };
+
+        this.#sendEmail(mailOptions);
+    }
+
+    #sendEmail(mailOptions) {
+        this.transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                throw new Error(error);
+            }
+            console.log('Email enviado: ' + info.response);
+        });
+    }
+}
+
+module.exports = SendEmail;
+
+
+// const emailTemplate = fs.readFileSync(path.join(__dirname, 'accountCreationTemplate.html'), 'utf8');
+
+// const sendEmail = (to, subject, html) => {
+//     const mailOptions = {
+//         from: 'no.reply.financepro24@gmail.com',
+//         to: to,
+//         subject: subject,
+//         html: html
+//     };
+
+//     transporter.sendMail(mailOptions, (error, info) => {
+//         if (error) {
+//             return console.log(error);
+//         }
+//         console.log('Email enviado: ' + info.response);
+//     });
+// };
+
+// const userName = 'Thiago';
+// const confirmationLink = 'https://example.com/confirm?token=12345';
+// const htmlContent = emailTemplate.replace('[Nome do Usuário]', userName).replace('[Link de Confirmação]', confirmationLink).replace(/\[Nome da Empresa\]/g, 'Finance Pro');
+
+// sendEmail(
+//     'deoliveirasantosthiago4@gmail.com',
+//     ,
+//     htmlContent
+// );
