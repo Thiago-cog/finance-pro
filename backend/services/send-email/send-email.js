@@ -21,7 +21,7 @@ class SendEmail {
 
     sendAccountCreation(to, fullName, confirmToken) {
         const emailTemplate = fs.readFileSync(path.join(__dirname, 'templates', 'accountCreationTemplate.html'), 'utf8');
-        const confirmationLink = `http://localhost:3000/confirm-email?token=${confirmToken}`;
+        const confirmationLink = `https://finance-pro-sepia.vercel.app/confirm-email?token=${confirmToken}`;
         const htmlContent = emailTemplate.replace('[Nome do Usuário]', fullName).replace('[Link de Confirmação]', confirmationLink).replace(/\[Nome da Empresa\]/g, 'Finance Pro');
 
         const mailOptions = {
@@ -36,7 +36,7 @@ class SendEmail {
 
     sendForgotPassword(to, forgotPasswordToken) {
         const emailTemplate = fs.readFileSync(path.join(__dirname, 'templates', 'forgotPassword.html'), 'utf8');
-        const forgotPasswordLink = `http://localhost:3000/reset-password?token=${forgotPasswordToken}`;
+        const forgotPasswordLink = `https://finance-pro-sepia.vercel.app/reset-password?token=${forgotPasswordToken}`;
         const htmlContent = emailTemplate.replace('[Email do Usuário]', to).replace('[Link de Recuperação]', forgotPasswordLink).replace(/\[Nome da Empresa\]/g, 'Finance Pro');
 
         const mailOptions = {
