@@ -80,15 +80,11 @@ const Login = () => {
                             </label>
                         </div>
 
-                        {/* <div className="mb-5">
-                            <label className="text-white mr-2">
-                                <input type="checkbox" className="cursor-pointer rounded-md" /> Remember me
-                            </label>
-                            <a href="#" className="text-sky-500 hover:text-sky-400">Esqueceu a Senha?</a>
-                        </div> */}
-
                         <div className="mb-5">
                             <input className="font-sans text-lg rounded-lg bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 text-white font-bold w-full p-2.5 cursor-pointer" type="submit" value="Entrar" />
+                        </div>
+                        <div className="mb-5">
+                            <p className="text-white font-bold font-sans">Esqueceu a Senha? <Link to="/forgot-password" className="font-sans font-bold text-sky-500 hover:text-sky-400">Clique aqui</Link></p>
                         </div>
 
                         <div className="mb-5 w-full">

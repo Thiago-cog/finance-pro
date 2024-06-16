@@ -43,6 +43,18 @@ class UserRepository {
         const conn = await this.databaseConnector.generateConnection();
         await conn.query("UPDATE users SET confirm_email_token = $1 WHERE id = $2", [token, userId]);
     }
+
+    async findUserByEmail(email) {
+        const conn = await this.databaseConnector.generateConnection();
+        const result = await conn.query("SELECT * FROM users WHERE email = $1", [email]);
+        
+        return result.rows[0];
+    }
+
+    async setTokenAndExpiresByEmail(forgotPasswordToken, now, email) {
+        const conn = await this.databaseConnector.generateConnection();
+        await conn.query("UPDATE users SET password_reset_token = $1, password_reset_expires = $2 WHERE email = $3", [forgotPasswordToken, now, email]);
+    }
 }
 
 module.exports = UserRepository;

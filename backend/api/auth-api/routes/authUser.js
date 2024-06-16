@@ -57,4 +57,11 @@ router.get('/get-email-token', async (req, res) => {
     applyResult(result, res);
 });
 
+router.post('/forgot-password', async (req, res) => {
+    const userAuthorization = new UserAuthorization(new UserRepository());
+    const email = req.query.email;
+    const result = await userAuthorization.forgotPassword(email);
+    applyResult(result, res);
+});
+
 module.exports = router;

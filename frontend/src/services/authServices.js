@@ -60,7 +60,16 @@ class AuthService {
         } catch (error) {
             return error.response;
         }
-    } 
+    }
+
+    async forgotPassword(email) {
+        try {
+            const response = await axios.post(`${BASE_URL}/forgot-password?email=${email}`);
+            return response;
+        } catch (error) {
+            return error.response;
+        }
+    }
 }
 
 export default new AuthService();

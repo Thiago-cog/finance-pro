@@ -30,10 +30,6 @@ const ConfirmEmail = () => {
         setToken(confirmToken);
     }, [location]);
 
-    useEffect(() => {
-
-    });
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 

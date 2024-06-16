@@ -199,6 +199,52 @@ class UserAuthorization {
 
         return result;
     }
+
+    async forgotPassword(email) {
+        let result = {}
+        try {
+
+            if (!email) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Email não informada ',
+                    message: "Usuário não identificado."
+                }
+                return result;
+            }
+
+            const findUserByEmail = await this.userRepository.findUserByEmail(email);
+
+            if(!findUserByEmail) {
+                result.status = 400;
+                result.errors = {
+                    errors: 'Email informado não encontrado',
+                    message: "Email informado não registrado na plataforma, por favor verificar o email."
+                }
+                return result;
+            }
+
+            const forgotPasswordToken = crypto.randomBytes(20).toString('hex');
+            const now = new Date();
+            now.setHours(now.getHours() + 1);
+
+            await this.userRepository.setTokenAndExpiresByEmail(forgotPasswordToken, now, email);
+
+            this.sendEmail.sendForgotPassword(email, forgotPasswordToken);
+            
+            result.status = 200;
+            result.data = {
+                message: "Email enviado com sucesso!"
+            }
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                errors: error,
+                message: "Erro inesperado aconteceu!" + error.message
+            }
+        }
+        return result;
+    }
 }
 
 module.exports = UserAuthorization;

@@ -12,6 +12,8 @@ import InvestmentsWallet from "../pages/investmentsWallet/index";
 import Profile from "../pages/profile/index";
 import { PrivateRoute } from "./privateRoute";
 import ConfirmEmail from "../pages/confirmEmail/confirmEmail";
+import ForgotPassword from "../pages/forgotPassword/forgot-password";
+import ResetPassword from "../pages/resetPassword/reset-password";
 
 const AppRoutes = () => {
     return (
@@ -20,6 +22,8 @@ const AppRoutes = () => {
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/confirm-email" element={<ConfirmEmail/>} />
+                <Route path="/forgot-password" element={<ForgotPassword/>} />
+                <Route path="/reset-password" element={<ResetPassword/>} />
                 <Route path="/dashboard" 
                     element={
                         <PrivateRoute redirectTo="/">
