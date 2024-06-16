@@ -1,6 +1,7 @@
 import axios from "axios";
 const BASE_URL = "https://brapi.dev/api";
-const BASE_URL_BACK = "http://localhost:3003/investments";
+// const BASE_URL_BACK = "http://localhost:3003/investments";
+const BASE_URL_BACK = "https://finance-pro-investments-api.vercel.app/investments";
 const token = "fsg3B6QgZs5DfEn86UYdgE";
 
 class InvestmentsService {
