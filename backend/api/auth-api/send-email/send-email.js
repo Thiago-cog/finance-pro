@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 class SendEmail {
-   
+
     constructor() {
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
@@ -35,11 +35,28 @@ class SendEmail {
             html: htmlContent
         };
 
-        this.transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                throw new Error(error);
-            }
-            console.log('Email enviado: ' + info.response);
+        await new Promise((resolve, reject) => {
+            this.transporter.verify(function (error, success) {
+                if (error) {
+                    console.log(error);
+                    reject(error);
+                } else {
+                    console.log("Server is ready to take our messages");
+                    resolve(success);
+                }
+            });
+        });
+
+        await new Promise((resolve, reject) => {
+            this.transporter.sendMail(mailData, (err, info) => {
+                if (err) {
+                    console.error(err);
+                    reject(err);
+                } else {
+                    console.log(info.response);
+                    resolve(info);
+                }
+            });
         });
     }
 
@@ -55,11 +72,28 @@ class SendEmail {
             html: htmlContent
         };
 
-        this.transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log(error);
-            }
-            console.log('Email enviado: ' + info.response);
+        await new Promise((resolve, reject) => {
+            this.transporter.verify(function (error, success) {
+                if (error) {
+                    console.log(error);
+                    reject(error);
+                } else {
+                    console.log("Server is ready to take our messages");
+                    resolve(success);
+                }
+            });
+        });
+
+        await new Promise((resolve, reject) => {
+            this.transporter.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                    console.error(err);
+                    reject(err);
+                } else {
+                    console.log(info.response);
+                    resolve(info);
+                }
+            });
         });
     }
 }
