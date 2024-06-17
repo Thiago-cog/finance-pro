@@ -96,7 +96,7 @@ class UserAuthorization {
 
             await this.userRepository.setTokenByUserId(confirmToken, userId);
             
-            this.sendEmail.sendAccountCreation(email, fullname, confirmToken);
+            await this.sendEmail.sendAccountCreation(email, fullname, confirmToken);
             
             result.status = 201;
             result.data = {
@@ -230,7 +230,7 @@ class UserAuthorization {
 
             await this.userRepository.setTokenAndExpiresByEmail(forgotPasswordToken, now, email);
 
-            this.sendEmail.sendForgotPassword(email, forgotPasswordToken);
+            await this.sendEmail.sendForgotPassword(email, forgotPasswordToken);
             
             result.status = 200;
             result.data = {
