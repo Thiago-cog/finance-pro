@@ -48,7 +48,7 @@ class SendEmail {
         });
 
         await new Promise((resolve, reject) => {
-            this.transporter.sendMail(mailData, (err, info) => {
+            this.transporter.sendMail(mailOptions, (err, info) => {
                 if (err) {
                     console.error(err);
                     reject(err);
