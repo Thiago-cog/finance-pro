@@ -5,10 +5,10 @@ const SendEmail = require('../send-email/send-email');
 
 
 class UserAuthorization {
-    constructor(userRepository) {
+    constructor(userRepository, sendEmail) {
         this.userRepository = userRepository;
         this.saltRounds = 10;
-        this.sendEmail = new SendEmail();
+        this.sendEmail = sendEmail;
     }
 
     async decodeToken(token) {
@@ -229,7 +229,7 @@ class UserAuthorization {
             now.setHours(now.getHours() + 1);
 
             await this.userRepository.setTokenAndExpiresByEmail(forgotPasswordToken, now, email);
-
+            
             await this.sendEmail.sendForgotPassword(email, forgotPasswordToken);
             
             result.status = 200;

@@ -9,7 +9,7 @@ class SendEmail {
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT,
-            secure: false,
+            secure: true,
             auth: {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASS
@@ -25,7 +25,7 @@ class SendEmail {
         const htmlContent = emailTemplate.replace('[Nome do Usuário]', fullName).replace('[Link de Confirmação]', confirmationLink).replace(/\[Nome da Empresa\]/g, 'Finance Pro');
 
         const mailOptions = {
-            from: 'no.reply.financepro24@gmail.com',
+            from: process.env.SMTP_USER,
             to: to,
             subject: 'Bem-vindo à FinancePro - Confirme seu email',
             html: htmlContent
@@ -45,7 +45,7 @@ class SendEmail {
         const htmlContent = emailTemplate.replace('[Email do Usuário]', to).replace('[Link de Recuperação]', forgotPasswordLink).replace(/\[Nome da Empresa\]/g, 'Finance Pro');
 
         const mailOptions = {
-            from: 'no.reply.financepro24@gmail.com',
+            from: process.env.SMTP_USER,
             to: to,
             subject: 'Recuperação de senha',
             html: htmlContent
@@ -53,7 +53,7 @@ class SendEmail {
 
         this.transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                throw new Error(error);
+                console.log(error);
             }
             console.log('Email enviado: ' + info.response);
         });
