@@ -1,6 +1,6 @@
 import axios from "axios";
 // const BASE_URL = "https://finance-pro-auth-api.vercel.app/user";
-const BASE_URL = "http://ec2-34-214-31-245.us-west-2.compute.amazonaws.com:3001/user";
+const BASE_URL = "https://1946-45-65-156-98.ngrok-free.app/user";
 class AuthService {
     async decodeToken(token) {
         const config = {
