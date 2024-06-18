@@ -46,48 +46,48 @@ function Profile() {
         <>
             <Navbar />
 
-            <div className="p-10 sm:ml-64 h-auto min-h-screen bg-gray-900">
-                <div className="w-full bg-white rounded-lg mt-14  pt-1 px-14 pb-10">
-                    <h1 role="heading" aria-label="profile information" className="focus:outline-none text-3xl font-bold text-gray-800 mt-12">
+            <div className="p-4 sm:ml-64 h-auto min-h-screen bg-gray-900">
+                <div className="w-full bg-white rounded-lg mt-14 p-8 sm:p-14">
+                    <h1 role="heading" aria-label="profile information" className="focus:outline-none text-2xl sm:text-3xl font-bold text-gray-800 mt-4 sm:mt-12">
                         Perfil
                     </h1>
-                    <p role="contentinfo" className=" focus:outline-nonetext-sm font-light leading-tight text-gray-600 mt-4">
+                    <p role="contentinfo" className="focus:outline-none text-sm font-light leading-tight text-gray-600 mt-2 sm:mt-4">
                         Bem-vindo {name}
                     </p>
-                    <div className="mt-8 md:flex items-center">
+                    <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="flex flex-col">
                             <label className="mb-3 text-sm leading-none text-gray-800 font-semibold">Nome</label>
-                            <input type="name" className="w-64  text-sm font-medium leading-none text-gray-800 p-3 border rounded-lg  border-gray-200" value={fullname} onChange={(e) => setFullName(e.target.value)} />
+                            <input type="name" className="w-full sm:w-64 text-sm font-medium leading-none text-gray-800 p-3 border rounded-lg border-gray-200" value={fullname} onChange={(e) => setFullName(e.target.value)} />
                         </div>
-                        <div className="flex flex-col md:ml-12 md:mt-0 mt-8">
+                        <div className="flex flex-col">
                             <label className="mb-3 text-sm leading-none text-gray-800 font-semibold">Email</label>
-                            <input type="email" className="w-64  text-sm font-medium leading-none text-gray-800 p-3 border rounded-lg border-gray-200" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            <input type="email" className="w-full sm:w-64 text-sm font-medium leading-none text-gray-800 p-3 border rounded-lg border-gray-200" value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
                     </div>
-                    <div className="mt-12 md:flex items-center mb-4">
+                    <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
                         <div className="flex flex-col">
                             <label className="mb-3 text-sm leading-none text-gray-800 font-semibold">Telefone</label>
                             <InputMask
                                 mask="(99) 99999-9999"
                                 placeholder="(99) 99999-9999"
-                                className="w-64  text-sm font-medium leading-none text-gray-800 p-3 border rounded-lg border-gray-200"
+                                className="w-full sm:w-64 text-sm font-medium leading-none text-gray-800 p-3 border rounded-lg border-gray-200"
                                 id="phone"
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
                             ></InputMask>
                         </div>
-                        <div className="flex flex-col md:ml-12 md:mt-0 mt-8">
+                        <div className="flex flex-col">
                             <label className="mb-3 text-sm leading-none text-gray-800 font-semibold">Senha</label>
-                            <input type="password" className="w-64  text-sm font-medium leading-none text-gray-800 p-3 border rounded-lg border-gray-200" onChange={(e) => setPassword(e.target.value)} />
+                            <input type="password" className="w-full sm:w-64 text-sm font-medium leading-none text-gray-800 p-3 border rounded-lg border-gray-200" onChange={(e) => setPassword(e.target.value)} />
                         </div>
                     </div>
-                    <h1 role="heading" aria-label="profile information" className="focus:outline-none text-3xl font-bold text-gray-800 mt-12">
+                    <h1 role="heading" aria-label="profile information" className="focus:outline-none text-2xl sm:text-3xl font-bold text-gray-800 mt-8 sm:mt-12">
                         Integrações
                     </h1>
-                    <p role="contentinfo" className=" focus:outline-nonetext-sm font-light leading-tight text-gray-600 my-4">
+                    <p role="contentinfo" className="focus:outline-none text-sm font-light leading-tight text-gray-600 my-4">
                         Futuras integrações que haverá na plataforma
                     </p>
-                    <div className="mb-20">
+                    <div className="mb-8 sm:mb-20">
                         <Switcher3 text={"B3"} />
                         <Switcher3 text={"Open Finance"} />
                     </div>

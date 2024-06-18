@@ -5,7 +5,7 @@ import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
 import Loading from '../loading';
 
-function Index() {
+function ExpenseChart() {
 	const [listExpenses, setListExpenses] = useState([]);
 	const [activeIndex, setActiveIndex] = useState(0);
 	const [disabledLoading, setDisableLoading] = useState(false);
@@ -41,7 +41,6 @@ function Index() {
 	}));
 
 	const renderActiveShape = (props) => {
-
 		const RADIAN = Math.PI / 180;
 		const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
 		const sin = Math.sin(-RADIAN * midAngle);
@@ -93,11 +92,11 @@ function Index() {
 
 	return (
 		<>
-			<Loading disable={disabledLoading}/>
+			<Loading disable={disabledLoading} />
 			{data && data.length > 0 ? (
-				<ResponsiveContainer  width="100%" height="100%">
-					<PieChart className="rounded-lg h-full w-1/2  bg-white">
-						<text x="13%" y="30" textAnchor="middle" dominantBaseline="middle" fontSize="20">
+				<ResponsiveContainer width="100%" height={200} className="mb-4">
+					<PieChart className="rounded-lg bg-white">
+						<text x="50%" y="30" textAnchor="middle" dominantBaseline="middle" fontSize="16">
 							Total de Despesas
 						</text>
 						<Pie
@@ -106,8 +105,8 @@ function Index() {
 							data={data}
 							cx="50%"
 							cy="50%"
-							innerRadius={60}
-							outerRadius={80}
+							innerRadius={40}
+							outerRadius={50}
 							fill="#8884d8"
 							dataKey="value"
 							onMouseEnter={onPieEnter}
@@ -119,8 +118,7 @@ function Index() {
 					</PieChart>
 				</ResponsiveContainer>
 			) : (
-
-				<div className='rounded-lg w-1/2 bg-white h-full flex justify-center items-center text-xl ml-2'>
+				<div className='rounded-lg w-full h-48 bg-white flex justify-center items-center text-xl'>
 					<h1>Nenhum dado encontrado</h1>
 				</div>
 			)}
@@ -128,4 +126,4 @@ function Index() {
 	);
 }
 
-export default Index;
+export default ExpenseChart;

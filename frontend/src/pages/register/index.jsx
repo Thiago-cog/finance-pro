@@ -7,7 +7,6 @@ import RegisterImage from "../../assets/Login-rafiki.svg";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -18,7 +17,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const response = await authServices.registerUser(email, password, fullname);
-        if (response.status == 201) {
+        if (response.status === 201) {
             toast.success(`${response.data.message}`, {
                 position: "top-center",
                 autoClose: 2000,
@@ -35,52 +34,53 @@ const Register = () => {
             }, 2500);
         }
     }
+
     return (
-        <div className=" w-full h-screen flex bg-gradient-to-tr from-gray-950 to-gray-900">
+        <div className="flex flex-col md:flex-row w-full h-screen bg-gradient-to-tr from-gray-950 to-gray-900">
             <ToastContainer />
-            <div className="flex justify-center items-center h-full basis-5/12">
-                <div className="w-3/6">
+            <div className="flex justify-center items-center h-full md:basis-5/12 p-4">
+                <div className="w-full max-w-md">
                     <img
                         className="mx-auto h-24 w-24"
                         src={Logo}
                         alt="Finance Pro"
                     />
-                    <h1 className="font-sans font-bold text-white text-6xl my-9">
+                    <h1 className="font-sans font-bold text-white text-4xl md:text-6xl my-6 md:my-9 text-center md:text-left">
                         Cadastre-se
                     </h1>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-5">
-                            <label htmlFor="email" className="font-sans font-bold text-gray-300 block text-sm  leading-6">
+                            <label htmlFor="fullname" className="font-sans font-bold text-gray-300 block text-sm leading-6">
                                 Nome
-                                <input
-                                    value={fullname}
-                                    onChange={(e) => setName(e.target.value)}
-                                    id="fullname"
-                                    name="fullname"
-                                    type="text"
-                                    autoComplete="text"
-                                    required
-                                    className="bg-gray-800 block w-full rounded-lg border-0 py-3 text-white ring-inset"
-                                />
                             </label>
+                            <input
+                                value={fullname}
+                                onChange={(e) => setName(e.target.value)}
+                                id="fullname"
+                                name="fullname"
+                                type="text"
+                                autoComplete="text"
+                                required
+                                className="bg-gray-800 block w-full rounded-lg border-0 py-3 text-white ring-inset"
+                            />
                         </div>
                         <div className="mb-5">
                             <label htmlFor="email" className="font-sans font-bold text-gray-300 block text-sm leading-6">
                                 Email
-                                <input
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    autoComplete="email"
-                                    required
-                                    className="bg-gray-800 block w-full rounded-lg border-0 py-3 text-white ring-inset"
-                                />
                             </label>
+                            <input
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                id="email"
+                                name="email"
+                                type="email"
+                                autoComplete="email"
+                                required
+                                className="bg-gray-800 block w-full rounded-lg border-0 py-3 text-white ring-inset"
+                            />
                         </div>
                         <div className="mb-5">
-                            <label htmlFor="confirmPassword" className="block text-sm font-bold text-gray-300">
+                            <label htmlFor="password" className="font-sans font-bold text-gray-300 block text-sm leading-6">
                                 Senha
                             </label>
                             <div className="relative">
@@ -114,13 +114,15 @@ const Register = () => {
                     </form>
                 </div>
             </div>
-            <div className="basis-7/12">
+            <div className="hidden md:block md:basis-7/12">
                 <img
                     src={RegisterImage}
-                    className="h-full" />
+                    className="h-full w-full object-cover"
+                    alt="Register Illustration"
+                />
             </div>
         </div>
-    )
+    );
 }
 
 export default Register;

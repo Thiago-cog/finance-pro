@@ -58,26 +58,26 @@ const Login = () => {
     }
 
     return (
-        <div className="relative w-full h-screen flex bg-gradient-to-br from-gray-950 to-gray-900">
+        <div className="flex flex-col md:flex-row w-full h-screen bg-gradient-to-br from-gray-950 to-gray-900">
             <ToastContainer />
-            <div className="flex justify-center items-center h-full basis-5/12">
-                <div className="w-3/6">
-                    <h1 className="font-sans font-bold text-white text-6xl my-9">
+            <div className="flex justify-center items-center h-full md:basis-5/12 p-4">
+                <div className="w-full max-w-md">
+                    <h1 className="font-sans font-bold text-white text-4xl md:text-6xl my-6 md:my-9">
                         Finance Pro
-                        <span className="inline-block w-3 h-3 bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-full"></span>
+                        <span className="inline-block w-3 h-3 bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-full ml-2"></span>
                     </h1>
                     <form onSubmit={handleSubmit}>
-                        <div className="mb-5 font-sans font-bold text-gray-300">
-                            <label>
+                        <div className="mb-5">
+                            <label className="font-sans font-bold text-gray-300 block text-sm leading-6">
                                 Email
-                                <input className="font-sans w-full p-3 font-bold text-base text-white bg-gray-800 rounded-lg ring-inset border-0" value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
+                                <input className="font-sans w-full p-3 font-bold text-base text-white bg-gray-800 rounded-lg ring-inset border-0 mt-1" value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
                             </label>
                         </div>
 
-                        <div className="mb-5 font-sans font-bold text-gray-300">
-                            <label>
+                        <div className="mb-5">
+                            <label className="font-sans font-bold text-gray-300 block text-sm leading-6">
                                 Senha
-                                <div className="relative">
+                                <div className="relative mt-1">
                                     <input
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
@@ -95,7 +95,8 @@ const Login = () => {
                                     >
                                         {showPassword ? <EyeOff size={20} color="white" /> : <Eye size={20} color="white" />}
                                     </button>
-                                </div>                            </label>
+                                </div>
+                            </label>
                         </div>
 
                         <div className="mb-5">
@@ -111,12 +112,15 @@ const Login = () => {
                     </form>
                 </div>
             </div>
-            <div className="basis-7/12">
+            <div className="hidden md:flex md:basis-7/12">
                 <img
                     src={FinanceImage}
-                    className="h-full" />
+                    className="h-full w-full object-cover"
+                    alt="Finance Image"
+                />
             </div>
         </div>
     )
 }
+
 export default Login;
