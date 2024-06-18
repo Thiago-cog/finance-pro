@@ -13,14 +13,14 @@ const Dashboard = () => {
                 <div className="mt-14">
                     <AllStatus />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="rounded bg-gray-50 dark:bg-gray-800">
+                        <div className="rounded bg-gray-900">
                             <RevenueChart />
                         </div>
-                        <div className="rounded bg-gray-50 dark:bg-gray-800">
+                        <div className="rounded bg-gray-900 mb-4">
                             <ExpenseChart />
                         </div>
                     </div>
-                    <div className="flex items-center justify-center h-96 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+                    <div className="flex items-center justify-center h-96 mb-4 rounded bg-gray-900">
                         <MonthlyIncomeAndExpenseChart />
                     </div>
                 </div>

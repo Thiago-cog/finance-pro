@@ -7,6 +7,7 @@ import GetCookie from "../../hooks/getCookie";
 function RevenueChart() {
 	const [listRevenue, setListRevenue] = useState([]);
 	const [activeIndex, setActiveIndex] = useState(0);
+	const [radius, setRadius] = useState({ innerRadius: 40, outerRadius: 60, x: "13%" });
 	const token = GetCookie("user_session");
 
 	async function getTotalRevenue() {
@@ -18,6 +19,21 @@ function RevenueChart() {
 
 	useEffect(() => {
 		getTotalRevenue();
+	}, []);
+
+	useEffect(() => {
+		function handleResize() {
+			if (window.innerWidth < 640) {
+				setRadius({ innerRadius: 40, outerRadius: 50, x: "50%" });
+			} else {
+				setRadius({ innerRadius: 60, outerRadius: 80, x: "13%" });
+			}
+		}
+
+		window.addEventListener('resize', handleResize);
+		handleResize();
+
+		return () => window.removeEventListener('resize', handleResize);
 	}, []);
 
 	function generateColors(numColors) {
@@ -90,9 +106,9 @@ function RevenueChart() {
 	return (
 		<>
 			{data && data.length > 0 ? (
-				<ResponsiveContainer width="100%" height={200}>
-					<PieChart className="rounded-lg bg-white">
-						<text x="50%" y="30" textAnchor="middle" dominantBaseline="middle" fontSize="16">
+				<ResponsiveContainer width="100%" height={220}>
+					<PieChart className="rounded-lg h-full w-full lg:w-1/2 bg-white">
+						<text x={radius.x} y="30" textAnchor="middle" dominantBaseline="middle" fontSize="16">
 							Total de receitas
 						</text>
 						<Pie
@@ -101,8 +117,8 @@ function RevenueChart() {
 							data={data}
 							cx="50%"
 							cy="50%"
-							innerRadius={40}
-							outerRadius={50}
+							innerRadius={radius.innerRadius}
+							outerRadius={radius.outerRadius}
 							fill="#8884d8"
 							dataKey="value"
 							onMouseEnter={onPieEnter}
@@ -114,7 +130,7 @@ function RevenueChart() {
 					</PieChart>
 				</ResponsiveContainer>
 			) : (
-				<div className='rounded-lg w-full h-48 bg-white flex justify-center items-center text-xl'>
+				<div className='rounded-lg w-full h-full bg-white flex justify-center items-center text-xl'>
 					<h1>Nenhum dado encontrado</h1>
 				</div>
 			)}
