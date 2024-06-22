@@ -15,7 +15,7 @@ function FormAccount() {
     const [valueBalance, setValueBalance] = useState(0);
     const [listAccounts, setListAccounts] = useState([]);
     const token = GetCookie("user_session");
-    
+
     async function getAccounts() {
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
@@ -38,7 +38,7 @@ function FormAccount() {
         const userId = decodeToken.userToken.id;
         const resultCreateAccount = await accountsServices.createAccount(token, nameAccount, typeAccount, valueBalance, userId);
 
-        if(resultCreateAccount.status === 400){
+        if (resultCreateAccount.status === 400) {
             toast.info(`${resultCreateAccount.data.message}`, {
                 position: "top-center",
                 autoClose: 2500,
@@ -49,7 +49,7 @@ function FormAccount() {
                 progress: undefined,
                 theme: "dark",
             });
-        }else if(resultCreateAccount.status === 500){
+        } else if (resultCreateAccount.status === 500) {
             toast.error('Internal Server Error!', {
                 position: "top-center",
                 autoClose: 2500,
@@ -60,7 +60,7 @@ function FormAccount() {
                 progress: undefined,
                 theme: "dark",
             });
-        }else{
+        } else {
             toast.success(`${resultCreateAccount.data.message}`, {
                 position: "top-center",
                 autoClose: 2500,
@@ -82,53 +82,48 @@ function FormAccount() {
             <ToastContainer />
             <div className="py-4 px-2">
                 <div className="relative rounded-lg max-h-96 overflow-y-auto overflow-x-auto">
-                    <table className="w-full text-sm text-left text-gray-500">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
-                            <tr>
-                                <th scope="col" className="px-6 py-3">
-                                    nome da conta
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    tipo da conta
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    status
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    saldo
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    ações
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {listAccounts.map((account, index) => (
-                                <tr className="bg-white border-b" key={index}>
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap font-sans">
-                                        {account.name}
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full text-sm text-left text-gray-500">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+                                <tr>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        nome da conta
                                     </th>
-                                    <td className="px-6 py-4">
-                                        {account.type_account}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        Ativa
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        R$ {
-                                            account.isInteger 
-                                            ? String(account.balance+ '00').replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".") 
-                                            : String(account.balance).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")
-                                        }
-                                    </td>
-                                    <td className="px-6 py-4 flex">
-                                        <PenSquare className="w-5 h-5 mr-1"/>
-                                        <XCircle className="w-5 h-5"/>
-                                    </td>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        tipo da conta
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        status
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        saldo
+                                    </th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {listAccounts.map((account, index) => (
+                                    <tr className="bg-white border-b" key={index}>
+                                        <th scope="row" className="px-2 py-2 sm:px-6 sm:py-4 font-medium text-gray-900 whitespace-nowrap font-sans">
+                                            {account.name}
+                                        </th>
+                                        <td className="px-2 py-2 sm:px-6 sm:py-4">
+                                            {account.type_account}
+                                        </td>
+                                        <td className="px-2 py-2 sm:px-6 sm:py-4">
+                                            Ativa
+                                        </td>
+                                        <td className="px-2 py-2 sm:px-6 sm:py-4">
+                                            R$ {
+                                                account.isInteger
+                                                    ? String(account.balance + '00').replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")
+                                                    : String(account.balance).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")
+                                            }
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div className="bg-white rounded-lg shadow mt-7 py-7">
                     <div className="hidden lg:block md:hidden">
@@ -186,7 +181,7 @@ function FormAccount() {
                     </div>
                     <hr className="h-[1px] bg-gray-100 my-14" />
                     <div className="flex flex-col flex-wrap items-center justify-center w-full px-7 lg:flex-row lg:justify-end md:justify-end gap-x-4 gap-y-4">
-                        <SaveButton functionButton={handleSave} text='Salvar' className="bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-lg transform font-bold px-6 py-4 text-white lg:max-w-[144px] w-full"/>
+                        <SaveButton functionButton={handleSave} text='Salvar' className="bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-lg transform font-bold px-6 py-4 text-white lg:max-w-[144px] w-full" />
                     </div>
                 </div>
             </div>

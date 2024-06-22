@@ -241,45 +241,54 @@ function FormTransaction() {
             <ToastContainer />
             <div className="py-4 px-2">
                 <div className="relative rounded-lg max-h-96 overflow-y-auto overflow-x-auto">
-                    <table className="w-full text-sm text-left text-gray-500">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th scope="col" className="px-6 py-3">
-                                    Nome da Conta
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Categoria
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Tipo
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Valor
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {currentItems.map((moviment, index) => (
-                                <tr className="bg-white border-b" key={index}>
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap flex items-center">
-                                        {moviment.type_movement === "Despesa"
-                                            ? <><ArrowDown className="w-4 h-5 text-red-600" /><DollarSign className="w-4 h-5 text-red-600" /></>
-                                            : <><ArrowUp className="w-4 h-5 text-lime-600" /><DollarSign className="w-4 h-5 text-lime-600" /></>
-                                        } {moviment.name}
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full text-sm text-left text-gray-500">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        Nome da Conta
                                     </th>
-                                    <td className="px-6 py-4">
-                                        {moviment.name_category}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {moviment.type_movement}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        R$ {moviment.value}
-                                    </td>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        Categoria
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        Tipo
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        Valor
+                                    </th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {currentItems.map((moviment, index) => (
+                                    <tr className="bg-white border-b" key={index}>
+                                        <th scope="row" className="px-2 py-2 sm:px-6 sm:py-4 font-medium text-gray-900 whitespace-nowrap flex items-center">
+                                            {moviment.type_movement === "Despesa"
+                                                ? <>
+                                                    <ArrowDown className="w-4 h-5 text-red-600" />
+                                                    <DollarSign className="w-4 h-5 text-red-600" />
+                                                </>
+                                                : <>
+                                                    <ArrowUp className="w-4 h-5 text-lime-600" />
+                                                    <DollarSign className="w-4 h-5 text-lime-600" />
+                                                </>
+                                            }
+                                            <span className="ml-2">{moviment.name}</span>
+                                        </th>
+                                        <td className="px-2 py-2 sm:px-6 sm:py-4">
+                                            {moviment.name_category}
+                                        </td>
+                                        <td className="px-2 py-2 sm:px-6 sm:py-4">
+                                            {moviment.type_movement}
+                                        </td>
+                                        <td className="px-2 py-2 sm:px-6 sm:py-4">
+                                            R$ {moviment.value}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                     <div className="flex justify-center items-center px-6 py-3 bg-white border-t">
                         <button
                             onClick={() => handleClick(currentPage - 1)}
@@ -299,7 +308,7 @@ function FormTransaction() {
                     </div>
                 </div>
                 <div className="bg-white rounded-lg shadow mt-7 py-7">
-                    <div className="hidden lg:block md:hidden">
+                    <div className="block lg:block md:block sm:block">
                         <div className="px-7 header flex bg-white lg:justify-around md:justify-around justify-start pb-8 pt-2 border-b-[2px] border-slate-100 flex-wrap gap-x-2">
                             {activeTab === 'extract' ? (
                                 <a className="cursor-pointer text-sky-500" onClick={() => changeTab('extract')}>

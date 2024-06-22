@@ -30,31 +30,31 @@ function FormCard() {
         const allAccounts = await accountsServices.getAccounts(token, userId);
         const allCards = await accountsServices.getCards(token, userId);
 
-        const selectObject = {"id": 0, "name": "Selecione"};
+        const selectObject = { "id": 0, "name": "Selecione" };
         allAccounts.data.accounts.unshift(selectObject);
 
-        allCards.data.cards.forEach(function(card, indice) {
+        allCards.data.cards.forEach(function (card, indice) {
             const valueSplit = String(card.value).split('.');
-            const limitAvailableSplit =  String(card.limit_available).split('.');
-            if(valueSplit.length == 1){
+            const limitAvailableSplit = String(card.limit_available).split('.');
+            if (valueSplit.length == 1) {
                 allCards.data.cards[indice].value = allCards.data.cards[indice].value + '00';
-            }else{
-                if(valueSplit[1].length == 1){
+            } else {
+                if (valueSplit[1].length == 1) {
                     allCards.data.cards[indice].value = allCards.data.cards[indice].value + '0';
                 }
             }
 
-            if(limitAvailableSplit.length == 1){
+            if (limitAvailableSplit.length == 1) {
                 allCards.data.cards[indice].limit_available = allCards.data.cards[indice].limit_available + '00';
-            }else{
-                if(limitAvailableSplit[1].length == 1){
+            } else {
+                if (limitAvailableSplit[1].length == 1) {
                     allCards.data.cards[indice].limit_available = allCards.data.cards[indice].limit_available + '0';
                 }
             }
             allCards.data.cards[indice].value = String(allCards.data.cards[indice].value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
             allCards.data.cards[indice].limit_available = String(allCards.data.cards[indice].limit_available).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".");
         });
-        
+
         setListAccounts(allAccounts.data.accounts);
         setListCards(allCards.data.cards);
         setDisableLoading(true);
@@ -72,7 +72,7 @@ function FormCard() {
         e.preventDefault();
         const resultCreatCard = await accountsServices.createCard(token, accountId, numberCard, dueDay, valueLimitCard, valueInvoice);
 
-        if(resultCreatCard.status === 400){
+        if (resultCreatCard.status === 400) {
             toast.info(`${resultCreatCard.data.message}`, {
                 position: "top-center",
                 autoClose: 2500,
@@ -83,7 +83,7 @@ function FormCard() {
                 progress: undefined,
                 theme: "dark",
             });
-        }else if(resultCreatCard.status === 500){
+        } else if (resultCreatCard.status === 500) {
             toast.error('Internal Server Error!', {
                 position: "top-center",
                 autoClose: 2500,
@@ -94,7 +94,7 @@ function FormCard() {
                 progress: undefined,
                 theme: "dark",
             });
-        }else{
+        } else {
             toast.success(`${resultCreatCard.data.message}`, {
                 position: "top-center",
                 autoClose: 2500,
@@ -117,47 +117,49 @@ function FormCard() {
 
     return (
         <>
-            <Loading disable={disabledLoading}/>
+            <Loading disable={disabledLoading} />
             <ToastContainer />
             <div className="py-4 px-2">
                 <div className="relative rounded-lg max-h-96 overflow-y-auto overflow-x-auto">
-                    <table className="w-full text-sm text-left text-gray-500">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
-                            <tr>
-                                <th scope="col" className="px-6 py-3">
-                                    número do cartão
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    conta
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    valor da fatura
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    limite disponível 
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {listCards.map((card, index) => (
-                                <tr className="bg-white border-b" key={index}>
-                                    <th scope="row" className="px-6 py-4">
-                                        {card.number_card}
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full text-sm text-left text-gray-500">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+                                <tr>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        número do cartão
                                     </th>
-                                    <td className="px-6 py-4">
-                                        {card.name}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                    R$ {String(card.value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")}
-                                        
-                                    </td>
-                                    <td className="px-6 py-4">
-                                    R$ {String(card.limit_available).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")}
-                                    </td>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        conta
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        valor da fatura
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        limite disponível
+                                    </th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {listCards.map((card, index) => (
+                                    <tr className="bg-white border-b" key={index}>
+                                        <th scope="row" className="px-2 py-2 sm:px-6 sm:py-4">
+                                            {card.number_card}
+                                        </th>
+                                        <td className="px-2 py-2 sm:px-6 sm:py-4">
+                                            {card.name}
+                                        </td>
+                                        <td className="px-2 py-2 sm:px-6 sm:py-4">
+                                            R$ {String(card.value).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")}
+
+                                        </td>
+                                        <td className="px-2 py-2 sm:px-6 sm:py-4">
+                                            R$ {String(card.limit_available).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div className="bg-white rounded-lg shadow mt-7 py-7">
                     <div className="hidden lg:block md:hidden">
@@ -237,7 +239,7 @@ function FormCard() {
                     </div>
                     <hr className="h-[1px] bg-gray-100 my-14" />
                     <div className="flex flex-col flex-wrap items-center justify-center w-full px-7 lg:flex-row lg:justify-end md:justify-end gap-x-4 gap-y-4">
-                        <SaveButton functionButton={handleSave} text='Salvar' className="bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-lg transform font-bold px-6 py-4 text-white lg:max-w-[144px] w-full"/>
+                        <SaveButton functionButton={handleSave} text='Salvar' className="bg-gradient-to-tr from-indigo-600 via-cyan-600 to-emerald-500 rounded-lg transform font-bold px-6 py-4 text-white lg:max-w-[144px] w-full" />
                     </div>
                 </div>
             </div>

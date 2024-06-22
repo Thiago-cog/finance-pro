@@ -34,7 +34,6 @@ function Profile() {
         const userId = decodeToken.userToken.id;
 
         const resultUpdateUser = await authServices.updateUser(email, password, fullname, phone, userId, token);
-        console.log(resultUpdateUser);
 
     };
 
