@@ -28,7 +28,7 @@ function AllStatus() {
                 <div className="py-4 w-full md:py-8 bg-white shadow rounded-lg">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-6 xl:px-10 gap-y-8 gap-x-12 2xl:gap-x-28">
                         <div className="w-full">
-                            <p className="text-xs md:text-sm font-medium leading-none text-gray-500 uppercase">Margem de Lucro</p>
+                            <p className="text-xs md:text-sm font-medium leading-none text-gray-500 uppercase">Saldo %</p>
                             <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold leading-3 text-gray-800 mt-3 md:mt-5">{profitMargin}%</p>
                             <div className="flex flex-col md:w-64">
                                 <div className="w-full flex justify-end">
@@ -43,7 +43,7 @@ function AllStatus() {
                             </div>
                         </div>
                         <div className="w-full">
-                            <p className="text-xs md:text-sm font-medium leading-none text-gray-500 uppercase">Saldo</p>
+                            <p className="text-xs md:text-sm font-medium leading-none text-gray-500 uppercase">Receita</p>
                             <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold leading-3 text-gray-800 mt-3 md:mt-5">R$ {totalBalance}</p>
                             <div className="flex flex-col md:w-64">
                                 <div className="w-full flex justify-end">

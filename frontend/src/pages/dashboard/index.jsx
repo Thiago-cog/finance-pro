@@ -12,11 +12,11 @@ const Dashboard = () => {
             <div className="p-4 sm:ml-64 h-auto min-h-screen bg-gray-900">
                 <div className="mt-14">
                     <AllStatus />
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div className="rounded bg-gray-900">
                             <RevenueChart />
                         </div>
-                        <div className="rounded bg-gray-900 mb-4">
+                        <div className="rounded bg-gray-900">
                             <ExpenseChart />
                         </div>
                     </div>

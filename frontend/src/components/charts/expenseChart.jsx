@@ -27,7 +27,7 @@ function ExpenseChart() {
 	useEffect(() => {
 		function handleResize() {
 			if (window.innerWidth < 640) {
-				setRadius({ innerRadius: 40, outerRadius: 50, x: "50%" });
+				setRadius({ innerRadius: 50, outerRadius: 70, x: "50%" });
 			} else {
 				setRadius({ innerRadius: 60, outerRadius: 80, x: "13%" });
 			}
@@ -111,7 +111,7 @@ function ExpenseChart() {
 		<>
 			<Loading disable={disabledLoading} />
 			{data && data.length > 0 ? (
-				<ResponsiveContainer width="100%" height={220}>
+				<ResponsiveContainer width="100%" height={260}>
 					<PieChart className="rounded-lg h-full w-full lg:w-1/2 bg-white">
 						<text x={radius.x} y="30" textAnchor="middle" dominantBaseline="middle" fontSize="16">
 							Total de Despesas
@@ -121,7 +121,7 @@ function ExpenseChart() {
 							activeShape={renderActiveShape}
 							data={data}
 							cx="50%"
-							cy="50%"
+							cy="60%"
 							innerRadius={radius.innerRadius}
 							outerRadius={radius.outerRadius}
 							fill="#8884d8"
