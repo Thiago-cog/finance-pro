@@ -8,12 +8,12 @@ export default defineConfig({
     react(),
     VitePWA({
       manifest: {
-        name: 'Finance Pro',
-        short_name: 'F.Pro',
+        name: 'Finance Pro.',
+        short_name: 'Finance Pro',
         description: 'Descrição do aplicativo',
         start_url: '/',
         display: 'standalone',
-        background_color: '#ffffff',
+        background_color: '#111827',
         theme_color: '#000000',
         icons: [
           {
