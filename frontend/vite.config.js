@@ -17,7 +17,7 @@ export default defineConfig({
         theme_color: '#000000',
         icons: [
           {
-            src: './src/assets/2-removebg-preview.png',
+            src: './src/assets/logo_transparent_fixed.png',
             sizes: '192x192',
             type: 'image/png'
           }
