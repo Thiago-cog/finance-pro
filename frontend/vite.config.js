@@ -13,11 +13,11 @@ export default defineConfig({
         description: 'Descrição do aplicativo',
         start_url: '/',
         display: 'standalone',
-        background_color: '#111827',
+        background_color: '#ffffff',
         theme_color: '#111827',
         icons: [
           {
-            src: './src/assets/logo_transparent_fixed.png',
+            src: './src/assets/logo_colored.png',
             sizes: '192x192',
             type: 'image/png'
           }
