@@ -53,17 +53,17 @@ function Index({ stock }) {
         resultFinancialData?.historicalDataPrice.map((historicalDataPrice) => {
             historicalDataPrice.date = format(new Date(historicalDataPrice.date * 1000), 'dd/MM/yyyy');
         });
-        
+
         setQuoteFinancialData(resultFinancialData);
         setQuoteDefaultKeyStatistics(resultDefaultKeyStatistics);
         setQuoteValueChartData(resultFinancialData?.historicalDataPrice);
         setQuoteSummaryProfile(resultSummaryProfile?.summaryProfile);
-        
-        if(listIncomeStatementHistory?.length > 0){
+
+        if (listIncomeStatementHistory?.length > 0) {
             setQuoteIncomeStatementHistory(listIncomeStatementHistory[0]);
         }
 
-        if(listBalanceSheetHistory?.length > 0){
+        if (listBalanceSheetHistory?.length > 0) {
             setQuoteBalanceSheetHistory(listBalanceSheetHistory[0]);
         }
         setDisableLoading(true);
@@ -76,8 +76,8 @@ function Index({ stock }) {
 
     return (
         <>
-            <Loading disable={disabledLoading}/>
-            <Modal isOpen={openToModal} setOpenToModal={setOpenToModal} stock={stock} quoteValue={quoteFinancialData?.financialData?.currentPrice}/>
+            <Loading disable={disabledLoading} />
+            <Modal isOpen={openToModal} setOpenToModal={setOpenToModal} stock={stock} quoteValue={quoteFinancialData?.financialData?.currentPrice} />
             <nav className="bg-gray-900 border-gray-800 rounded-lg border-4 mb-4">
                 <div className="max-w-screen-xl flex items-center mx-auto p-4">
                     <img src={quoteFinancialData?.logourl} alt={quoteFinancialData?.longName} className="h-16 w-16 rounded-lg" />
@@ -91,15 +91,15 @@ function Index({ stock }) {
                 </div>
             </nav>
             {disabledLoading == true && (
-                <div className="w-full h-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
-                    <GridCardTop text="Cotação" value={`R$ ${quoteFinancialData?.financialData?.currentPrice}`}/>
-                    <GridCardTop text="Variação (dia)" value={`R$ ${parseFloat(quoteFinancialData?.regularMarketChange?.toFixed(2))} (${quoteFinancialData?.regularMarketChangePercent?.toFixed(2)}%)`}/>
-                    <GridCardTop text="P/L" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.forwardPE?.toFixed(2)}/>
-                    <GridCardTop text="P/VP" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.priceToBook?.toFixed(2)}/>
-                    <GridCardTop text="DY" value="R$ 1200,00"/>
+                <div className="grid grid-cols-1 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <GridCardTop text="Cotação" value={`R$ ${quoteFinancialData?.financialData?.currentPrice}`} />
+                    <GridCardTop text="Variação (dia)" value={`R$ ${parseFloat(quoteFinancialData?.regularMarketChange?.toFixed(2))} (${quoteFinancialData?.regularMarketChangePercent?.toFixed(2)}%)`} />
+                    <GridCardTop text="P/L" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.forwardPE?.toFixed(2)} />
+                    <GridCardTop text="P/VP" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.priceToBook?.toFixed(2)} />
+                    <GridCardTop text="DY" value="R$ 1200,00" />
                 </div>
             )}
-            <div className="flex-row justify-center bg-white mt-24 rounded-lg">
+            <div className="flex-row justify-center bg-white rounded-lg hidden sm:block">
                 <p className="text-2xl m-4 mt-8">Cotação</p>
                 <ResponsiveContainer width="100%" height={400}>
                     <AreaChart
@@ -123,23 +123,23 @@ function Index({ stock }) {
             {disabledLoading == true && (
                 <div className="mt-14 bg-white rounded-lg">
                     <p className="font-sans text-2xl ml-4 mb-2">Indicadores</p>
-                    <div className="grid grid-cols-4 gap-4 bg-white rounded-lg">
-                        <GridCardDetails text="P/L" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.forwardPE?.toFixed(2)}/>
-                        <GridCardDetails text="P/RECEITA (PSR)" value={(quoteFinancialData?.financialData?.currentPrice / quoteFinancialData?.financialData?.revenuePerShare).toFixed(2)}/>
-                        <GridCardDetails text="P/VP" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.priceToBook?.toFixed(2)}/>
-                        <GridCardDetails text="MARGEM LÍQUIDA" value={`${(quoteDefaultKeyStatistics?.defaultKeyStatistics?.profitMargins * 100).toFixed(2)}%`}/>
-                        <GridCardDetails text="MARGEM BRUTA" value={`${(quoteFinancialData?.financialData?.grossMargins * 100).toFixed(2)}%`}/>
-                        <GridCardDetails text="MARGEM EBITDA" value={`${(quoteFinancialData?.financialData?.ebitdaMargins * 100).toFixed(2)}%`}/>
-                        <GridCardDetails text="MARGEM EBIT" value={`${((quoteIncomeStatementHistory?.ebit / quoteIncomeStatementHistory?.totalRevenue) * 100).toFixed(2)}%`}/>
-                        <GridCardDetails text="EV/EBITDA" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.enterpriseToEbitda?.toFixed(2)}/>
-                        <GridCardDetails text="EV/EBIT" value={(quoteDefaultKeyStatistics?.defaultKeyStatistics?.enterpriseValue / quoteIncomeStatementHistory?.ebit).toFixed(2)}/>
-                        <GridCardDetails text="VPA" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue.toString().split('.')[1]?.length > 2 ? (quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue).toFixed(2) : quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue}/>
-                        <GridCardDetails text="LPA" value={(quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteDefaultKeyStatistics?.defaultKeyStatistics?.floatShares).toFixed(2)}/>
-                        <GridCardDetails text="ROE" value={`${((quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteBalanceSheetHistory?.totalStockholderEquity) * 100).toFixed(2)}%`}/>
-                        <GridCardDetails text="ROA" value={`${((quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteBalanceSheetHistory?.totalAssets) * 100).toFixed(2)}%`}/>
-                        <GridCardDetails text="DÍVIDA LÍQUIDA / PATRIMÔNIO" value={(quoteFinancialData?.financialData?.totalDebt / quoteBalanceSheetHistory?.totalStockholderEquity).toFixed(2)}/>
-                        <GridCardDetails text="DÍVIDA LÍQUIDA / EBIT" value={(quoteFinancialData?.financialData?.totalDebt / quoteIncomeStatementHistory?.ebit).toFixed(2)}/>
-                        <GridCardDetails text="DÍVIDA LÍQUIDA / EBITDA" value={(quoteFinancialData?.financialData?.totalDebt / quoteFinancialData?.financialData?.ebitda).toFixed(2)}/>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 bg-white rounded-lg">
+                        <GridCardDetails text="P/L" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.forwardPE?.toFixed(2)} />
+                        <GridCardDetails text="P/RECEITA (PSR)" value={(quoteFinancialData?.financialData?.currentPrice / quoteFinancialData?.financialData?.revenuePerShare).toFixed(2)} />
+                        <GridCardDetails text="P/VP" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.priceToBook?.toFixed(2)} />
+                        <GridCardDetails text="MARGEM LÍQUIDA" value={`${(quoteDefaultKeyStatistics?.defaultKeyStatistics?.profitMargins * 100).toFixed(2)}%`} />
+                        <GridCardDetails text="MARGEM BRUTA" value={`${(quoteFinancialData?.financialData?.grossMargins * 100).toFixed(2)}%`} />
+                        <GridCardDetails text="MARGEM EBITDA" value={`${(quoteFinancialData?.financialData?.ebitdaMargins * 100).toFixed(2)}%`} />
+                        <GridCardDetails text="MARGEM EBIT" value={`${((quoteIncomeStatementHistory?.ebit / quoteIncomeStatementHistory?.totalRevenue) * 100).toFixed(2)}%`} />
+                        <GridCardDetails text="EV/EBITDA" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.enterpriseToEbitda?.toFixed(2)} />
+                        <GridCardDetails text="EV/EBIT" value={(quoteDefaultKeyStatistics?.defaultKeyStatistics?.enterpriseValue / quoteIncomeStatementHistory?.ebit).toFixed(2)} />
+                        <GridCardDetails text="VPA" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue.toString().split('.')[1]?.length > 2 ? (quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue).toFixed(2) : quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue} />
+                        <GridCardDetails text="LPA" value={(quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteDefaultKeyStatistics?.defaultKeyStatistics?.floatShares).toFixed(2)} />
+                        <GridCardDetails text="ROE" value={`${((quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteBalanceSheetHistory?.totalStockholderEquity) * 100).toFixed(2)}%`} />
+                        <GridCardDetails text="ROA" value={`${((quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteBalanceSheetHistory?.totalAssets) * 100).toFixed(2)}%`} />
+                        <GridCardDetails text="DÍVIDA LÍQUIDA / PATRIMÔNIO" value={(quoteFinancialData?.financialData?.totalDebt / quoteBalanceSheetHistory?.totalStockholderEquity).toFixed(2)} />
+                        <GridCardDetails text="DÍVIDA LÍQUIDA / EBIT" value={(quoteFinancialData?.financialData?.totalDebt / quoteIncomeStatementHistory?.ebit).toFixed(2)} />
+                        <GridCardDetails text="DÍVIDA LÍQUIDA / EBITDA" value={(quoteFinancialData?.financialData?.totalDebt / quoteFinancialData?.financialData?.ebitda).toFixed(2)} />
                     </div>
                 </div>
             )}
@@ -166,7 +166,7 @@ function Index({ stock }) {
                             <img className="h-full w-full object-cover rounded-full shadow" src={quoteFinancialData?.logourl} alt />
                         </div>
                         <p className="mb-6 text-lg font-bold text-gray-900 ">{quoteFinancialData?.longName}</p>
-                        <SaveButton functionButton={null} text={<a href={quoteSummaryProfile?.website}>Visit website</a>} className={null}/>
+                        <SaveButton functionButton={null} text={<a href={quoteSummaryProfile?.website}>Visit website</a>} className={null} />
                     </div>
                 </div>
                 <div className="xl:w-3/5 lg:w-3/5 px-6 py-8">
@@ -201,7 +201,7 @@ function Index({ stock }) {
                                 <p className="text-sm text-gray-700 ">{quoteSummaryProfile?.longBusinessSummary}</p>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>

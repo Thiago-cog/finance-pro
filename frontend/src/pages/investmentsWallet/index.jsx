@@ -16,7 +16,7 @@ const InvestmentsWallet = () => {
     const [disabledLoading, setDisableLoading] = useState(false);
     const [openToModal, setOpenToModal] = useState(false);
     const token = GetCookie("user_session");
-    
+
     async function getAllWalletData() {
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
@@ -31,19 +31,18 @@ const InvestmentsWallet = () => {
     }, []);
 
     return (
-
         <>
             <Navbar />
-            <Modal isOpen={openToModal} setOpenToModal={setOpenToModal} stock={null} quoteValue={0}/>
-            <Loading disable={disabledLoading}/>
+            <Modal isOpen={openToModal} setOpenToModal={setOpenToModal} stock={null} quoteValue={0} />
+            <Loading disable={disabledLoading} />
             <div className="p-4 sm:ml-64 h-auto min-h-screen bg-gray-900">
                 <div className="sm:px-6">
-                    <div className="flex justify-between bg-gray-900 w-full h-96 mt-16 rounded-lg">
-                        <TableRankStock/>
-                        <WalletChart/>
-                    </div> 
+                    <div className="flex flex-col md:flex-row justify-between bg-gray-900 w-full h-auto md:h-96 mt-16 rounded-lg">
+                        <TableRankStock />
+                        <WalletChart />
+                    </div>
                 </div>
-                <div className=" mt-14">
+                <div className="mt-14">
                     <div className="w-full sm:px-6">
                         <div className="px-4 md:px-10 py-4 md:py-7 bg-gray-100 rounded-t-lg">
                             <div className="sm:flex items-center justify-between">
@@ -54,7 +53,7 @@ const InvestmentsWallet = () => {
                             </div>
                         </div>
                         {listActives.map((value) => (
-                            <TableInvestments nameType={value.name_type} totalActive={value.count} stocks={value.stocks} totalBuyPrice={value.total} totalSum={value.totalSum}/>
+                            <TableInvestments nameType={value.name_type} totalActive={value.count} stocks={value.stocks} totalBuyPrice={value.total} totalSum={value.totalSum} />
                         ))}
                     </div>
                 </div>

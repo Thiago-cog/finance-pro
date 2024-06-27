@@ -124,18 +124,18 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
         return (
             <>
                 <ToastContainer />
-                <div className="fixed bg-black bg-opacity-50 inset-0 z-50">
-                    <div className="fixed top-1/2 left-1/2 rounded-lg p-16 xl:w-2/6 xl:h-3/6 -translate-y-2/4 -translate-x-2/4 bg-white shadow-lg">
-                        <button className="absolute top-0 right-0 mt-3 mr-3 hover:bg-gray-200 rounded-lg" onClick={() => setOpenToModal(!isOpen)}>
+                <div className="fixed bg-black bg-opacity-50 inset-0 z-50 flex items-center justify-center">
+                    <div className="relative bg-white rounded-lg p-8 w-full max-w-2xl mx-auto shadow-lg">
+                        <button className="absolute top-3 right-3 hover:bg-gray-200 rounded-lg p-2" onClick={() => setOpenToModal(!isOpen)}>
                             <X className="w-6 h-6" />
                         </button>
                         <div className="mb-4">
                             <h1 className="text-2xl font-sans font-bold">Adicionar Ativo</h1>
                         </div>
-                        <div className=" w-full grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="mb-4">
                                 <label>Carteiras</label>
-                                <select className="border-gray-300 w-48 h-14 rounded-lg outline-none focus:bg-gray-50" onChange={setWalletIdSelect} value={walletId}>
+                                <select className="border-gray-300 w-full h-14 rounded-lg outline-none focus:bg-gray-50" onChange={setWalletIdSelect} value={walletId}>
                                     {listWallets.map((wallet, index) => (
                                         <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={wallet.id}>{wallet.name}</option>
                                     ))}
@@ -143,15 +143,15 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
                             </div>
                             <div>
                                 <label>Ticker</label>
-                                <input type="text" defaultValue={localStockValue} onBlur={(e) => getStockByTicker(e.target.value)} className="rounded-lg border-gray-300 h-14" />
+                                <input type="text" defaultValue={localStockValue} onBlur={(e) => getStockByTicker(e.target.value)} className="rounded-lg border-gray-300 w-full h-14" />
                             </div>
                             <div>
                                 <label>Cotação em R$</label>
-                                <input type="text" value={localQuoteValue} disabled className="rounded-lg border-gray-300 h-14" />
+                                <input type="text" value={localQuoteValue} disabled className="rounded-lg border-gray-300 w-full h-14" />
                             </div>
                             <div className="mb-4">
                                 <label>Tipo do ativo</label>
-                                <select className="border-gray-300 w-48 h-14 rounded-lg outline-none focus:bg-gray-50" onChange={setTypeInvestmentIdSelect} value={typeInvestmentId}>
+                                <select className="border-gray-300 w-full h-14 rounded-lg outline-none focus:bg-gray-50" onChange={setTypeInvestmentIdSelect} value={typeInvestmentId}>
                                     {listTypeInvestments.map((typeInvestment, index) => (
                                         <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={typeInvestment.id}>{typeInvestment.name}</option>
                                     ))}
@@ -159,15 +159,15 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
                             </div>
                             <div className="mb-4">
                                 <label>Quantidade</label>
-                                <input type="text" onChange={(e) => setQuantity(e.target.value)} value={valueQuantity} className="rounded-lg border-gray-300 h-14" />
+                                <input type="text" onChange={(e) => setQuantity(e.target.value)} value={valueQuantity} className="rounded-lg border-gray-300 w-full h-14" />
                             </div>
                             <div className="mb-4">
                                 <label>Valor Total em R$</label>
-                                <input type="text" value={totalValue} disabled className="rounded-lg border-gray-300 h-14" />
+                                <input type="text" value={totalValue} disabled className="rounded-lg border-gray-300 w-full h-14" />
                             </div>
                         </div>
-                        <div>
-                            <SaveButton functionButton={handleSave} text='Salvar'/>
+                        <div className="mt-4 flex justify-end">
+                            <SaveButton functionButton={handleSave} text='Salvar' />
                         </div>
                     </div>
                 </div>

@@ -7,17 +7,33 @@ import GetCookie from "../../hooks/getCookie";
 function WalletChart({ totalSum }) {
 	const [listAllStock, setListAllStock] = useState([]);
 	const [activeIndex, setActiveIndex] = useState(0);
+	const [radius, setRadius] = useState({ innerRadius: 40, outerRadius: 60, x: "13%" });
 	const token = GetCookie("user_session");
-    
+
 	async function getTotalRevenue() {
 		const decodeToken = await authServices.decodeToken(token);
 		const userId = decodeToken.userToken.id;
-		const response = await investmentsServices.getAllStocks(token, userId);		
+		const response = await investmentsServices.getAllStocks(token, userId);
 		setListAllStock(response);
 	}
 
 	useEffect(() => {
 		getTotalRevenue();
+	}, []);
+
+	useEffect(() => {
+		function handleResize() {
+			if (window.innerWidth < 640) {
+				setRadius({ innerRadius: 40, outerRadius: 60, x: "50%" });
+			} else {
+				setRadius({ innerRadius: 60, outerRadius: 80, x: "13%" });
+			}
+		}
+
+		window.addEventListener('resize', handleResize);
+		handleResize();
+
+		return () => window.removeEventListener('resize', handleResize);
 	}, []);
 
 	function generateColors(numColors) {
@@ -90,36 +106,37 @@ function WalletChart({ totalSum }) {
 
 	return (
 		<>
-			{data && data.length > 0 ? (
-				<ResponsiveContainer className="mr-4" width="50%" height="100%">
-					<PieChart className="rounded-lg h-full w-1/2  bg-white">
-						<text x="13%" y="30" textAnchor="middle" dominantBaseline="middle" fontSize="20">
-							Ativos na carteira
-						</text>
-						<Pie
-							activeIndex={activeIndex}
-							activeShape={renderActiveShape}
-							data={data}
-							cx="50%"
-							cy="50%"
-							innerRadius={60}
-							outerRadius={80}
-							fill="#8884d8"
-							dataKey="value"
-							onMouseEnter={onPieEnter}
-						>
-							{data.map((entry, index) => (
-								<Cell key={`cell-${index}`} fill={entry.color} />
-							))}
-						</Pie>
-					</PieChart>
-				</ResponsiveContainer>
-			) : (
-
-				<div className='rounded-lg w-1/2 bg-white h-full flex justify-center items-center text-xl mr-2'>
-					<h1>Nenhum dado encontrado</h1>
-				</div>
-			)}
+			<div className="bg-white shadow rounded-lg p-4 md:p-10 w-full md:w-1/2 h-96">
+				{data && data.length > 0 ? (
+					<ResponsiveContainer width="100%" height="100%">
+						<PieChart>
+							<text x={radius.x} y="30" textAnchor="middle" dominantBaseline="middle" fontSize="20">
+								Ativos na carteira
+							</text>
+							<Pie
+								activeIndex={activeIndex}
+								activeShape={renderActiveShape}
+								data={data}
+								cx="50%"
+								cy="50%"
+								innerRadius={radius.innerRadius}
+								outerRadius={radius.outerRadius}
+								fill="#8884d8"
+								dataKey="value"
+								onMouseEnter={onPieEnter}
+							>
+								{data.map((entry, index) => (
+									<Cell key={`cell-${index}`} fill={entry.color} />
+								))}
+							</Pie>
+						</PieChart>
+					</ResponsiveContainer>
+				) : (
+					<div className="h-full flex justify-center items-center text-xl">
+						<h1>Nenhum dado encontrado</h1>
+					</div>
+				)}
+			</div>
 		</>
 	);
 }

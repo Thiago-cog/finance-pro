@@ -94,7 +94,7 @@ function Index() {
             <Loading disable={disabledLoading} />
             <div className="w-full flex flex-col md:flex-row items-center justify-between mb-5">
                 <div></div>
-                <div className="relative w-full md:w-auto">
+                <div className="relative w-full md:w-auto mb-2">
                     <input className="w-full md:w-96 py-2 rounded-lg" placeholder="Pesquisar" value={search} onChange={(ev) => setSearch(ev.target.value)} />
                     {filterSearch.length > 0 && (
                         <ul className="search-results rounded-lg absolute w-full mt-1 bg-white shadow-lg z-10">
