@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CreditCard } from 'lucide-react';
+import { CreditCard, XCircle } from 'lucide-react';
 import InputMask from "react-input-mask";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -68,6 +68,47 @@ function FormCard() {
         setAccountId(accountId);
     }
 
+    async function deleteCard(cardId) {
+        const resultDeleteCard = await accountsServices.deleteCard(token, cardId);
+
+        if (resultDeleteCard.status === 400) {
+            toast.info(`${resultDeleteCard.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        } else if (resultDeleteCard.status === 500) {
+            toast.error('Internal Server Error!', {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        } else {
+            toast.info(`${resultDeleteCard.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
+
+        getAccounts();
+    }
+
     const handleSave = async (e) => {
         e.preventDefault();
         const resultCreatCard = await accountsServices.createCard(token, accountId, numberCard, dueDay, valueLimitCard, valueInvoice);
@@ -81,7 +122,7 @@ function FormCard() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         } else if (resultCreatCard.status === 500) {
             toast.error('Internal Server Error!', {
@@ -92,7 +133,7 @@ function FormCard() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         } else {
             toast.success(`${resultCreatCard.data.message}`, {
@@ -103,7 +144,7 @@ function FormCard() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         }
 
@@ -137,6 +178,9 @@ function FormCard() {
                                     <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
                                         limite disponível
                                     </th>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        ações
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -154,6 +198,12 @@ function FormCard() {
                                         </td>
                                         <td className="px-2 py-2 sm:px-6 sm:py-4">
                                             R$ {String(card.limit_available).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")}
+                                        </td>
+                                        <td className="px-2 py-2 sm:px-6 sm:py-4 flex">
+                                            {/* <PenSquare className="w-5 h-5 mr-1" /> */}
+                                            <button onClick={() => deleteCard(card.id)}>
+                                                <XCircle className="w-5 h-5"/>
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}
@@ -232,7 +282,18 @@ function FormCard() {
                                     Data de Vencimento
                                 </p>
                                 <div className="mb-5">
-                                    <input className="font-sans font-normal text-base w-1/2 p-3 mt-4 border border-gray-300 rounded-lg outline-none focus:bg-gray-50" value={dueDay} onChange={(e) => setDueDay(e.target.value)} type="text" />
+                                    <input
+                                        className="font-sans font-normal text-base w-1/2 p-3 mt-4 border border-gray-300 rounded-lg outline-none focus:bg-gray-50"
+                                        value={dueDay}
+                                        onChange={(e) => {
+                                            const inputValue = e.target.value;
+                                            if (/^\d{0,2}$/.test(inputValue)) {  // Verifica se são até dois dígitos numéricos
+                                                setDueDay(inputValue);  // Atualiza o estado com o valor válido
+                                            }
+                                        }}
+                                        type="text"
+                                        maxLength="2"  // Limita a entrada a dois caracteres
+                                    />
                                 </div>
                             </div>
                         </div>

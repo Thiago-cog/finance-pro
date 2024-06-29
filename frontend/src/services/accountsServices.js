@@ -172,6 +172,51 @@ class AccountsService {
             return error.response;
         }
     }
+
+    async deleteTransaction(token, transactionId) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.delete(`${BASE_URL}/delete-transaction?transactionId=${transactionId}`, config);
+            return response.data;
+        }catch (error){
+            return error.response;
+        }
+    }
+
+    async deleteAccount(token, accountId) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.delete(`${BASE_URL}/delete-account?accountId=${accountId}`, config);
+            return response.data;
+        }catch (error){
+            return error.response;
+        }
+    }
+    
+    async deleteCard(token, cardId) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.delete(`${BASE_URL}/delete-card?cardId=${cardId}`, config);
+            return response.data;
+        }catch (error){
+            return error.response;
+        }
+    }
 }
 
 

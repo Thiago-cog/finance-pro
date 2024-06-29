@@ -12,6 +12,7 @@ const ResetPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [warningMessage, setWarningMessage] = useState('');
     const [token, setToken] = useState(null);
     const location = useLocation();
 
@@ -26,9 +27,9 @@ const ResetPassword = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
-        }else if (validate.status === 401) {
+        } else if (validate.status === 401) {
             toast.warn(`${validate.data.message}`, {
                 position: "top-center",
                 autoClose: 2500,
@@ -37,7 +38,7 @@ const ResetPassword = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
             return navigate("/");
         }
@@ -53,7 +54,12 @@ const ResetPassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
+        if (password.length < 6) {
+            setWarningMessage('A senha deve ter pelo menos 6 caracteres.');
+            return;
+        }
+
         if (password !== confirmPassword) {
             toast.warn('As senhas não coincidem. Por favor, tente novamente.', {
                 position: "top-center",
@@ -63,13 +69,13 @@ const ResetPassword = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
             return;
         }
-        
+
         const result = await authServices.resetPassword(password, token);
-        
+
         if (result.status === 400) {
             toast.warn(`${result.data.message}`, {
                 position: "top-center",
@@ -79,7 +85,7 @@ const ResetPassword = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         } else if (result.status === 500) {
             toast.error(`Internal Server Error! ${result.data.message}`, {
@@ -90,7 +96,7 @@ const ResetPassword = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         } else {
             toast.success(`${result.data.message}`, {
@@ -101,13 +107,24 @@ const ResetPassword = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         }
 
         setTimeout(() => {
             return navigate("/");
         }, 2500);
+    };
+
+    const handlePasswordChange = (e) => {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+
+        if (newPassword.length < 6) {
+            setWarningMessage('A senha deve ter pelo menos 6 caracteres.');
+        } else {
+            setWarningMessage('');
+        }
     };
 
     return (
@@ -127,7 +144,7 @@ const ResetPassword = () => {
                         <div className="relative mt-1">
                             <input
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={handlePasswordChange}
                                 id="password"
                                 name="password"
                                 type={showPassword ? "text" : "password"}
@@ -143,6 +160,9 @@ const ResetPassword = () => {
                                 {showPassword ? <EyeOff size={20} color="white" /> : <Eye size={20} color="white" />}
                             </button>
                         </div>
+                        {warningMessage && (
+                            <p className="text-red-500 text-sm mt-2">{warningMessage}</p>
+                        )}
                     </div>
                     <div>
                         <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300">
@@ -167,6 +187,9 @@ const ResetPassword = () => {
                                 {showConfirmPassword ? <EyeOff size={20} color="white" /> : <Eye size={20} color="white" />}
                             </button>
                         </div>
+                        {warningMessage && (
+                            <p className="text-red-500 text-sm mt-2">{warningMessage}</p>
+                        )}
                     </div>
                     <div>
                         <SaveButton text="Salvar" functionButton={handleSubmit} />

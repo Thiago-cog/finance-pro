@@ -35,7 +35,7 @@ const Login = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         } else if (resultLogin.status === 500) {
             toast.error('Internal Server Error!', {
@@ -46,7 +46,7 @@ const Login = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         }
 

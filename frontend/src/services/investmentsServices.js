@@ -221,6 +221,36 @@ class InvestmentsService {
         }
     }
 
+    async isHaveWallet(token, userId) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.get(`${BASE_URL_BACK}/validates-wallet?userId=${userId}`, config);
+            return response.data;
+        } catch(error) {
+            return error.response;
+        }
+    }
+
+    async createWallet(token, walletData) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
+        try{
+            const response = await axios.post(`${BASE_URL_BACK}/create-wallet`, walletData, config);
+            return response;
+        }catch (error){
+            return error.response;
+        }
+    }
+
 }
 
 export default new InvestmentsService();

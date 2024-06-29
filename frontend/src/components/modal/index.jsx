@@ -82,7 +82,7 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         } else if (resultAddQuote?.status === 500) {
             toast.error('Internal Server Error!', {
@@ -93,7 +93,7 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         } else {
             toast.success(`${resultAddQuote?.data?.message}`, {
@@ -104,7 +104,7 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         }
     }
@@ -135,7 +135,7 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="mb-4">
                                 <label>Carteiras</label>
-                                <select className="border-gray-300 w-full h-14 rounded-lg outline-none focus:bg-gray-50" onChange={setWalletIdSelect} value={walletId}>
+                                <select className="border-gray-300 w-full h-14 rounded-lg outline-none focus:bg-gray-50 cursor-pointer" onChange={setWalletIdSelect} value={walletId}>
                                     {listWallets.map((wallet, index) => (
                                         <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={wallet.id}>{wallet.name}</option>
                                     ))}
@@ -147,11 +147,11 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
                             </div>
                             <div>
                                 <label>Cotação em R$</label>
-                                <input type="text" value={localQuoteValue} disabled className="rounded-lg border-gray-300 w-full h-14" />
+                                <input type="text" value={localQuoteValue} disabled className="rounded-lg border-gray-300 w-full h-14 bg-gray-100" />
                             </div>
                             <div className="mb-4">
                                 <label>Tipo do ativo</label>
-                                <select className="border-gray-300 w-full h-14 rounded-lg outline-none focus:bg-gray-50" onChange={setTypeInvestmentIdSelect} value={typeInvestmentId}>
+                                <select className="border-gray-300 w-full h-14 rounded-lg outline-none focus:bg-gray-50 cursor-pointer" onChange={setTypeInvestmentIdSelect} value={typeInvestmentId}>
                                     {listTypeInvestments.map((typeInvestment, index) => (
                                         <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={typeInvestment.id}>{typeInvestment.name}</option>
                                     ))}
@@ -163,7 +163,7 @@ function Modal({ isOpen, setOpenToModal, stock, quoteValue }) {
                             </div>
                             <div className="mb-4">
                                 <label>Valor Total em R$</label>
-                                <input type="text" value={totalValue} disabled className="rounded-lg border-gray-300 w-full h-14" />
+                                <input type="text" value={totalValue} disabled className="rounded-lg border-gray-300 w-full h-14 bg-gray-100" />
                             </div>
                         </div>
                         <div className="mt-4 flex justify-end">

@@ -22,7 +22,7 @@ const ForgotPassword = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         } else if (result.status === 500) {
             toast.error(`Internal Server Error! ${result.data.message}`, {
@@ -33,7 +33,7 @@ const ForgotPassword = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         } else {
             toast.success(`${result.data.message}`, {
@@ -44,7 +44,7 @@ const ForgotPassword = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         }
 

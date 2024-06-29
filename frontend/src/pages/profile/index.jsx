@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Eye, EyeOff } from 'lucide-react';
 import authServices from "../../services/authServices.js";
 import Navbar from "../../components/navbar";
 import Switcher3 from "../../components/toggle/index.jsx";
@@ -12,6 +13,8 @@ function Profile() {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [warningMessage, setWarningMessage] = useState('');
     const token = GetCookie("user_session");
 
     async function getUserData() {
@@ -33,8 +36,24 @@ function Profile() {
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
 
+        if (password.length < 6) {
+            setWarningMessage('A senha deve ter pelo menos 6 caracteres.');
+            return;
+        }
+        
         const resultUpdateUser = await authServices.updateUser(email, password, fullname, phone, userId, token);
 
+    };
+
+    const handlePasswordChange = (e) => {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+
+        if (newPassword.length < 6) {
+            setWarningMessage('A senha deve ter pelo menos 6 caracteres.');
+        } else {
+            setWarningMessage('');
+        }
     };
 
     useEffect(() => {
@@ -77,7 +96,23 @@ function Profile() {
                         </div>
                         <div className="flex flex-col">
                             <label className="mb-3 text-sm leading-none text-gray-800 font-semibold">Senha</label>
-                            <input type="password" className="w-full sm:w-64 text-sm font-medium leading-none text-gray-800 p-3 border rounded-lg border-gray-200" onChange={(e) => setPassword(e.target.value)} />
+                            <div className="relative">
+                                <input 
+                                    type={showPassword ? "text" : "password"} 
+                                    className="w-full sm:w-64 text-sm font-medium leading-none text-gray-800 p-3 border rounded-lg border-gray-200" 
+                                    onChange={handlePasswordChange}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute inset-y-0 right-[445px] flex items-center pr-3"
+                                >
+                                    {showPassword ? <EyeOff size={20} color="black" /> : <Eye size={20} color="black" />}
+                                </button>
+                            </div>
+                            {warningMessage && (
+                                <p className="text-red-500 text-sm mt-2">{warningMessage}</p>
+                            )}
                         </div>
                     </div>
                     <h1 role="heading" aria-label="profile information" className="focus:outline-none text-2xl sm:text-3xl font-bold text-gray-800 mt-8 sm:mt-12">

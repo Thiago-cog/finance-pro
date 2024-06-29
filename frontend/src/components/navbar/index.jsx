@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { LogOut, Landmark, CreditCard, ArrowLeftRight, TrendingUp, User } from 'lucide-react';
+import { LogOut, Landmark, CreditCard, ArrowLeftRight, TrendingUp, User, Wallet, CandlestickChart } from 'lucide-react';
 
 import Logo from "../../assets/2-removebg-preview.png";
 import GetCookie from "../../hooks/getCookie.jsx";
@@ -9,7 +9,12 @@ import authServices from "../../services/authServices.js";
 
 const Navbar = () => {
     const [name, setName] = useState("");
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
+
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
 
     async function getUser() {
         const token = GetCookie("user_session");
@@ -52,6 +57,10 @@ const Navbar = () => {
 
     function profile() {
         navigate("/profile");
+    }
+
+    function wallet() {
+        navigate("/investments-wallet");
     }
 
     return (
@@ -105,10 +114,29 @@ const Navbar = () => {
                             </button>
                         </li>
                         <li>
-                            <button onClick={investments} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <TrendingUp className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+                            <button
+                                onClick={toggleDropdown}
+                                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                            >
+                                <TrendingUp className="flex-shrink-0 w-5 h-5 transition duration-75 text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                                 <span className="flex-1 ml-3 whitespace-nowrap font-bold font-sans">Investimentos</span>
                             </button>
+                            {isDropdownOpen && (
+                                <ul className="mt-2 space-y-2">
+                                    <li>
+                                        <button onClick={wallet} className="flex items-center p-2 rounded-lg text-white  hover:bg-gray-700 group">
+                                            <Wallet className="ml-8 mr-2 w-5 h-5 text-gray-400"/>
+                                            <span className="whitespace-nowrap font-sans">Carteira</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button onClick={investments} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                            <CandlestickChart className="ml-8 mr-2 w-5 h-5 text-gray-400"/>
+                                            <span className="whitespace-nowrap font-sans">Homebreak</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            )}
                         </li>
                         <li>
                             <button onClick={profile} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

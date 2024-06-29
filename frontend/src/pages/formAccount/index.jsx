@@ -32,6 +32,46 @@ function FormAccount() {
         setTypeAccount(valueTypeAccount);
     }
 
+    async function deleteAccount(accountId) {
+        const resultDeleteAccount = await accountsServices.deleteAccount(token, accountId);
+
+        if (resultDeleteAccount.status === 400) {
+            toast.info(`${resultDeleteAccount.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        } else if (resultDeleteAccount.status === 500) {
+            toast.error('Internal Server Error!', {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        } else {
+            toast.info(`${resultDeleteAccount.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
+        getAccounts();
+    }
+
     const handleSave = async (e) => {
         e.preventDefault();
         const decodeToken = await authServices.decodeToken(token);
@@ -47,7 +87,7 @@ function FormAccount() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         } else if (resultCreateAccount.status === 500) {
             toast.error('Internal Server Error!', {
@@ -58,7 +98,7 @@ function FormAccount() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         } else {
             toast.success(`${resultCreateAccount.data.message}`, {
@@ -69,7 +109,7 @@ function FormAccount() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         }
 
@@ -98,6 +138,9 @@ function FormAccount() {
                                     <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
                                         saldo
                                     </th>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        ações
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -118,6 +161,12 @@ function FormAccount() {
                                                     ? String(account.balance + '00').replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")
                                                     : String(account.balance).replace(/\D/g, "").replace(/(\d)(\d{2})$/g, "$1,$2").replace(/(?=(\d{3})+(\D))\B/g, ".")
                                             }
+                                        </td>
+                                        <td className="px-2 py-2 sm:px-6 sm:py-4 flex">
+                                            {/* <PenSquare className="w-5 h-5 mr-1" /> */}
+                                            <button onClick={() => deleteAccount(account.id)}>
+                                                <XCircle className="w-5 h-5"/>
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}

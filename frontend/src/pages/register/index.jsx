@@ -12,10 +12,17 @@ const Register = () => {
     const [password, setPassword] = useState("");
     const [fullname, setName] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [warningMessage, setWarningMessage] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (password.length < 6) {
+            setWarningMessage('A senha deve ter pelo menos 6 caracteres.');
+            return;
+        }
+
         const response = await authServices.registerUser(email, password, fullname);
         if (response.status === 201) {
             toast.success(`${response.data.message}`, {
@@ -26,7 +33,7 @@ const Register = () => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
 
             setTimeout(() => {
@@ -34,6 +41,17 @@ const Register = () => {
             }, 2500);
         }
     }
+
+    const handlePasswordChange = (e) => {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+
+        if (newPassword.length < 6) {
+            setWarningMessage('A senha deve ter pelo menos 6 caracteres.');
+        } else {
+            setWarningMessage('');
+        }
+    };
 
     return (
         <div className="flex flex-col md:flex-row w-full h-screen bg-gradient-to-tr from-gray-950 to-gray-900">
@@ -86,7 +104,7 @@ const Register = () => {
                             <div className="relative">
                                 <input
                                     value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={handlePasswordChange}
                                     id="password"
                                     name="password"
                                     type={showPassword ? "text" : "password"}
@@ -102,6 +120,9 @@ const Register = () => {
                                     {showPassword ? <EyeOff size={20} color="white" /> : <Eye size={20} color="white" />}
                                 </button>
                             </div>
+                            {warningMessage && (
+                                <p className="text-red-500 text-sm mt-2">{warningMessage}</p>
+                            )}
                         </div>
                         <div>
                             <button

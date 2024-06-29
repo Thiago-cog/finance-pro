@@ -6,19 +6,42 @@ export const InputMoney = ({ onValue, classP, classInput }) => {
     function handleValueBalanceChange(e) {
         let inputValue = e.target.value;
         inputValue = inputValue.replace(/\D/g, "");
-        inputValue = inputValue.replace(/(\d)(\d{2})$/g, "$1,$2");
-        inputValue = inputValue.replace(/(?=(\d{3})+(\D))\B/g, ".");
-        setValueBalance(inputValue);
-        
-        inputValue = inputValue.replace(/\D/g, "");
-        inputValue = parseFloat(inputValue)/100;
-        onValue(inputValue);
+
+        if (inputValue === "") {
+            setValueBalance("");
+            onValue(0);
+            return;
+        }
+
+        const billionLimit = 100000000; 
+        let numericValue = parseInt(inputValue, 10);
+        if (numericValue > billionLimit) {
+            numericValue = billionLimit;
+        }
+
+
+        let stringValue = numericValue.toString().padStart(3, "0");
+        let integerPart = stringValue.slice(0, -2);
+        let decimalPart = stringValue.slice(-2);
+
+        integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        let formattedValue = integerPart + ',' + decimalPart;
+
+        setValueBalance(formattedValue);
+
+        onValue(numericValue / 100);
     }
 
     return (
         <>
             <p className={classP}>R$</p>
-            <input className={classInput} type="text" value={valueBalance} onChange={handleValueBalanceChange} />
+            <input 
+                className={classInput} 
+                type="text" 
+                value={valueBalance} 
+                onChange={handleValueBalanceChange} 
+            />
         </>
     )
 }

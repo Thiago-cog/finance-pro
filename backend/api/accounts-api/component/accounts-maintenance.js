@@ -458,6 +458,96 @@ class AccountsMaintenance {
         return result;
     }
 
+    async deleteTransaction(transactionId) {
+        let result = {};
+        try {
+
+            if(!transactionId) {
+                result.status = 400;
+                result.errors = {
+                    error: 'ID NÃO ENCONTRADO',
+                    message: 'O id da transação não informado.'
+                };
+                return result
+            }
+
+            await this.accountsRepository.deleteTransactionById(transactionId);
+
+            result.status = 200;
+            result.data = {
+                message: 'Transação deletada com sucesso'
+            };
+
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                error: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            };
+        }
+        return result;
+    }
+    
+    async deleteAccount(accountId) {
+        let result = {};
+        try {
+
+            if(!accountId) {
+                result.status = 400;
+                result.errors = {
+                    error: 'ID NÃO ENCONTRADO',
+                    message: 'O id da conta não informado.'
+                };
+                return result
+            }
+
+            await this.accountsRepository.deleteAccountById(accountId);
+
+            result.status = 200;
+            result.data = {
+                message: 'Conta deletada com sucesso'
+            };
+
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                error: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            };
+        }
+        return result;
+    }
+    
+    async deleteCard(cardId) {
+        let result = {};
+        try {
+
+            if(!cardId) {
+                result.status = 400;
+                result.errors = {
+                    error: 'ID NÃO ENCONTRADO',
+                    message: 'O id do cartão não informado.'
+                };
+                return result
+            }
+
+            await this.accountsRepository.deleteCardById(cardId);
+
+            result.status = 200;
+            result.data = {
+                message: 'Cartão deletado com sucesso'
+            };
+
+        } catch (error) {
+            result.status = 500
+            result.errors = {
+                error: error.message,
+                message: "Erro inesperado aconteceu!" + error.message
+            };
+        }
+        return result;
+    }
+
     #calculateValueExtract(value_account = 0, value_movement, type_movement) {
         let returnJson = {
             valueFinal: 0,

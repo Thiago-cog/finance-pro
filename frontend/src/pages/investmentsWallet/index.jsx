@@ -9,19 +9,24 @@ import TableRankStock from "../../components/table/tableRankStock";
 import investmentsServices from "../../services/investmentsServices";
 import authServices from "../../services/authServices";
 import GetCookie from "../../hooks/getCookie";
-import BackButton from "../../components/button/backButton";
+import ModalWallet from "../../components/modal/modalWallet";
 
 const InvestmentsWallet = () => {
     const [listActives, setListActives] = useState([]);
     const [disabledLoading, setDisableLoading] = useState(false);
     const [openToModal, setOpenToModal] = useState(false);
+    const [openToModalWallet, setOpenToModalWallet] = useState(false);
     const token = GetCookie("user_session");
 
     async function getAllWalletData() {
         const decodeToken = await authServices.decodeToken(token);
         const userId = decodeToken.userToken.id;
+        const isHaveWallet = await investmentsServices.isHaveWallet(token, userId);
         const listActivesResponse = await investmentsServices.getAllWalletData(token, userId);
-
+        if(!isHaveWallet.length > 0){
+            setOpenToModalWallet(true);
+        }
+        
         setListActives(listActivesResponse);
         setDisableLoading(true);
     }
@@ -33,6 +38,7 @@ const InvestmentsWallet = () => {
     return (
         <>
             <Navbar />
+            <ModalWallet isOpen={openToModalWallet} setOpenToModal={setOpenToModalWallet}/>
             <Modal isOpen={openToModal} setOpenToModal={setOpenToModal} stock={null} quoteValue={0} />
             <Loading disable={disabledLoading} />
             <div className="p-4 sm:ml-64 h-auto min-h-screen bg-gray-900">

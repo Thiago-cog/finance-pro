@@ -16,10 +16,9 @@ const applyResult = (result, res) => {
     return res.send(result.data);
 };
 
-router.post('/create-wallet/:userId', authenticateToken, async (req, res) => {
+router.post('/create-wallet', authenticateToken, async (req, res) => {
     const investmentsMaintenance = new InvestmentsMaintenance(new WalletsRepository(), null);
     const walletData = req.body;
-    walletData.userId = parseInt(req.params.userId);
     const result = await investmentsMaintenance.createWallet(walletData);
     applyResult(result, res);
 });
@@ -62,6 +61,13 @@ router.get('/get-rank-stocks', authenticateToken, async (req, res) => {
     const investmentsMaintenance = new InvestmentsMaintenance(new WalletsRepository(), new InvestmentsRepository(), new TypeInvestmentsRepository());
     const userId = parseInt(req.query.userId);
     const result = await investmentsMaintenance.getRankStocksByUserId(userId);
+    applyResult(result, res);
+});
+
+router.get('/validates-wallet', authenticateToken, async (req, res) => {
+    const investmentsMaintenance = new InvestmentsMaintenance(new WalletsRepository(), new InvestmentsRepository(), new TypeInvestmentsRepository());
+    const userId = parseInt(req.query.userId);
+    const result = await investmentsMaintenance.validatesWallet(userId);
     applyResult(result, res);
 });
 module.exports = router;

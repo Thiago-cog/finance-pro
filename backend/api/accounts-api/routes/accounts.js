@@ -97,4 +97,25 @@ router.get('/get-revenue-expenses/', authenticateToken, async(req, res) => {
     const result = await accountsMaintenance.getRevenueAndExpensesByUserId(userId);
     applyResult(result, res);
 });
+
+router.delete('/delete-transaction', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    const transactionId = parseInt(req.query.transactionId);
+    const result = await accountsMaintenance.deleteTransaction(transactionId);
+    applyResult(result, res);
+});
+
+router.delete('/delete-account', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    const accountId = parseInt(req.query.accountId);
+    const result = await accountsMaintenance.deleteAccount(accountId);
+    applyResult(result, res);
+});
+
+router.delete('/delete-card', authenticateToken, async(req, res) => {
+    const accountsMaintenance = new AccountsMaintenance(new AccountsRepository());
+    const cardId = parseInt(req.query.cardId);
+    const result = await accountsMaintenance.deleteCard(cardId);
+    applyResult(result, res);
+});
 module.exports = router;

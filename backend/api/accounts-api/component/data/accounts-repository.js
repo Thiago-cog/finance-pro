@@ -295,6 +295,27 @@ class AccountsRepository {
         return result.rows;
     }
 
+    async deleteTransactionById(transactionId) {
+        const conn = await this.databaseConnector.generateConnection();
+        await conn.query(`DELETE FROM extracts WHERE id = $1`, [transactionId]);
+        await conn.query(`DELETE FROM invoices WHERE id = $1`, [transactionId]);
+    }
+    
+    async deleteAccountById(accountId) {
+        const conn = await this.databaseConnector.generateConnection();
+        const resultIdCard = await conn.query(`SELECT id FROM cards WHERE accounts_id = $1`, [accountId]);
+
+        await conn.query(`DELETE FROM invoices WHERE card_id = $1`, [resultIdCard?.rows[0]?.id]);
+        await conn.query(`DELETE FROM extracts WHERE account_id = $1`, [accountId]);
+        await conn.query(`DELETE FROM cards WHERE accounts_id = $1`, [accountId]);
+        await conn.query(`DELETE  FROM accounts WHERE id = $1`, [accountId]);
+    }
+    
+    async deleteCardById(cardId) {
+        const conn = await this.databaseConnector.generateConnection();
+        await conn.query(`DELETE FROM invoices WHERE card_id = $1`, [cardId]);
+        await conn.query(`DELETE FROM cards WHERE id = $1`, [cardId]);
+    }
 }
 
 module.exports = AccountsRepository;

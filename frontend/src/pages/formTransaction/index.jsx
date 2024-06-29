@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowDown, ArrowUp, DollarSign, Receipt, GanttChartSquare } from 'lucide-react';
+import { ArrowDown, ArrowUp, DollarSign, Receipt, GanttChartSquare, PenSquare, XCircle } from 'lucide-react';
 import InputMask from "react-input-mask";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,6 +16,7 @@ function FormTransaction() {
     const currentDate = new Date();
     const formatCurrentDate = currentDate.toLocaleDateString('pt-BR');
     const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth(); // 0-indexed
 
     const [value, setValue] = useState(0);
     const [listAccounts, setListAccounts] = useState([]);
@@ -67,6 +68,10 @@ function FormTransaction() {
         'Dezembro'
     ]
 
+    const getMonthsUntilCurrent = () => {
+        return arrayMonth.slice(0, currentMonth + 2); // +2 because we need to include the current month and 'Selecione'
+    }
+
     const changeTab = (tab) => {
         setActiveTab(tab);
     };
@@ -95,6 +100,49 @@ function FormTransaction() {
         const selectObject = { "id": 0, "number_card": "Selecione", "name": "" };
         allCards.data.cards.unshift(selectObject);
         setListCards(allCards.data.cards)
+    }
+
+    async function deleteTransaction(transactionId) {
+        const resultdeleteTransaction = await accountsServices.deleteTransaction(token, transactionId);
+
+        if (resultdeleteTransaction.status === 400) {
+            toast.info(`${resultdeleteTransaction.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        } else if (resultdeleteTransaction.status === 500) {
+            toast.error('Internal Server Error!', {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        } else {
+            toast.info(`${resultdeleteTransaction.message}`, {
+                position: "top-center",
+                autoClose: 2500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
+
+        getAccounts();
+        getCards();
+        getMoviments();
     }
 
     async function getCategories() {
@@ -144,7 +192,7 @@ function FormTransaction() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         } else if (resultCreateMovement.status === 500) {
             toast.error('Internal Server Error!', {
@@ -155,7 +203,7 @@ function FormTransaction() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         } else {
             toast.success(`${resultCreateMovement.data.message}`, {
@@ -166,7 +214,7 @@ function FormTransaction() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                theme: "dark",
+                theme: "light",
             });
         }
         getAccounts();
@@ -257,6 +305,9 @@ function FormTransaction() {
                                     <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
                                         Valor
                                     </th>
+                                    <th scope="col" className="px-2 py-2 sm:px-6 sm:py-3">
+                                        ações
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -283,6 +334,12 @@ function FormTransaction() {
                                         </td>
                                         <td className="px-2 py-2 sm:px-6 sm:py-4">
                                             R$ {moviment.value}
+                                        </td>
+                                        <td className="px-2 py-2 sm:px-6 sm:py-4 flex">
+                                            {/* <PenSquare className="w-5 h-5 mr-1" /> */}
+                                            <button onClick={() => deleteTransaction(moviment.id)}>
+                                                <XCircle className="w-5 h-5"/>
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}
@@ -430,7 +487,7 @@ function FormTransaction() {
                                         Mês
                                     </p>
                                     <select className="border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setValueMonthMovement}>
-                                        {arrayMonth.map((month, index) => (
+                                        {getMonthsUntilCurrent().map((month, index) => (
                                             <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={index}>{month}</option>
                                         ))}
                                     </select>
@@ -511,7 +568,7 @@ function FormTransaction() {
                                         Mês
                                     </p>
                                     <select className="border-gray-300 relative flex items-center justify-between w-1/2 h-14  p-3 mt-4 rounded-lg outline-none focus:bg-gray-50" onChange={setValueMonthMovement}>
-                                        {arrayMonth.map((month, index) => (
+                                        {getMonthsUntilCurrent().map((month, index) => (
                                             <option key={index} className="rounded p-3 text-lg leading-none text-gray-600 cursor-pointer hover:bg-indigo-100 hover:font-medium hover:text-indigo-700 hover:rounded" value={index}>{month}</option>
                                         ))}
                                     </select>
