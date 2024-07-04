@@ -23,6 +23,7 @@ function Index({ stock }) {
 
     async function getQuoteAllStatusByName() {
         const resultFinancialData = await investmentsServices.getQuoteFinancialDataByName(stock, null);
+        console.log("🚀 ~ getQuoteAllStatusByName ~ resultFinancialData:", resultFinancialData)
         const resultDefaultKeyStatistics = await investmentsServices.getQuoteDefaultKeyStatisticsByName(stock, null);
         const resultSummaryProfile = await investmentsServices.getQuoteSummaryProfileByName(stock, null);
         const resultIncomeStatementHistory = await investmentsServices.getQuoteIncomeStatementHistoryByName(stock, null);
@@ -53,6 +54,7 @@ function Index({ stock }) {
         resultFinancialData?.historicalDataPrice.map((historicalDataPrice) => {
             historicalDataPrice.date = format(new Date(historicalDataPrice.date * 1000), 'dd/MM/yyyy');
         });
+        console.log(resultDefaultKeyStatistics)
 
         setQuoteFinancialData(resultFinancialData);
         setQuoteDefaultKeyStatistics(resultDefaultKeyStatistics);
@@ -77,7 +79,7 @@ function Index({ stock }) {
     return (
         <>
             <Loading disable={disabledLoading} />
-            <Modal isOpen={openToModal} setOpenToModal={setOpenToModal} stock={stock} quoteValue={quoteFinancialData?.financialData?.currentPrice} />
+            <Modal isOpen={openToModal} setOpenToModal={setOpenToModal} stock={stock} quoteValue={quoteFinancialData?.regularMarketPrice} />
             <nav className="bg-gray-900 border-gray-800 rounded-lg border-4 mb-4">
                 <div className="max-w-screen-xl flex items-center mx-auto p-4">
                     <img src={quoteFinancialData?.logourl} alt={quoteFinancialData?.longName} className="h-16 w-16 rounded-lg" />
@@ -92,10 +94,10 @@ function Index({ stock }) {
             </nav>
             {disabledLoading == true && (
                 <div className="grid grid-cols-1 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                    <GridCardTop text="Cotação" value={`R$ ${quoteFinancialData?.financialData?.currentPrice}`} />
+                    <GridCardTop text="Cotação" value={`R$ ${quoteFinancialData?.regularMarketPrice}`} />
                     <GridCardTop text="Variação (dia)" value={`R$ ${parseFloat(quoteFinancialData?.regularMarketChange?.toFixed(2))} (${quoteFinancialData?.regularMarketChangePercent?.toFixed(2)}%)`} />
-                    <GridCardTop text="P/L" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.forwardPE?.toFixed(2)} />
-                    <GridCardTop text="P/VP" value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.priceToBook?.toFixed(2)} />
+                    <GridCardTop text="P/L" value="7,49" />
+                    <GridCardTop text="P/VP" value="1,55" />
                     <GridCardTop text="DY" value="R$ 1200,00" />
                 </div>
             )}
@@ -126,82 +128,82 @@ function Index({ stock }) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 bg-white rounded-lg">
                         <GridCardDetails 
                             text="P/L" 
-                            value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.forwardPE?.toFixed(2)} 
+                            value="7,49" 
                             tooltipText="<b>P/L (Preço/Lucro):</b> Mede quanto os investidores estão dispostos a pagar por cada real de lucro da empresa. Este indicador é importante pois ajuda a avaliar se a ação está supervalorizada ou subvalorizada."
                         />
                         <GridCardDetails 
                             text="P/RECEITA (PSR)" 
-                            value={(quoteFinancialData?.financialData?.currentPrice / quoteFinancialData?.financialData?.revenuePerShare).toFixed(2)} 
+                            value="1,41"
                             tooltipText="<b>P/Receita (PSR):</b> É a relação entre o preço da ação e a receita por ação. Esse indicador é importante porque indica quanto os investidores estão pagando por unidade de receita."
                         />
                         <GridCardDetails 
                             text="P/VP" 
-                            value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.priceToBook?.toFixed(2)} 
+                            value="1,55" 
                             tooltipText="<b>P/VP (Preço/Valor Patrimonial):</b> Compara o preço da ação ao valor patrimonial por ação. Ele é utilizado para avaliar se a ação está negociada acima ou abaixo do seu valor contábil."
                         />
                         <GridCardDetails 
                             text="MARGEM LÍQUIDA" 
-                            value={`${(quoteDefaultKeyStatistics?.defaultKeyStatistics?.profitMargins * 100).toFixed(2)}%`} 
+                            value="18,78%" 
                             tooltipText="<b>Margem Líquida:</b> Representa o percentual do lucro líquido em relação à receita líquida. É um indicador importante porque mostra a eficiência da empresa em converter receita em lucro."
                         />
                         <GridCardDetails 
                             text="MARGEM BRUTA" 
-                            value={`${(quoteFinancialData?.financialData?.grossMargins * 100).toFixed(2)}%`} 
+                            value="41,35%" 
                             tooltipText="<b>Margem Bruta:</b> É a relação entre o lucro bruto e a receita líquida, indicando o percentual de cada real de receita que sobra após a dedução dos custos diretos de produção. É importante para avaliar a eficiência da produção."
                         />
                         <GridCardDetails 
                             text="MARGEM EBITDA" 
-                            value={`${(quoteFinancialData?.financialData?.ebitdaMargins * 100).toFixed(2)}%`} 
+                            value="38,21%"
                             tooltipText="<b>Margem EBITDA:</b> Representa a relação entre o EBITDA (lucros antes de juros, impostos, depreciação e amortização) e a receita líquida. Indica a eficiência operacional da empresa sem considerar efeitos financeiros e contábeis."
                         />
                         <GridCardDetails 
                             text="MARGEM EBIT" 
-                            value={`${((quoteIncomeStatementHistory?.ebit / quoteIncomeStatementHistory?.totalRevenue) * 100).toFixed(2)}%`} 
+                            value="30,72%" 
                             tooltipText="<b>Margem EBIT:</b> Mostra a relação entre o EBIT (lucros antes de juros e impostos) e a receita líquida. Esse indicador é importante pois mede a eficiência operacional da empresa, desconsiderando os efeitos financeiros."
                         />
                         <GridCardDetails 
                             text="EV/EBITDA" 
-                            value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.enterpriseToEbitda?.toFixed(2)} 
+                            value="4,37"
                             tooltipText="<b>EV/EBITDA:</b> Relação entre o valor da empresa (EV) e o EBITDA. Este indicador é importante para avaliar a empresa desconsiderando os efeitos financeiros, impostos e depreciações."
                         />
                         <GridCardDetails 
                             text="EV/EBIT" 
-                            value={(quoteDefaultKeyStatistics?.defaultKeyStatistics?.enterpriseValue / quoteIncomeStatementHistory?.ebit).toFixed(2)} 
+                            value="5,43"
                             tooltipText="<b>EV/EBIT:</b> Relação entre o valor da empresa (EV) e o EBIT. É utilizado para avaliar a empresa considerando seu valor de mercado mais a dívida líquida, em relação aos lucros operacionais."
                         />
                         <GridCardDetails 
                             text="VPA" 
-                            value={quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue.toString().split('.')[1]?.length > 2 ? (quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue).toFixed(2) : quoteDefaultKeyStatistics?.defaultKeyStatistics?.bookValue} 
+                            value="41,24" 
                             tooltipText="<b>VPA (Valor Patrimonial por Ação):</b> É o valor contábil dos ativos líquidos da empresa dividido pelo número de ações. Ajuda a determinar se uma ação está cara ou barata."
                         />
                         <GridCardDetails 
                             text="LPA" 
-                            value={(quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteDefaultKeyStatistics?.defaultKeyStatistics?.floatShares).toFixed(2)} 
+                            value="8,53"
                             tooltipText="<b>LPA (Lucro por Ação):</b> Indica o lucro líquido dividido pelo número de ações. É um dos principais indicadores de desempenho financeiro de uma empresa."
                         />
                         <GridCardDetails 
                             text="ROE" 
-                            value={`${((quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteBalanceSheetHistory?.totalStockholderEquity) * 100).toFixed(2)}%`} 
+                            value="20,68%"
                             tooltipText="<b>ROE (Retorno sobre Patrimônio):</b> Mede a rentabilidade do patrimônio líquido da empresa. É importante pois indica a eficiência da empresa em gerar lucro com o capital dos acionistas."
                         />
                         <GridCardDetails 
                             text="ROA" 
-                            value={`${((quoteDefaultKeyStatistics?.defaultKeyStatistics?.netIncomeToCommon / quoteBalanceSheetHistory?.totalAssets) * 100).toFixed(2)}%`} 
+                            value="8,55%" 
                             tooltipText="<b>ROA (Retorno sobre Ativos):</b> Indica a rentabilidade total dos ativos da empresa. Mostra a eficiência da empresa em gerar lucros a partir dos seus ativos."
                         />
                         <GridCardDetails 
                             text="DÍVIDA LÍQUIDA / PATRIMÔNIO" 
-                            value={(quoteFinancialData?.financialData?.totalDebt / quoteBalanceSheetHistory?.totalStockholderEquity).toFixed(2)} 
+                            value="0,29"
                             tooltipText="<b>Dívida Líquida/Patrimônio:</b> Relação entre a dívida líquida e o patrimônio líquido. Esse indicador é utilizado para avaliar o grau de endividamento da empresa em relação ao seu patrimônio."
                         />
                         <GridCardDetails 
                             text="DÍVIDA LÍQUIDA / EBIT" 
-                            value={(quoteFinancialData?.financialData?.totalDebt / quoteIncomeStatementHistory?.ebit).toFixed(2)} 
+                            value="0,86" 
                             tooltipText="<b>Dívida Líquida/EBIT:</b> Relação entre a dívida líquida e o EBIT. Importante para avaliar a capacidade da empresa de pagar suas dívidas com seus lucros operacionais."
                         />
                         <GridCardDetails 
                             text="DÍVIDA LÍQUIDA / EBITDA" 
-                            value={(quoteFinancialData?.financialData?.totalDebt / quoteFinancialData?.financialData?.ebitda).toFixed(2)} 
+                            value="0,69" 
                             tooltipText="<b>Dívida Líquida/EBITDA:</b> Relação entre a dívida líquida e o EBITDA. Ajuda a avaliar a capacidade da empresa de pagar suas dívidas sem considerar depreciações e amortizações."
                         />
                     </div>
